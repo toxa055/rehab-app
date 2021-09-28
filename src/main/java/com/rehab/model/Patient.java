@@ -3,7 +3,7 @@ package com.rehab.model;
 public class Patient extends AbstractNamedEntity {
     private int insuranceNumber;
     private Doctor doctor;
-    private PatientState patientState;
+    private PatientState patientState = PatientState.TREATING;
     private String diagnosis;
 
     public Patient() {

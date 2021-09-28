@@ -1,7 +1,7 @@
 package com.rehab.model;
 
 public class Cure extends AbstractNamedEntity {
-    private CureType cureType;
+    private CureType cureType = CureType.MEDICINE;
 
     public Cure() {
     }
