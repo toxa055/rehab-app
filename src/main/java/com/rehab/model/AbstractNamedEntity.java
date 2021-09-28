@@ -1,7 +1,10 @@
 package com.rehab.model;
 
 public abstract class AbstractNamedEntity extends AbstractIdEntity {
-    protected final String name;
+    protected String name;
+
+    protected AbstractNamedEntity() {
+    }
 
     public AbstractNamedEntity(int id, String name) {
         super(id);
@@ -10,5 +13,9 @@ public abstract class AbstractNamedEntity extends AbstractIdEntity {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
