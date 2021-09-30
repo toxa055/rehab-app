@@ -3,14 +3,14 @@ package com.rehab.model;
 public class Prescription extends AbstractIdEntity {
     private Patient patient;
     private Cure cure;
-    private String pattern; // e.g. "2xDAY:MORNING;EVENING" or e.g. "3xWEEK:MON;WED;FRI"
-    private String period;  // e.g. "3xWEEK"                or e.g. "1xMONTH"
+    private Pattern pattern; // e.g. "2xDAY:MORNING;EVENING" or e.g. "3xWEEK:MON;WED;FRI"
+    private Period period;  // e.g. "3xWEEK"                or e.g. "1xMONTH"
     private String dose;
 
     public Prescription() {
     }
 
-    public Prescription(Integer id, Patient patient, Cure cure, String pattern, String period, String dose) {
+    public Prescription(Integer id, Patient patient, Cure cure, Pattern pattern, Period period, String dose) {
         super(id);
         this.patient = patient;
         this.cure = cure;
@@ -27,11 +27,11 @@ public class Prescription extends AbstractIdEntity {
         return cure;
     }
 
-    public String getPattern() {
+    public Pattern getPattern() {
         return pattern;
     }
 
-    public String getPeriod() {
+    public Period getPeriod() {
         return period;
     }
 
@@ -47,11 +47,11 @@ public class Prescription extends AbstractIdEntity {
         this.cure = cure;
     }
 
-    public void setPattern(String pattern) {
+    public void setPattern(Pattern pattern) {
         this.pattern = pattern;
     }
 
-    public void setPeriod(String period) {
+    public void setPeriod(Period period) {
         this.period = period;
     }
 
