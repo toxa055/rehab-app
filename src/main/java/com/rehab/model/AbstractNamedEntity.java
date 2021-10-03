@@ -6,7 +6,7 @@ public abstract class AbstractNamedEntity extends AbstractIdEntity {
     protected AbstractNamedEntity() {
     }
 
-    public AbstractNamedEntity(int id, String name) {
+    public AbstractNamedEntity(Integer id, String name) {
         super(id);
         this.name = name;
     }

@@ -1,4 +1,4 @@
-package com.rehab.model;
+package com.rehab.model.type;
 
 public enum Role {
     ADMIN,

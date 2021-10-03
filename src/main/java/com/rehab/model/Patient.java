@@ -1,51 +1,54 @@
 package com.rehab.model;
 
+import com.rehab.model.type.PatientState;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Patient extends AbstractNamedEntity {
     private int insuranceNumber;
-    private Doctor doctor;
+    private String address;
     private PatientState patientState = PatientState.TREATING;
-    private String diagnosis;
+    private List<Treatment> treatments = new ArrayList<>();
 
     public Patient() {
     }
 
-    public Patient(int id, String name, int insuranceNumber, Doctor doctor, PatientState patientState, String diagnosis) {
+    public Patient(Integer id, String name, int insuranceNumber, String address) {
         super(id, name);
+        this.address = address;
         this.insuranceNumber = insuranceNumber;
-        this.doctor = doctor;
-        this.patientState = patientState;
-        this.diagnosis = diagnosis;
     }
 
     public int getInsuranceNumber() {
         return insuranceNumber;
     }
 
-    public Doctor getDoctor() {
-        return doctor;
+    public String getAddress() {
+        return address;
     }
 
     public PatientState getPatientState() {
         return patientState;
     }
 
-    public String getDiagnosis() {
-        return diagnosis;
+    public List<Treatment> getTreatments() {
+        return treatments;
     }
 
     public void setInsuranceNumber(int insuranceNumber) {
         this.insuranceNumber = insuranceNumber;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setPatientState(PatientState patientState) {
         this.patientState = patientState;
     }
 
-    public void setDiagnosis(String diagnosis) {
-        this.diagnosis = diagnosis;
+    public void setTreatments(List<Treatment> treatments) {
+        this.treatments = treatments;
     }
 }

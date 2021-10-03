@@ -1,11 +1,14 @@
 package com.rehab.model;
 
+import com.rehab.model.type.EventState;
+import com.rehab.model.type.Role;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Event extends AbstractIdEntity {
     private Patient patient;
-    private Nurse nurse;
+    private Employee nurse;
     private LocalDate plannedDate;
     private LocalTime plannedTime;
     private EventState eventState = EventState.PLANNED;
@@ -17,14 +20,16 @@ public class Event extends AbstractIdEntity {
     public Event() {
     }
 
-    public Event(Integer id, Patient patient, Nurse nurse, LocalDate plannedDate, LocalTime plannedTime,
-                 EventState eventState, Cure cure, LocalDate endDate, LocalTime endTime, String comment) {
+    public Event(Integer id, Patient patient, Employee nurse, LocalDate plannedDate, LocalTime plannedTime,
+                 Cure cure, LocalDate endDate, LocalTime endTime, String comment) {
         super(id);
+        if (nurse.getRole() != Role.NURSE) {
+            throw new IllegalArgumentException();
+        }
         this.patient = patient;
         this.nurse = nurse;
         this.plannedDate = plannedDate;
         this.plannedTime = plannedTime;
-        this.eventState = eventState;
         this.cure = cure;
         this.endDate = endDate;
         this.endTime = endTime;
@@ -35,7 +40,7 @@ public class Event extends AbstractIdEntity {
         return patient;
     }
 
-    public Nurse getNurse() {
+    public Employee getNurse() {
         return nurse;
     }
 
@@ -71,7 +76,10 @@ public class Event extends AbstractIdEntity {
         this.patient = patient;
     }
 
-    public void setNurse(Nurse nurse) {
+    public void setNurse(Employee nurse) {
+        if (nurse.getRole() != Role.NURSE) {
+            throw new IllegalArgumentException();
+        }
         this.nurse = nurse;
     }
 

@@ -3,8 +3,8 @@ package com.rehab.model;
 public class Prescription extends AbstractIdEntity {
     private Patient patient;
     private Cure cure;
-    private Pattern pattern; // e.g. "2xDAY:MORNING;EVENING" or e.g. "3xWEEK:MON;WED;FRI"
-    private Period period;  // e.g. "3xWEEK"                or e.g. "1xMONTH"
+    private Pattern pattern;
+    private Period period;
     private String dose;
 
     public Prescription() {

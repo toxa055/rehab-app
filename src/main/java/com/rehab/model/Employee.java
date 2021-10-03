@@ -1,14 +1,16 @@
 package com.rehab.model;
 
-public abstract class AbstractEmployee extends AbstractNamedEntity {
+import com.rehab.model.type.Role;
+
+public class Employee extends AbstractNamedEntity {
     protected String email;
     protected String password;
     protected Role role;
 
-    protected AbstractEmployee() {
+    protected Employee() {
     }
 
-    public AbstractEmployee(int id, String name, String email, String password, Role role) {
+    public Employee(Integer id, String name, String email, String password, Role role) {
         super(id, name);
         this.email = email;
         this.password = password;

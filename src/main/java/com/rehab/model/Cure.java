@@ -1,12 +1,14 @@
 package com.rehab.model;
 
+import com.rehab.model.type.CureType;
+
 public class Cure extends AbstractNamedEntity {
-    private CureType cureType = CureType.MEDICINE;
+    private CureType cureType;
 
     public Cure() {
     }
 
-    public Cure(int id, String name, CureType cureType) {
+    public Cure(Integer id, String name, CureType cureType) {
         super(id, name);
         this.cureType = cureType;
     }
