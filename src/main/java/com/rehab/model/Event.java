@@ -23,7 +23,7 @@ public class Event extends AbstractIdEntity {
     public Event(Integer id, Patient patient, Employee nurse, LocalDate plannedDate, LocalTime plannedTime,
                  Cure cure, LocalDate endDate, LocalTime endTime, String comment) {
         super(id);
-        if (nurse.getRole() != Role.NURSE) {
+        if (!nurse.getRoles().contains(Role.NURSE)) {
             throw new IllegalArgumentException();
         }
         this.patient = patient;
@@ -77,7 +77,7 @@ public class Event extends AbstractIdEntity {
     }
 
     public void setNurse(Employee nurse) {
-        if (nurse.getRole() != Role.NURSE) {
+        if (!nurse.getRoles().contains(Role.NURSE)) {
             throw new IllegalArgumentException();
         }
         this.nurse = nurse;

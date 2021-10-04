@@ -1,6 +1,9 @@
 package com.rehab.model;
 
+import com.rehab.model.type.Role;
+
 public class Prescription extends AbstractIdEntity {
+    private Employee doctor;
     private Patient patient;
     private Cure cure;
     private Pattern pattern;
@@ -10,13 +13,20 @@ public class Prescription extends AbstractIdEntity {
     public Prescription() {
     }
 
-    public Prescription(Integer id, Patient patient, Cure cure, Pattern pattern, Period period, String dose) {
+    public Prescription(Integer id, Employee doctor, Patient patient, Cure cure, Pattern pattern, Period period, String dose) {
         super(id);
+        if (!doctor.getRoles().contains(Role.DOCTOR)) {
+            throw new IllegalArgumentException();
+        }
         this.patient = patient;
         this.cure = cure;
         this.pattern = pattern;
         this.period = period;
         this.dose = dose;
+    }
+
+    public Employee getDoctor() {
+        return doctor;
     }
 
     public Patient getPatient() {
@@ -37,6 +47,13 @@ public class Prescription extends AbstractIdEntity {
 
     public String getDose() {
         return dose;
+    }
+
+    public void setDoctor(Employee doctor) {
+        if (!doctor.getRoles().contains(Role.DOCTOR)) {
+            throw new IllegalArgumentException();
+        }
+        this.doctor = doctor;
     }
 
     public void setPatient(Patient patient) {

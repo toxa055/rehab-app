@@ -13,7 +13,7 @@ public class Treatment extends AbstractIdEntity {
 
     public Treatment(Integer id, Patient patient, Employee doctor, String diagnosis) {
         super(id);
-        if (doctor.getRole() != Role.DOCTOR) {
+        if (!doctor.getRoles().contains(Role.DOCTOR)) {
             throw new IllegalArgumentException();
         }
         this.patient = patient;
@@ -42,7 +42,7 @@ public class Treatment extends AbstractIdEntity {
     }
 
     public void setDoctor(Employee doctor) {
-        if (doctor.getRole() != Role.DOCTOR) {
+        if (!doctor.getRoles().contains(Role.DOCTOR)) {
             throw new IllegalArgumentException();
         }
         this.doctor = doctor;

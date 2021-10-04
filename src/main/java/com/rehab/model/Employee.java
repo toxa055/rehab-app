@@ -2,19 +2,36 @@ package com.rehab.model;
 
 import com.rehab.model.type.Role;
 
-public class Employee extends AbstractNamedEntity {
-    protected String email;
-    protected String password;
-    protected Role role;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-    protected Employee() {
+public class Employee extends AbstractIdEntity {
+    private String name;
+    private String position;
+    private String email;
+    private String password;
+    private Set<Role> roles;
+    private List<Prescription> prescriptions = new ArrayList<>();
+
+    public Employee() {
     }
 
-    public Employee(Integer id, String name, String email, String password, Role role) {
-        super(id, name);
+    public Employee(Integer id, String name, String position, String email, String password, Set<Role> roles) {
+        super(id);
+        this.name = name;
+        this.position = position;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.roles = roles;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPosition() {
+        return position;
     }
 
     public String getEmail() {
@@ -25,8 +42,20 @@ public class Employee extends AbstractNamedEntity {
         return password;
     }
 
-    public Role getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public List<Prescription> getPrescriptions() {
+        return prescriptions;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public void setEmail(String email) {
@@ -37,7 +66,11 @@ public class Employee extends AbstractNamedEntity {
         this.password = password;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void setPrescriptions(List<Prescription> prescriptions) {
+        this.prescriptions = prescriptions;
     }
 }
