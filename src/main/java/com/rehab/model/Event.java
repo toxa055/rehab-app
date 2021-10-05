@@ -13,6 +13,7 @@ public class Event extends AbstractIdEntity {
     private LocalTime plannedTime;
     private EventState eventState = EventState.PLANNED;
     private Cure cure;
+    private String dose = "According to instruction.";
     private LocalDate endDate;
     private LocalTime endTime;
     private String comment;
@@ -21,7 +22,7 @@ public class Event extends AbstractIdEntity {
     }
 
     public Event(Integer id, Patient patient, Employee nurse, LocalDate plannedDate, LocalTime plannedTime,
-                 Cure cure, LocalDate endDate, LocalTime endTime, String comment) {
+                 Cure cure, String dose, LocalDate endDate, LocalTime endTime, String comment) {
         super(id);
         if (!nurse.getRoles().contains(Role.NURSE)) {
             throw new IllegalArgumentException();
@@ -31,6 +32,7 @@ public class Event extends AbstractIdEntity {
         this.plannedDate = plannedDate;
         this.plannedTime = plannedTime;
         this.cure = cure;
+        this.dose = dose;
         this.endDate = endDate;
         this.endTime = endTime;
         this.comment = comment;
@@ -58,6 +60,10 @@ public class Event extends AbstractIdEntity {
 
     public Cure getCure() {
         return cure;
+    }
+
+    public String getDose() {
+        return dose;
     }
 
     public LocalDate getEndDate() {
@@ -97,6 +103,10 @@ public class Event extends AbstractIdEntity {
 
     public void setCure(Cure cure) {
         this.cure = cure;
+    }
+
+    public void setDose(String dose) {
+        this.dose = dose;
     }
 
     public void setEndDate(LocalDate endDate) {
