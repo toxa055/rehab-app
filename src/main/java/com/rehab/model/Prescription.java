@@ -2,13 +2,34 @@ package com.rehab.model;
 
 import com.rehab.model.type.Role;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "prescriptions")
 public class Prescription extends AbstractIdEntity {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "doctor_id", nullable = false)
     private Employee doctor;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cure_id", nullable = false)
     private Cure cure;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pattern_id", nullable = false)
     private Pattern pattern;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "period_id", nullable = false)
     private Period period;
-    private String dose;
+
+    @Column(name = "dose", nullable = false)
+    private String dose = "According to instruction.";
 
     public Prescription() {
     }
