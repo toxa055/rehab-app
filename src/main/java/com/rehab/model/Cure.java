@@ -2,8 +2,17 @@ package com.rehab.model;
 
 import com.rehab.model.type.CureType;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "cures")
 public class Cure extends AbstractIdEntity {
+
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    @Column(name = "cure_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private CureType cureType;
 
     public Cure() {

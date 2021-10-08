@@ -2,16 +2,34 @@ package com.rehab.model;
 
 import com.rehab.model.type.Role;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import javax.persistence.*;
+import java.util.*;
 
+@Entity
+@Table(name = "employees")
 public class Employee extends AbstractIdEntity {
+
+    @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "position", nullable = false)
     private String position;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "employee_roles", joinColumns = @JoinColumn(name = "employee_id"),
+            uniqueConstraints = {@UniqueConstraint(columnNames = {"employee_id", "role"}, name = "employee_roles_idx")})
+    @JoinColumn(name = "employee_id")
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor")
     private List<Prescription> prescriptions = new ArrayList<>();
 
     public Employee() {

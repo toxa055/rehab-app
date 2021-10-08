@@ -3,25 +3,53 @@ package com.rehab.model;
 import com.rehab.model.type.EventState;
 import com.rehab.model.type.Role;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Entity
+@Table(name = "events")
 public class Event extends AbstractIdEntity {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "nurse_id")
     private Employee nurse;
+
+    @Column(name = "planned_date", nullable = false)
     private LocalDate plannedDate;
+
+    @Column(name = "planned_time", nullable = false)
     private LocalTime plannedTime;
+
+    @Column(name = "event_state")
+    @Enumerated(EnumType.STRING)
     private EventState eventState = EventState.PLANNED;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cure_id", nullable = false)
     private Cure cure;
+
+    @Column(name = "dose", nullable = false)
+    private String dose = "According to instruction.";
+
+    @Column(name = "end_date")
     private LocalDate endDate;
+
+    @Column(name = "end_time")
     private LocalTime endTime;
+
+    @Column(name = "comment")
     private String comment;
 
     public Event() {
     }
 
     public Event(Integer id, Patient patient, Employee nurse, LocalDate plannedDate, LocalTime plannedTime,
-                 Cure cure, LocalDate endDate, LocalTime endTime, String comment) {
+                 Cure cure, String dose, LocalDate endDate, LocalTime endTime, String comment) {
         super(id);
         if (!nurse.getRoles().contains(Role.NURSE)) {
             throw new IllegalArgumentException();
@@ -31,6 +59,7 @@ public class Event extends AbstractIdEntity {
         this.plannedDate = plannedDate;
         this.plannedTime = plannedTime;
         this.cure = cure;
+        this.dose = dose;
         this.endDate = endDate;
         this.endTime = endTime;
         this.comment = comment;
@@ -58,6 +87,10 @@ public class Event extends AbstractIdEntity {
 
     public Cure getCure() {
         return cure;
+    }
+
+    public String getDose() {
+        return dose;
     }
 
     public LocalDate getEndDate() {
@@ -97,6 +130,10 @@ public class Event extends AbstractIdEntity {
 
     public void setCure(Cure cure) {
         this.cure = cure;
+    }
+
+    public void setDose(String dose) {
+        this.dose = dose;
     }
 
     public void setEndDate(LocalDate endDate) {

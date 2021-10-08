@@ -2,8 +2,17 @@ package com.rehab.model;
 
 import com.rehab.model.type.TimeUnit;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "periods")
 public class Period extends AbstractIdEntity {
+
+    @Column(name = "count", nullable = false)
     private int count;
+
+    @Column(name = "unit", nullable = false)
+    @Enumerated(EnumType.STRING)
     private TimeUnit unit;
 
     public Period() {
