@@ -1,5 +1,6 @@
 package com.rehab.controller;
 
+import com.rehab.dto.CureDto;
 import com.rehab.service.CureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,17 @@ public class CureController {
     public String getByName(@RequestParam String name, Model model) {
         model.addAttribute("cure", cureService.getByName(name));
         return "cures/cure";
+    }
+
+    @GetMapping("/new")
+    public String create() {
+        return "/cures/new";
+    }
+
+    @PostMapping("new")
+    public String createCure(CureDto cureDto) {
+        cureService.save(cureDto);
+        return "redirect:";
     }
 
     @GetMapping

@@ -30,6 +30,10 @@ public class CureService {
         return toDto(cureCrudRepository.getByName(name));
     }
 
+    public Cure save(CureDto cureDto) {
+        return cureCrudRepository.save(toEntity(cureDto));
+    }
+
     public List<CureDto> getAll() {
         return cureCrudRepository
                 .findAll()

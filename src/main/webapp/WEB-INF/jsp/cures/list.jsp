@@ -13,5 +13,6 @@
         <c:out value="${cure.id}, ${cure.name}, ${cure.cureType}"/><br>
     </c:forEach><br>
 </div>
+<a href="/cures/new">Add new cure</a>
 </body>
 </html>
