@@ -3,15 +3,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
-    <title>Employees</title>
+    <title>Patient ${patient.name}</title>
 </head>
 <body>
-<a href="/">Home</a>
+<a href="../">Home</a><br>
+<a href="/patients">Patients</a>
 <div>
-    <p>Employees:</p>
-    <c:forEach items="${employees}" var="e">
-        <c:out value="${e.id}, ${e.name}, ${e.email}, ${e.position}"/><br/>
-    </c:forEach>
+    <c:out value="${patient.id}, ${patient.insuranceNumber}, ${patient.name}, ${patient.address}, ${patient.patientState}"/><br>
 </div>
 </body>
 </html>
