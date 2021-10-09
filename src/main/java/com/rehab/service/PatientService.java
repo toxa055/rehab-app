@@ -23,6 +23,14 @@ public class PatientService {
         this.modelMapper = modelMapper;
     }
 
+    public PatientDto getById(int id) {
+        return toDto(patientCrudRepository.findById(id).get());
+    }
+
+    public PatientDto getByInsuranceNumber(int insuranceNumber) {
+        return toDto(patientCrudRepository.getByInsuranceNumber(insuranceNumber));
+    }
+
     public Patient save(PatientDto patientDto) {
         return patientCrudRepository.save(toEntity(patientDto));
     }

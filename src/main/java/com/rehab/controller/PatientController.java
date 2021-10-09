@@ -5,9 +5,7 @@ import com.rehab.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/patients")
@@ -18,6 +16,18 @@ public class PatientController {
     @Autowired
     public PatientController(PatientService patientService) {
         this.patientService = patientService;
+    }
+
+    @GetMapping(value = "/getBy", params = "id")
+    public String getById(@RequestParam int id, Model model) {
+        model.addAttribute("patient", patientService.getById(id));
+        return "patients/patient";
+    }
+
+    @GetMapping(value = "/getBy", params = "insuranceNumber")
+    public String getByInsuranceNumber(int insuranceNumber, Model model) {
+        model.addAttribute("patient", patientService.getByInsuranceNumber(insuranceNumber));
+        return "patients/patient";
     }
 
     @GetMapping
