@@ -23,6 +23,10 @@ public class PatientService {
         this.modelMapper = modelMapper;
     }
 
+    public Patient save(PatientDto patientDto) {
+        return patientCrudRepository.save(toEntity(patientDto));
+    }
+
     public List<PatientDto> getAll() {
         return patientCrudRepository
                 .findAll()

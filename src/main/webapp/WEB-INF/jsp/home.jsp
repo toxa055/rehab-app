@@ -5,7 +5,7 @@
 </head>
 <body>
 <h2>Welcome to Rehab Application!</h2>
-<a href="/employees">Employees</a><br/>
+<a href="/employees">Employees</a><br>
 <a href="/patients">Patients</a>
 </body>
 </html>

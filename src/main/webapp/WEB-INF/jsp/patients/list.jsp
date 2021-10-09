@@ -6,12 +6,13 @@
     <title>Patients</title>
 </head>
 <body>
-<a href="/">Home</a>
+<a href="../">Home</a>
 <div>
     <p>Patients:</p>
     <c:forEach items="${patients}" var="p">
-        <c:out value="${p.id}, ${p.insuranceNumber}, ${p.name}, ${p.address}, ${p.patientState}"/><br/>
-    </c:forEach>
+        <c:out value="${p.id}, ${p.insuranceNumber}, ${p.name}, ${p.address}, ${p.patientState}"/><br>
+    </c:forEach><br>
 </div>
+<a href="/patients/new">Add new patient</a>
 </body>
 </html>
