@@ -22,6 +22,14 @@ public class CureService {
         this.modelMapper = modelMapper;
     }
 
+    public CureDto getById(int id) {
+        return toDto(cureCrudRepository.findById(id).get());
+    }
+
+    public CureDto getByName(String name) {
+        return toDto(cureCrudRepository.getByName(name));
+    }
+
     public List<CureDto> getAll() {
         return cureCrudRepository
                 .findAll()

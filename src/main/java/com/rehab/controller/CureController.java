@@ -17,8 +17,20 @@ public class CureController {
         this.cureService = cureService;
     }
 
+    @GetMapping(value = "/getBy", params = "id")
+    public String getById(@RequestParam int id, Model model) {
+        model.addAttribute("cure", cureService.getById(id));
+        return "/cures/cure";
+    }
+
+    @GetMapping(value = "getBy", params = "name")
+    public String getByName(@RequestParam String name, Model model) {
+        model.addAttribute("cure", cureService.getByName(name));
+        return "cures/cure";
+    }
+
     @GetMapping
-    public String getAll(Model model) {
+    public String cures(Model model) {
         model.addAttribute("cures", cureService.getAll());
         return "/cures/list";
     }
