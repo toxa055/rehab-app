@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CureCrudRepository extends JpaRepository<Cure, Integer> {
 
+    Cure getByName(String name);
 }
