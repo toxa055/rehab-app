@@ -2,9 +2,10 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
-    <title>Rehab Application Home Page</title>
+    <title>Home Page</title>
 </head>
 <body>
-<p>Welcome to Rehab Application!</p>
+<h2>Welcome to Rehab Application!</h2>
+<a href="/employees">Employees</a>
 </body>
 </html>
