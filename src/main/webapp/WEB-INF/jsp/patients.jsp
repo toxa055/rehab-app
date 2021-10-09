@@ -3,14 +3,14 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
-    <title>Employees</title>
+    <title>Patients</title>
 </head>
 <body>
 <a href="/">Home</a>
 <div>
-    <p>Employees:</p>
-    <c:forEach items="${employees}" var="e">
-        <c:out value="${e.id}, ${e.name}, ${e.email}, ${e.position}"/><br/>
+    <p>Patients:</p>
+    <c:forEach items="${patients}" var="p">
+        <c:out value="${p.id}, ${p.insuranceNumber}, ${p.name}, ${p.address}, ${p.patientState}"/><br/>
     </c:forEach>
 </div>
 </body>
