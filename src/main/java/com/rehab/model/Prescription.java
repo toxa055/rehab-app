@@ -3,6 +3,7 @@ package com.rehab.model;
 import com.rehab.model.type.Role;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "prescriptions")
@@ -15,6 +16,9 @@ public class Prescription extends AbstractIdEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
+
+    @Column(name = "prescription_date", nullable = false)
+    private LocalDate date = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cure_id", nullable = false)
@@ -54,6 +58,10 @@ public class Prescription extends AbstractIdEntity {
         return patient;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
     public Cure getCure() {
         return cure;
     }
@@ -79,6 +87,10 @@ public class Prescription extends AbstractIdEntity {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public void setCure(Cure cure) {
