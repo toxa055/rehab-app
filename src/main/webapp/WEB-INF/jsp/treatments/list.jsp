@@ -10,7 +10,7 @@
 <div>
     <p>Treatments:</p>
     <c:forEach items="${treatments}" var="t">
-        <c:out value="${t.patientId}, ${t.patientInsuranceNumber}, ${t.patientName},
+        <c:out value="${t.id}, ${t.patientId}, ${t.patientInsuranceNumber}, ${t.patientName},
         ${t.doctorId}, ${t.doctorName}, ${t.date}, ${t.diagnosis}, ${t.closed}"/><br>
     </c:forEach><br>
 </div>

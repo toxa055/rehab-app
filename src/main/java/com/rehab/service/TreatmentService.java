@@ -22,6 +22,26 @@ public class TreatmentService {
         this.modelMapper = modelMapper;
     }
 
+    public TreatmentDto getById(int id) {
+        return toDto(treatmentCrudRepository.findById(id).get());
+    }
+
+    public List<TreatmentDto> getAllByPatientId(int patientId) {
+        return treatmentCrudRepository
+                .findAllByPatientId(patientId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<TreatmentDto> getAllByDoctorId(int doctorId) {
+        return treatmentCrudRepository
+                .findAllByDoctorId(doctorId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+    }
+
     public List<TreatmentDto> getAll() {
         return treatmentCrudRepository
                 .findAll()

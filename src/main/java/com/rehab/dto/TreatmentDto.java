@@ -3,6 +3,7 @@ package com.rehab.dto;
 import java.time.LocalDate;
 
 public class TreatmentDto {
+    private int id;
     private int patientId;
     private int patientInsuranceNumber;
     private String patientName;
@@ -15,14 +16,19 @@ public class TreatmentDto {
     public TreatmentDto() {
     }
 
-    public TreatmentDto(int patientId, int patientInsuranceNumber, String patientName, int doctorId,
+    public TreatmentDto(int id, int patientId, int patientInsuranceNumber, String patientName, int doctorId,
                         String doctorName, String diagnosis) {
+        this.id = id;
         this.patientId = patientId;
         this.patientInsuranceNumber = patientInsuranceNumber;
         this.patientName = patientName;
         this.doctorId = doctorId;
         this.doctorName = doctorName;
         this.diagnosis = diagnosis;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getPatientId() {
@@ -55,6 +61,10 @@ public class TreatmentDto {
 
     public boolean isClosed() {
         return isClosed;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setPatientId(int patientId) {
