@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/treatments")
 public class TreatmentController {
 
+    private static final String TREATMENTS = "treatments";
+    private static final String TREATMENTS_LIST = "/treatments/list";
     private final TreatmentService treatmentService;
 
     @Autowired
@@ -25,19 +27,19 @@ public class TreatmentController {
 
     @GetMapping(value = "/getBy", params = "patientId")
     public String getAllByPatientId(@RequestParam int patientId, Model model) {
-        model.addAttribute("treatments", treatmentService.getAllByPatientId(patientId));
-        return "treatments/list";
+        model.addAttribute(TREATMENTS, treatmentService.getAllByPatientId(patientId));
+        return TREATMENTS_LIST;
     }
 
     @GetMapping(value = "/getBy", params = "doctorId")
     public String getAllByDoctorId(@RequestParam int doctorId, Model model) {
-        model.addAttribute("treatments", treatmentService.getAllByDoctorId(doctorId));
-        return "treatments/list";
+        model.addAttribute(TREATMENTS, treatmentService.getAllByDoctorId(doctorId));
+        return TREATMENTS_LIST;
     }
 
     @GetMapping
     public String treatments(Model model) {
-        model.addAttribute("treatments", treatmentService.getAll());
-        return "treatments/list";
+        model.addAttribute(TREATMENTS, treatmentService.getAll());
+        return TREATMENTS_LIST;
     }
 }

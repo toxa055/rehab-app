@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/prescriptions")
 public class PrescriptionController {
 
+    private static final String PRESCRIPTIONS = "prescriptions";
     private static final String PRESCRIPTION_LIST = "/prescriptions/list";
     private final PrescriptionService prescriptionService;
 
@@ -26,19 +27,19 @@ public class PrescriptionController {
 
     @GetMapping(value = "/getBy", params = "patientId")
     public String getAllByPatientId(@RequestParam int patientId, Model model) {
-        model.addAttribute("prescriptions", prescriptionService.getAllByPatientId(patientId));
+        model.addAttribute(PRESCRIPTIONS, prescriptionService.getAllByPatientId(patientId));
         return PRESCRIPTION_LIST;
     }
 
     @GetMapping(value = "/getBy", params = "doctorId")
     public String getAllByDoctorId(@RequestParam int doctorId, Model model) {
-        model.addAttribute("prescriptions", prescriptionService.getAllByDoctorId(doctorId));
+        model.addAttribute(PRESCRIPTIONS, prescriptionService.getAllByDoctorId(doctorId));
         return PRESCRIPTION_LIST;
     }
 
     @GetMapping
     public String prescriptions(Model model) {
-        model.addAttribute("prescriptions", prescriptionService.getAll());
+        model.addAttribute(PRESCRIPTIONS, prescriptionService.getAll());
         return PRESCRIPTION_LIST;
     }
 }

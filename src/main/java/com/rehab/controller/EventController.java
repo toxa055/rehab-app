@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/events")
 public class EventController {
 
+    private static final String EVENTS = "events";
     private static final String EVENTS_LIST = "/events/list";
     private final EventService eventService;
 
@@ -26,25 +27,25 @@ public class EventController {
 
     @GetMapping(value = "/getBy", params = "patientId")
     public String getAllByPatientId(@RequestParam int patientId, Model model) {
-        model.addAttribute("events", eventService.getAllByPatientId(patientId));
+        model.addAttribute(EVENTS, eventService.getAllByPatientId(patientId));
         return EVENTS_LIST;
     }
 
     @GetMapping(value = "/getBy", params = "nurseId")
     public String getAllByNurseId(@RequestParam int nurseId, Model model) {
-        model.addAttribute("events", eventService.getAllByNurseId(nurseId));
+        model.addAttribute(EVENTS, eventService.getAllByNurseId(nurseId));
         return EVENTS_LIST;
     }
 
     @GetMapping
     public String events(Model model) {
-        model.addAttribute("events", eventService.getAll());
+        model.addAttribute(EVENTS, eventService.getAll());
         return EVENTS_LIST;
     }
 
     @GetMapping("/today")
     public String todayEvents(Model model) {
-        model.addAttribute("events", eventService.getAllToday());
+        model.addAttribute(EVENTS, eventService.getAllToday());
         return EVENTS_LIST;
     }
 }
