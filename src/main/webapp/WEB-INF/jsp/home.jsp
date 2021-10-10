@@ -7,6 +7,7 @@
 <h2>Welcome to Rehab Application!</h2>
 <a href="/employees">Employees</a><br>
 <a href="/patients">Patients</a><br>
+<a href="/treatments">Treatments</a><br>
 <a href="/cures">Cures</a>
 </body>
 </html>

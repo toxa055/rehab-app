@@ -76,11 +76,12 @@ CREATE TABLE pattern_units
 
 CREATE TABLE treatments
 (
-    id         INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
-    patient_id INTEGER NOT NULL,
-    doctor_id  INTEGER NOT NULL,
-    diagnosis  VARCHAR NOT NULL,
-    closed     BOOLEAN NOT NULL    DEFAULT FALSE,
+    id             INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
+    patient_id     INTEGER NOT NULL,
+    doctor_id      INTEGER NOT NULL,
+    treatment_date DATE    NOT NULL    DEFAULT CURRENT_DATE,
+    diagnosis      VARCHAR NOT NULL,
+    closed         BOOLEAN NOT NULL    DEFAULT FALSE,
     FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE
 );

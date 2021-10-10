@@ -3,6 +3,7 @@ package com.rehab.model;
 import com.rehab.model.type.Role;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "treatments")
@@ -15,6 +16,9 @@ public class Treatment extends AbstractIdEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor_id", nullable = false)
     private Employee doctor;
+
+    @Column(name = "treatment_date", nullable = false)
+    private LocalDate date = LocalDate.now();
 
     @Column(name = "diagnosis", nullable = false)
     private String diagnosis;
@@ -47,6 +51,10 @@ public class Treatment extends AbstractIdEntity {
         return diagnosis;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
     public boolean isClosed() {
         return isClosed;
     }
@@ -60,6 +68,10 @@ public class Treatment extends AbstractIdEntity {
             throw new IllegalArgumentException();
         }
         this.doctor = doctor;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public void setDiagnosis(String diagnosis) {
