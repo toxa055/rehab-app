@@ -10,12 +10,6 @@ public class CureDto {
     public CureDto() {
     }
 
-    public CureDto(int id, String name, CureType cureType) {
-        this.id = id;
-        this.name = name;
-        this.cureType = cureType;
-    }
-
     public int getId() {
         return id;
     }

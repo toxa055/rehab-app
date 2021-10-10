@@ -10,14 +10,6 @@ public class EmployeeDto {
     public EmployeeDto() {
     }
 
-    public EmployeeDto(int id, String name, String position, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.position = position;
-        this.email = email;
-        this.password = password;
-    }
-
     public int getId() {
         return id;
     }
