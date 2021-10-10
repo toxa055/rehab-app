@@ -49,10 +49,10 @@ INSERT INTO prescriptions (doctor_id, patient_id, cure_id, pattern_id, period_id
 VALUES (2, 5, 10, 16, 14);
 
 INSERT INTO events (patient_id, nurse_id, planned_date, planned_time, cure_id, dose)
-VALUES (4, 3, '2021-10-06', '9:30', 8, 'dose1'),
-       (4, 3, '2021-10-06', '17:30', 8, 'dose1');
+VALUES (4, 3, '2021-10-10', '9:30', 8, 'dose1'),
+       (4, 3, '2021-10-10', '17:30', 8, 'dose1');
 
 INSERT INTO events (patient_id, nurse_id, planned_date, cure_id)
-VALUES (5, 3, '2021-10-07', 10),
-       (5, 3, '2021-10-09', 10),
-       (5, 3, '2021-10-10', 10);
+VALUES (5, 3, '2021-10-10', 10),
+       (5, 3, '2021-10-12', 10),
+       (5, 3, '2021-10-14', 10);

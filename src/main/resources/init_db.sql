@@ -88,13 +88,14 @@ CREATE TABLE treatments
 
 CREATE TABLE prescriptions
 (
-    id         INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
-    doctor_id  INTEGER NOT NULL,
-    patient_id INTEGER NOT NULL,
-    cure_id    INTEGER NOT NULL,
-    pattern_id INTEGER NOT NULL,
-    period_id  INTEGER NOT NULL,
-    dose       VARCHAR NOT NULL    DEFAULT 'According to instruction.',
+    id                INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
+    doctor_id         INTEGER NOT NULL,
+    patient_id        INTEGER NOT NULL,
+    prescription_date DATE    NOT NULL    DEFAULT CURRENT_DATE,
+    cure_id           INTEGER NOT NULL,
+    pattern_id        INTEGER NOT NULL,
+    period_id         INTEGER NOT NULL,
+    dose              VARCHAR NOT NULL    DEFAULT 'According to instruction.',
     FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE,
     FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
     FOREIGN KEY (cure_id) REFERENCES cures (id) ON DELETE CASCADE,
