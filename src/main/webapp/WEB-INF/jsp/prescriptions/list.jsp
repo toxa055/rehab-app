@@ -15,8 +15,8 @@
         <c:forEach items="${p.patternUnits}" var="unit">
             <c:out value="${unit}, "/>
         </c:forEach>
-        <c:out value="${p.periodId}, ${p.periodCount}, ${p.periodUnit}, ${p.dose}"/> <br>
-    </c:forEach><br>
+        <c:out value="${p.periodId}, ${p.periodCount}, ${p.periodUnit}, ${p.dose}"/><br>
+    </c:forEach>
 </div>
 <%--<a href="/prescriptions/new">Add new prescription</a>--%>
 </body>
