@@ -16,17 +16,6 @@ public class TreatmentDto {
     public TreatmentDto() {
     }
 
-    public TreatmentDto(int id, int patientId, int patientInsuranceNumber, String patientName, int doctorId,
-                        String doctorName, String diagnosis) {
-        this.id = id;
-        this.patientId = patientId;
-        this.patientInsuranceNumber = patientInsuranceNumber;
-        this.patientName = patientName;
-        this.doctorId = doctorId;
-        this.doctorName = doctorName;
-        this.diagnosis = diagnosis;
-    }
-
     public int getId() {
         return id;
     }

@@ -12,13 +12,6 @@ public class PatientDto {
     public PatientDto() {
     }
 
-    public PatientDto(int id, int insuranceNumber, String name, String address) {
-        this.id = id;
-        this.insuranceNumber = insuranceNumber;
-        this.name = name;
-        this.address = address;
-    }
-
     public int getId() {
         return id;
     }
