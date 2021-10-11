@@ -7,16 +7,29 @@
     <title>Add new cure</title>
 </head>
 <body>
-<jsp:include page="../nav.jsp"/><br>
+<jsp:include page="../nav.jsp"/>
+<br>
 <div>
-    <p>Add new cure</p>
+    <h2>Add new cure</h2>
+    <br>
     <form action="/cures/new" method="post">
-        <input type="text" name="name" placeholder="Name"><br>
-        <select name="cureType">
-            <option>MEDICINE</option>
-            <option>PROCEDURE</option>
-        </select><br>
-        <button type="submit">Save</button>
+        <div class="row mb-3">
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="cureType" class="col-sm-2 col-form-label">Type</label>
+            <div class="col-sm-10">
+                <select class="form-select" aria-label="Cure Type" name="cureType" id="cureType">
+                    <option>MEDICINE</option>
+                    <option>PROCEDURE</option>
+                </select>
+            </div>
+        </div>
+        <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
 </body>

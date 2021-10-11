@@ -32,6 +32,8 @@
         </c:forEach>
     </table>
 </div>
-<a href="/patients/new">Add new patient</a>
+<a href="/patients/new">
+    <button type="button" class="btn btn-success">Add new</button>
+</a>
 </body>
 </html>

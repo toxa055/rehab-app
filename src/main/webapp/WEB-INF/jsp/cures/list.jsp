@@ -28,6 +28,8 @@
         </c:forEach>
     </table>
 </div>
-<a href="/cures/new">Add new cure</a>
+<a href="/cures/new">
+    <button type="button" class="btn btn-success">Add new</button>
+</a>
 </body>
 </html>
