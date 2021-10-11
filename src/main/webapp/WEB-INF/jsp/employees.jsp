@@ -16,16 +16,16 @@
         <tr>
             <th scope="col">id</th>
             <th scope="col">Name</th>
-            <th scope="col">Email</th>
             <th scope="col">Position</th>
+            <th scope="col">Email</th>
         </tr>
         </thead>
         <c:forEach items="${employees}" var="e">
             <tr class="table-light">
                 <td>${e.id}</td>
                 <td>${e.name}</td>
-                <td>${e.email}</td>
                 <td>${e.position}</td>
+                <td>${e.email}</td>
             </tr>
         </c:forEach>
     </table>

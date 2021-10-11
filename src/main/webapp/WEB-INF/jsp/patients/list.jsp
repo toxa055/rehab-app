@@ -14,7 +14,7 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col">id</th>
+            <th scope="col" style="display: none">id</th>
             <th scope="col">Insurance №</th>
             <th scope="col">Name</th>
             <th scope="col">Address</th>
@@ -23,7 +23,7 @@
         </thead>
         <c:forEach items="${patients}" var="p">
             <tr class="table-light">
-                <td>${p.id}</td>
+                <td style="display: none">${p.id}</td>
                 <td>${p.insuranceNumber}</td>
                 <td>${p.name}</td>
                 <td>${p.address}</td>

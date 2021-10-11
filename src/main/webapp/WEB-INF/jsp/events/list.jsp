@@ -7,16 +7,54 @@
     <title>Events</title>
 </head>
 <body>
-<jsp:include page="../nav.jsp"/><br>
+<jsp:include page="../nav.jsp"/>
+<br>
 <a href="/events">All</a><br>
 <a href="/events/today">Today</a><br>
 <div>
-    <p>Events:</p>
-    <c:forEach items="${events}" var="e">
-        <c:out value="${e.id}, ${e.patientId}, ${e.patientInsuranceNumber}, ${e.patientName}, ${e.nurseId},
-        ${e.nurseName}, ${e.plannedDate}, ${e.plannedTime}, ${e.eventState}, ${e.cureId}, ${e.cureName},
-        ${e.cureType}, ${e.dose}, ${e.endDate}, ${e.endTime}, ${e.comment}"/><br>
-    </c:forEach>
+    <h2>Events:</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="display: none">id</th>
+            <th scope="col" style="display: none">Patient id</th>
+            <th scope="col">Ins.№</th>
+            <th scope="col">Patient</th>
+            <th scope="col" style="display: none">Nurse id</th>
+            <th scope="col">Nurse</th>
+            <th scope="col">Planned Date</th>
+            <th scope="col">Planned Time</th>
+            <th scope="col">State</th>
+            <th scope="col" style="display: none">Cure id</th>
+            <th scope="col">Cure</th>
+            <th scope="col">Cure type</th>
+            <th scope="col">Dose</th>
+            <th scope="col">End Date</th>
+            <th scope="col">End Time</th>
+            <th scope="col">Comment</th>
+        </tr>
+        </thead>
+        <c:forEach items="${events}" var="e">
+            <tr class="table-light">
+                <td style="display: none">${e.id}</td>
+                <td style="display: none">${e.patientId}</td>
+                <td>${e.patientInsuranceNumber}</td>
+                <td>${e.patientName}</td>
+                <td style="display: none">${e.nurseId}</td>
+                <td>${e.nurseName}</td>
+                <td>${e.plannedDate}</td>
+                <td>${e.plannedTime}</td>
+                <td>${e.eventState}</td>
+                <td style="display: none">${e.cureId}</td>
+                <td>${e.cureName}</td>
+                <td>${e.cureType}</td>
+                <td>${e.dose}</td>
+                <td>${e.endDate}</td>
+                <td>${e.endTime}</td>
+                <td>${e.comment}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 </body>
 </html>

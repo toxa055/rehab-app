@@ -14,12 +14,12 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th scope="col">id</th>
-            <th scope="col">Patient's id</th>
+            <th scope="col" style="display: none">id</th>
+            <th scope="col" style="display: none">Patient id</th>
             <th scope="col">Ins.№</th>
-            <th scope="col">Patient's name</th>
-            <th scope="col">Doctor's id</th>
-            <th scope="col">Doctor's name</th>
+            <th scope="col">Patient</th>
+            <th scope="col" style="display: none">Doctor id</th>
+            <th scope="col">Doctor</th>
             <th scope="col">Date</th>
             <th scope="col">Diagnosis</th>
             <th scope="col">Closed</th>
@@ -27,11 +27,11 @@
         </thead>
         <c:forEach items="${treatments}" var="t">
             <tr class="table-light">
-                <td>${t.id}</td>
-                <td>${t.patientId}</td>
+                <td style="display: none">${t.id}</td>
+                <td style="display: none">${t.patientId}</td>
                 <td>${t.patientInsuranceNumber}</td>
                 <td>${t.patientName}</td>
-                <td>${t.doctorId}</td>
+                <td style="display: none">${t.doctorId}</td>
                 <td>${t.doctorName}</td>
                 <td>${t.date}</td>
                 <td>${t.diagnosis}</td>
