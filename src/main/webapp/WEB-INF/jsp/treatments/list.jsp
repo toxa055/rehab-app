@@ -3,10 +3,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>Treatments</title>
 </head>
 <body>
-<a href="../">Home</a>
+<jsp:include page="../nav.jsp"/><br>
 <div>
     <p>Treatments:</p>
     <c:forEach items="${treatments}" var="t">

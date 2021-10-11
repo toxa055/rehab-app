@@ -3,11 +3,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>Add new patient</title>
 </head>
 <body>
-<a href="../">Home</a><br>
-<a href="/patients">Patients</a>
+<jsp:include page="../nav.jsp"/><br>
 <div>
     <p>Add new patient</p>
     <form action="/patients/new" method="post">

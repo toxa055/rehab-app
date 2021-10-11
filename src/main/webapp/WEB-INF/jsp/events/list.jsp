@@ -3,10 +3,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>Events</title>
 </head>
 <body>
-<a href="../">Home</a><br>
+<jsp:include page="../nav.jsp"/><br>
 <a href="/events">All</a><br>
 <a href="/events/today">Today</a><br>
 <div>

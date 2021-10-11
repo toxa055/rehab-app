@@ -3,11 +3,11 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>${cure.name}</title>
 </head>
 <body>
-<a href="../">Home</a><br>
-<a href="/cures">Cures</a>
+<jsp:include page="../nav.jsp"/><br>
 <div>
     <c:out value="${cure.id}, ${cure.name}, ${cure.cureType}"/><br>
 </div>
