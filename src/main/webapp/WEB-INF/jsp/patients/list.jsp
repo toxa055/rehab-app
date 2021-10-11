@@ -7,12 +7,30 @@
     <title>Patients</title>
 </head>
 <body>
-<jsp:include page="../nav.jsp"/><br>
+<jsp:include page="../nav.jsp"/>
+<br>
 <div>
-    <p>Patients:</p>
-    <c:forEach items="${patients}" var="p">
-        <c:out value="${p.id}, ${p.insuranceNumber}, ${p.name}, ${p.address}, ${p.patientState}"/><br>
-    </c:forEach><br>
+    <h2>Patients:</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Insurance №</th>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+            <th scope="col">State</th>
+        </tr>
+        </thead>
+        <c:forEach items="${patients}" var="p">
+            <tr class="table-light">
+                <td>${p.id}</td>
+                <td>${p.insuranceNumber}</td>
+                <td>${p.name}</td>
+                <td>${p.address}</td>
+                <td>${p.patientState}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 <a href="/patients/new">Add new patient</a>
 </body>

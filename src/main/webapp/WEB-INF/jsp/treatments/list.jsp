@@ -7,13 +7,38 @@
     <title>Treatments</title>
 </head>
 <body>
-<jsp:include page="../nav.jsp"/><br>
+<jsp:include page="../nav.jsp"/>
+<br>
 <div>
-    <p>Treatments:</p>
-    <c:forEach items="${treatments}" var="t">
-        <c:out value="${t.id}, ${t.patientId}, ${t.patientInsuranceNumber}, ${t.patientName},
-        ${t.doctorId}, ${t.doctorName}, ${t.date}, ${t.diagnosis}, ${t.closed}"/><br>
-    </c:forEach><br>
+    <h2>Treatments:</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Patient's id</th>
+            <th scope="col">Ins.№</th>
+            <th scope="col">Patient's name</th>
+            <th scope="col">Doctor's id</th>
+            <th scope="col">Doctor's name</th>
+            <th scope="col">Date</th>
+            <th scope="col">Diagnosis</th>
+            <th scope="col">Closed</th>
+        </tr>
+        </thead>
+        <c:forEach items="${treatments}" var="t">
+            <tr class="table-light">
+                <td>${t.id}</td>
+                <td>${t.patientId}</td>
+                <td>${t.patientInsuranceNumber}</td>
+                <td>${t.patientName}</td>
+                <td>${t.doctorId}</td>
+                <td>${t.doctorName}</td>
+                <td>${t.date}</td>
+                <td>${t.diagnosis}</td>
+                <td>${t.closed}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 <%--<a href="/treatments/new">Add new treatment</a>--%>
 </body>

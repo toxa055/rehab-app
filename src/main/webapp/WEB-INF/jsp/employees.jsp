@@ -7,12 +7,28 @@
     <title>Employees</title>
 </head>
 <body>
-<jsp:include page="nav.jsp"/><br>
+<jsp:include page="nav.jsp"/>
+<br>
 <div>
-    <p>Employees:</p>
-    <c:forEach items="${employees}" var="e">
-        <c:out value="${e.id}, ${e.name}, ${e.email}, ${e.position}"/><br/>
-    </c:forEach>
+    <h2>Employees:</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Position</th>
+        </tr>
+        </thead>
+        <c:forEach items="${employees}" var="e">
+            <tr class="table-light">
+                <td>${e.id}</td>
+                <td>${e.name}</td>
+                <td>${e.email}</td>
+                <td>${e.position}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 </body>
 </html>
