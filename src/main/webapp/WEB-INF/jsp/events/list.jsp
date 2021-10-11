@@ -9,10 +9,14 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<a href="/events">All</a><br>
-<a href="/events/today">Today</a><br>
-<div>
-    <h2>Events:</h2>
+<div class="container-fluid">
+    <h2>Events</h2>
+    <a href="/events">
+        <button type="button" class="btn btn-info">All</button>
+    </a>
+    <a href="/events/today">
+        <button type="button" class="btn btn-info">Today</button>
+    </a><br>
     <table class="table table-hover">
         <thead>
         <tr>

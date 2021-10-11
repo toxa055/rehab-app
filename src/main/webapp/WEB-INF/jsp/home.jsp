@@ -5,7 +5,10 @@
     <title>Home Page</title>
 </head>
 <body>
-<jsp:include page="nav.jsp"/><br>
-<h2>Welcome to Rehab Application!</h2>
+<jsp:include page="nav.jsp"/>
+<br>
+<div class="container-fluid">
+    <h2>Welcome to Rehab Application!</h2>
+</div>
 </body>
 </html>

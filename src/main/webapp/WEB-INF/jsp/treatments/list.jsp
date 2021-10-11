@@ -9,8 +9,8 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div>
-    <h2>Treatments:</h2>
+<div class="container-fluid">
+    <h2>Treatments</h2>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -40,6 +40,5 @@
         </c:forEach>
     </table>
 </div>
-<%--<a href="/treatments/new">Add new treatment</a>--%>
 </body>
 </html>

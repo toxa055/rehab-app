@@ -9,8 +9,8 @@
 <body>
 <jsp:include page="nav.jsp"/>
 <br>
-<div>
-    <h2>Employees:</h2>
+<div class="container-fluid">
+    <h2>Employees</h2>
     <table class="table table-hover">
         <thead>
         <tr>

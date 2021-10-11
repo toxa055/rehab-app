@@ -5,7 +5,10 @@
     <title>Error</title>
 </head>
 <body>
-<jsp:include page="nav.jsp"/><br>
-<h1>This is the custom error page!</h1>
+<jsp:include page="nav.jsp"/>
+<br>
+<div class="container-fluid">
+    <h1>This is the custom error page!</h1>
+</div>
 </body>
 </html>

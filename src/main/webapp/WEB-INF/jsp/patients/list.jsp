@@ -9,8 +9,8 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div>
-    <h2>Patients:</h2>
+<div class="container-fluid">
+    <h2>Patients</h2>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -31,9 +31,9 @@
             </tr>
         </c:forEach>
     </table>
+    <a href="/patients/new">
+        <button type="button" class="btn btn-success">Add new</button>
+    </a>
 </div>
-<a href="/patients/new">
-    <button type="button" class="btn btn-success">Add new</button>
-</a>
 </body>
 </html>

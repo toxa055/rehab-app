@@ -9,7 +9,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div>
+<div class="container-fluid">
     <h2>Add new patient</h2>
     <br>
     <form action="/patients/new" method="post">
