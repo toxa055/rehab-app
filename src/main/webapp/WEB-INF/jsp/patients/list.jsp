@@ -19,6 +19,7 @@
             <th scope="col">Name</th>
             <th scope="col">Address</th>
             <th scope="col">State</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <c:forEach items="${patients}" var="p">
@@ -28,6 +29,9 @@
                 <td>${p.name}</td>
                 <td>${p.address}</td>
                 <td>${p.patientState}</td>
+                <td><a href="../treatments/new/${p.id}">
+                    <button type="button" class="btn btn-success">New treatment</button>
+                </a></td>
             </tr>
         </c:forEach>
     </table>
