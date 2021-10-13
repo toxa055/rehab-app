@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS prescriptions;
+DROP TABLE IF EXISTS prescriptions CASCADE;
 DROP TABLE IF EXISTS treatments;
 DROP TABLE IF EXISTS pattern_units;
 DROP TABLE IF EXISTS events;
@@ -76,12 +76,13 @@ CREATE TABLE pattern_units
 
 CREATE TABLE treatments
 (
-    id             INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
-    patient_id     INTEGER NOT NULL,
-    doctor_id      INTEGER NOT NULL,
-    treatment_date DATE    NOT NULL    DEFAULT CURRENT_DATE,
-    diagnosis      VARCHAR NOT NULL,
-    closed         BOOLEAN NOT NULL    DEFAULT FALSE,
+    id              INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
+    patient_id      INTEGER NOT NULL,
+    doctor_id       INTEGER NOT NULL,
+    prescription_id INTEGER,
+    treatment_date  DATE    NOT NULL    DEFAULT CURRENT_DATE,
+    diagnosis       VARCHAR NOT NULL,
+    closed          BOOLEAN NOT NULL    DEFAULT FALSE,
     FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE
 );
@@ -91,6 +92,7 @@ CREATE TABLE prescriptions
     id                INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
     doctor_id         INTEGER NOT NULL,
     patient_id        INTEGER NOT NULL,
+    treatment_id      INTEGER NOT NULL,
     prescription_date DATE    NOT NULL    DEFAULT CURRENT_DATE,
     cure_id           INTEGER NOT NULL,
     pattern_id        INTEGER NOT NULL,
@@ -102,6 +104,12 @@ CREATE TABLE prescriptions
     FOREIGN KEY (pattern_id) REFERENCES patterns ON DELETE CASCADE,
     FOREIGN KEY (period_id) REFERENCES periods (id) ON DELETE CASCADE
 );
+
+ALTER TABLE treatments
+    ADD CONSTRAINT prescription_fk FOREIGN KEY (prescription_id) REFERENCES prescriptions (id) ON DELETE CASCADE;
+
+ALTER TABLE prescriptions
+    ADD CONSTRAINT treatment_fk FOREIGN KEY (treatment_id) REFERENCES treatments (id) ON DELETE CASCADE;
 
 CREATE TABLE events
 (

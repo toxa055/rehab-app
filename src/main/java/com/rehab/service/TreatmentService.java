@@ -19,11 +19,13 @@ public class TreatmentService {
 
     private final TreatmentCrudRepository treatmentCrudRepository;
     private final ModelMapper modelMapper;
+    private final TypeMap<TreatmentDto, Treatment> typeMap;
 
     @Autowired
     public TreatmentService(TreatmentCrudRepository treatmentCrudRepository, ModelMapper modelMapper) {
         this.treatmentCrudRepository = treatmentCrudRepository;
         this.modelMapper = modelMapper;
+        typeMap = modelMapper.createTypeMap(TreatmentDto.class, Treatment.class);
     }
 
     public Treatment save(TreatmentDto treatmentDto) {
@@ -66,7 +68,6 @@ public class TreatmentService {
         treatmentDto.setDoctorId(1);
         Employee doctor = new Employee();
         doctor.setRoles(Set.of(Role.DOCTOR));
-        TypeMap<TreatmentDto, Treatment> typeMap = modelMapper.createTypeMap(TreatmentDto.class, Treatment.class);
         typeMap.addMappings(modelMapper -> modelMapper.map(src -> doctor, Treatment::setDoctor));
         return modelMapper.map(treatmentDto, Treatment.class);
     }
