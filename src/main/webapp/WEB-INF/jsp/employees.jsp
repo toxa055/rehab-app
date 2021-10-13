@@ -3,15 +3,32 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>Employees</title>
 </head>
 <body>
-<a href="/">Home</a>
-<div>
-    <p>Employees:</p>
-    <c:forEach items="${employees}" var="e">
-        <c:out value="${e.id}, ${e.name}, ${e.email}, ${e.position}"/><br/>
-    </c:forEach>
+<jsp:include page="nav.jsp"/>
+<br>
+<div class="container-fluid">
+    <h2>Employees</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Position</th>
+            <th scope="col">Email</th>
+        </tr>
+        </thead>
+        <c:forEach items="${employees}" var="e">
+            <tr class="table-light">
+                <td>${e.id}</td>
+                <td>${e.name}</td>
+                <td>${e.position}</td>
+                <td>${e.email}</td>
+            </tr>
+        </c:forEach>
+    </table>
 </div>
 </body>
 </html>

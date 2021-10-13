@@ -16,4 +16,5 @@ public class RehabApplication {
     public static void main(String[] args) {
         SpringApplication.run(RehabApplication.class, args);
     }
+
 }

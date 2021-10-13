@@ -3,16 +3,37 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>Patients</title>
 </head>
 <body>
-<a href="../">Home</a>
-<div>
-    <p>Patients:</p>
-    <c:forEach items="${patients}" var="p">
-        <c:out value="${p.id}, ${p.insuranceNumber}, ${p.name}, ${p.address}, ${p.patientState}"/><br>
-    </c:forEach><br>
+<jsp:include page="../nav.jsp"/>
+<br>
+<div class="container-fluid">
+    <h2>Patients</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="display: none">id</th>
+            <th scope="col">Insurance №</th>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+            <th scope="col">State</th>
+        </tr>
+        </thead>
+        <c:forEach items="${patients}" var="p">
+            <tr class="table-light">
+                <td style="display: none">${p.id}</td>
+                <td>${p.insuranceNumber}</td>
+                <td>${p.name}</td>
+                <td>${p.address}</td>
+                <td>${p.patientState}</td>
+            </tr>
+        </c:forEach>
+    </table>
+    <a href="/patients/new">
+        <button type="button" class="btn btn-success">Add new</button>
+    </a>
 </div>
-<a href="/patients/new">Add new patient</a>
 </body>
 </html>

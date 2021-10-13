@@ -1,10 +1,14 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>Error</title>
 </head>
 <body>
-<a href="/">Home</a>
-<h1>This is the custom error page!</h1>
+<jsp:include page="nav.jsp"/>
+<br>
+<div class="container-fluid">
+    <h1>This is the custom error page!</h1>
+</div>
 </body>
 </html>
