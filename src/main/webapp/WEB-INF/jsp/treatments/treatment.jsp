@@ -7,11 +7,37 @@
     <title>Treatment ${treatment.id}</title>
 </head>
 <body>
-<jsp:include page="../nav.jsp"/><br>
-<div>
-    <c:out value="${treatment.id}, ${treatment.patientId}, ${treatment.patientInsuranceNumber},
-    ${treatment.patientName}, ${treatment.doctorId}, ${treatment.doctorName},
-    ${treatment.date}, ${treatment.diagnosis}, ${treatment.closed}"/><br>
+<jsp:include page="../nav.jsp"/>
+<br>
+<div class="container-fluid">
+    <h2>Treatment ${treatment.id}</h2>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" style="display: none">id</th>
+            <th scope="col" style="display: none">Patient id</th>
+            <th scope="col">Ins.№</th>
+            <th scope="col">Patient</th>
+            <th scope="col" style="display: none">Doctor id</th>
+            <th scope="col">Doctor</th>
+            <th scope="col">Date</th>
+            <th scope="col">Diagnosis</th>
+            <th scope="col">Closed</th>
+        </tr>
+        </thead>
+        <tr class="table-light">
+            <td style="display: none">${treatment.id}</td>
+            <td style="display: none">${treatment.patientId}</td>
+            <td>${treatment.patientInsuranceNumber}</td>
+            <td>${treatment.patientName}</td>
+            <td style="display: none">${treatment.doctorId}</td>
+            <td>${treatment.doctorName}</td>
+            <td>${treatment.date}</td>
+            <td>${treatment.diagnosis}</td>
+            <td>${treatment.closed}</td>
+        </tr>
+    </table>
+    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
 </body>
 </html>
