@@ -65,6 +65,20 @@ public class Event extends AbstractIdEntity {
         this.comment = comment;
     }
 
+    public Event(Patient patient, Cure cure, String dose, LocalDate plannedDate) {
+        this.patient = patient;
+        this.cure = cure;
+        this.dose = dose;
+        this.plannedDate = plannedDate;
+    }
+
+    public Event(Patient patient, Cure cure, String dose, LocalTime plannedTime) {
+        this.patient = patient;
+        this.cure = cure;
+        this.dose = dose;
+        this.plannedTime = plannedTime;
+    }
+
     public Patient getPatient() {
         return patient;
     }

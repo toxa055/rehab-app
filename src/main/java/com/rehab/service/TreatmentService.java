@@ -1,13 +1,17 @@
 package com.rehab.service;
 
 import com.rehab.dto.TreatmentDto;
+import com.rehab.model.Employee;
 import com.rehab.model.Treatment;
+import com.rehab.model.type.Role;
 import com.rehab.repository.TreatmentCrudRepository;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,11 +19,17 @@ public class TreatmentService {
 
     private final TreatmentCrudRepository treatmentCrudRepository;
     private final ModelMapper modelMapper;
+    private final TypeMap<TreatmentDto, Treatment> typeMap;
 
     @Autowired
     public TreatmentService(TreatmentCrudRepository treatmentCrudRepository, ModelMapper modelMapper) {
         this.treatmentCrudRepository = treatmentCrudRepository;
         this.modelMapper = modelMapper;
+        typeMap = modelMapper.createTypeMap(TreatmentDto.class, Treatment.class);
+    }
+
+    public Treatment save(TreatmentDto treatmentDto) {
+        return treatmentCrudRepository.save(toEntity(treatmentDto));
     }
 
     public TreatmentDto getById(int id) {
@@ -52,5 +62,13 @@ public class TreatmentService {
 
     private TreatmentDto toDto(Treatment treatment) {
         return modelMapper.map(treatment, TreatmentDto.class);
+    }
+
+    private Treatment toEntity(TreatmentDto treatmentDto) {
+        treatmentDto.setDoctorId(1);
+        Employee doctor = new Employee();
+        doctor.setRoles(Set.of(Role.DOCTOR));
+        typeMap.addMappings(modelMapper -> modelMapper.map(src -> doctor, Treatment::setDoctor));
+        return modelMapper.map(treatmentDto, Treatment.class);
     }
 }

@@ -17,6 +17,9 @@ public class Prescription extends AbstractIdEntity {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "prescription")
+    private Treatment treatment;
+
     @Column(name = "prescription_date", nullable = false)
     private LocalDate date = LocalDate.now();
 
@@ -38,12 +41,14 @@ public class Prescription extends AbstractIdEntity {
     public Prescription() {
     }
 
-    public Prescription(Integer id, Employee doctor, Patient patient, Cure cure, Pattern pattern, Period period, String dose) {
+    public Prescription(Integer id, Employee doctor, Patient patient, Treatment treatment, Cure cure, Pattern pattern,
+                        Period period, String dose) {
         super(id);
         if (!doctor.getRoles().contains(Role.DOCTOR)) {
             throw new IllegalArgumentException();
         }
         this.patient = patient;
+        this.treatment = treatment;
         this.cure = cure;
         this.pattern = pattern;
         this.period = period;
@@ -56,6 +61,10 @@ public class Prescription extends AbstractIdEntity {
 
     public Patient getPatient() {
         return patient;
+    }
+
+    public Treatment getTreatment() {
+        return treatment;
     }
 
     public LocalDate getDate() {
@@ -87,6 +96,10 @@ public class Prescription extends AbstractIdEntity {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public void setTreatment(Treatment treatment) {
+        this.treatment = treatment;
     }
 
     public void setDate(LocalDate date) {

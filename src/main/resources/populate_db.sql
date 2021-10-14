@@ -42,11 +42,19 @@ VALUES (4, 1, 'diagnosis1'),
        (5, 1, 'diagnosis2'),
        (6, 2, 'diagnosis3');
 
-INSERT INTO prescriptions (doctor_id, patient_id, cure_id, pattern_id, period_id, dose)
-VALUES (1, 4, 8, 15, 12, 'dose1');
+INSERT INTO prescriptions (doctor_id, patient_id, treatment_id, cure_id, pattern_id, period_id, dose)
+VALUES (1, 4, 17, 8, 15, 12, 'dose1');
 
-INSERT INTO prescriptions (doctor_id, patient_id, cure_id, pattern_id, period_id)
-VALUES (2, 5, 10, 16, 14);
+INSERT INTO prescriptions (doctor_id, patient_id, treatment_id, cure_id, pattern_id, period_id)
+VALUES (2, 6, 19, 10, 16, 14);
+
+UPDATE treatments
+SET prescription_id = 20
+WHERE id = 17;
+
+UPDATE treatments
+SET prescription_id = 21
+WHERE id = 19;
 
 INSERT INTO events (patient_id, nurse_id, planned_date, planned_time, cure_id, dose)
 VALUES (4, 3, '2021-10-10', '9:30', 8, 'dose1'),

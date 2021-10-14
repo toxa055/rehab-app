@@ -19,6 +19,7 @@
             <th scope="col">Name</th>
             <th scope="col">Address</th>
             <th scope="col">State</th>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tr class="table-light">
@@ -27,6 +28,9 @@
             <td>${patient.name}</td>
             <td>${patient.address}</td>
             <td>${patient.patientState}</td>
+            <td><a href="../treatments/new/${patient.id}">
+                <button type="button" class="btn btn-success">New treatment</button>
+            </a></td>
         </tr>
     </table>
     <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
