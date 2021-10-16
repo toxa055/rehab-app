@@ -1,7 +1,7 @@
 INSERT INTO employees (name, position, email, password)
-VALUES ('doc1_name', 'doc1_position', 'doc1_email', 'doc1_pass'),
-       ('doc2_name', 'doc2_position', 'doc2_email', 'doc2_pass'),
-       ('nurse1_name', 'nurse1_position', 'nurse1_email', 'nurse1_pass');
+VALUES ('doc1_name', 'doc1_position', 'doc1@doc.ru', 'doc1_pass'),
+       ('doc2_name', 'doc2_position', 'doc2@doc.ru', 'doc2_pass'),
+       ('nurse1_name', 'nurse1_position', 'nurse1@nurse.ru', 'nurse1_pass');
 
 INSERT INTO employee_roles
 VALUES (1, 'DOCTOR'),
