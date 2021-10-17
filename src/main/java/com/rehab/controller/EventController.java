@@ -2,12 +2,14 @@ package com.rehab.controller;
 
 import com.rehab.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/events")
+@Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class EventController {
 
     private static final String EVENTS = "events";

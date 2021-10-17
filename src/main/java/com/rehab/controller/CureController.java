@@ -3,12 +3,14 @@ package com.rehab.controller;
 import com.rehab.dto.CureDto;
 import com.rehab.service.CureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/cures")
+@Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class CureController {
 
     private final CureService cureService;
@@ -31,11 +33,13 @@ public class CureController {
     }
 
     @GetMapping("/new")
+    @Secured("ROLE_DOCTOR")
     public String create() {
         return "/cures/new";
     }
 
     @PostMapping("new")
+    @Secured("ROLE_DOCTOR")
     public String createCure(CureDto cureDto) {
         cureService.save(cureDto);
         return "redirect:";

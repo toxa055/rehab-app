@@ -2,12 +2,14 @@ package com.rehab.controller;
 
 import com.rehab.service.PrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/prescriptions")
+@Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
 public class PrescriptionController {
 
     private static final String PRESCRIPTIONS = "prescriptions";
