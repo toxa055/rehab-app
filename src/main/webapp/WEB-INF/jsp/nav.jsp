@@ -39,6 +39,16 @@
                         <a class="nav-link" href="/cures">Cures</a>
                     </li>
                 </sec:authorize>
+                <sec:authorize access="!isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Log In</a>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="isAuthenticated()">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Log Out</a>
+                    </li>
+                </sec:authorize>
             </ul>
         </div>
     </div>
