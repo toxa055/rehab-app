@@ -33,13 +33,11 @@ public class CureController {
     }
 
     @GetMapping("/new")
-    @Secured("ROLE_DOCTOR")
     public String create() {
         return "/cures/new";
     }
 
     @PostMapping("new")
-    @Secured("ROLE_DOCTOR")
     public String createCure(CureDto cureDto) {
         cureService.save(cureDto);
         return "redirect:";
