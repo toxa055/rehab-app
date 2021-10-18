@@ -1,7 +1,14 @@
 package com.rehab.model.type;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     ADMIN,
     DOCTOR,
-    NURSE
+    NURSE;
+
+    @Override
+    public String getAuthority() {
+        return "ROLE_" + name();
+    }
 }
