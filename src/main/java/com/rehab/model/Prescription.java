@@ -17,7 +17,7 @@ public class Prescription extends AbstractIdEntity {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "prescription")
+    @OneToOne(fetch = FetchType.EAGER)
     private Treatment treatment;
 
     @Column(name = "prescription_date", nullable = false)
