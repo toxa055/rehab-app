@@ -24,7 +24,9 @@
             <label for="patientInsuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" name="patientInsuranceNumber"
-                       id="patientInsuranceNumber" value="${patient.insuranceNumber}" readonly>
+                       id="patientInsuranceNumber" value="${patient.insuranceNumber}" readonly><br>
+                <input type="button" class="btn btn-primary" id="searchByInsNum" value="Search">
+                <input type="button" class="btn btn-primary" id="changeInsNum" value="Change" disabled>
             </div>
         </div>
         <div class="row mb-3">
@@ -47,8 +49,9 @@
             </div>
         </div>
         <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary" id="saveButton" disabled>Save</button>
     </form>
 </div>
+<script src="${pageContext.request.contextPath}/js/find_patient.js"></script>
 </body>
 </html>
