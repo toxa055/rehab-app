@@ -21,18 +21,16 @@ public class PrescriptionService {
     private final PrescriptionCrudRepository prescriptionCrudRepository;
     private final PatternCrudRepository patternCrudRepository;
     private final PeriodCrudRepository periodCrudRepository;
-    private final TreatmentCrudRepository treatmentCrudRepository;
     private final ModelMapper modelMapper;
     private final TypeMap<PrescriptionDto, Prescription> typeMap;
 
     @Autowired
     public PrescriptionService(PrescriptionCrudRepository prescriptionCrudRepository,
                                PatternCrudRepository patternCrudRepository, PeriodCrudRepository periodCrudRepository,
-                               TreatmentCrudRepository treatmentCrudRepository, ModelMapper modelMapper) {
+                               ModelMapper modelMapper) {
         this.prescriptionCrudRepository = prescriptionCrudRepository;
         this.patternCrudRepository = patternCrudRepository;
         this.periodCrudRepository = periodCrudRepository;
-        this.treatmentCrudRepository = treatmentCrudRepository;
         this.modelMapper = modelMapper;
         typeMap = modelMapper.createTypeMap(PrescriptionDto.class, Prescription.class);
     }
@@ -42,11 +40,7 @@ public class PrescriptionService {
         var prescriptionFromDto = toEntity(prescriptionDto);
         prescriptionFromDto.setPattern(patternCrudRepository.save(prescriptionFromDto.getPattern()));
         prescriptionFromDto.setPeriod(periodCrudRepository.save(prescriptionFromDto.getPeriod()));
-        var savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
-        var treatment = treatmentCrudRepository.findById(prescriptionFromDto.getTreatment().getId()).get();
-        treatment.setPrescription(savedPrescription);
-        treatmentCrudRepository.save(treatment);
-        return savedPrescription;
+        return prescriptionCrudRepository.save(prescriptionFromDto);
     }
 
     public PrescriptionDto getById(int id) {

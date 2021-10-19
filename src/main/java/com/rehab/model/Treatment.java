@@ -17,9 +17,6 @@ public class Treatment extends AbstractIdEntity {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Employee doctor;
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "treatment")
-    private Prescription prescription;
-
     @Column(name = "treatment_date", nullable = false)
     private LocalDate date = LocalDate.now();
 
@@ -32,14 +29,13 @@ public class Treatment extends AbstractIdEntity {
     public Treatment() {
     }
 
-    public Treatment(Integer id, Patient patient, Employee doctor, Prescription prescription, String diagnosis) {
+    public Treatment(Integer id, Patient patient, Employee doctor, String diagnosis) {
         super(id);
         if (!doctor.getRoles().contains(Role.DOCTOR)) {
             throw new IllegalArgumentException();
         }
         this.patient = patient;
         this.doctor = doctor;
-        this.prescription = prescription;
         this.diagnosis = diagnosis;
     }
 
@@ -49,10 +45,6 @@ public class Treatment extends AbstractIdEntity {
 
     public Employee getDoctor() {
         return doctor;
-    }
-
-    public Prescription getPrescription() {
-        return prescription;
     }
 
     public String getDiagnosis() {
@@ -76,10 +68,6 @@ public class Treatment extends AbstractIdEntity {
             throw new IllegalArgumentException();
         }
         this.doctor = doctor;
-    }
-
-    public void setPrescription(Prescription prescription) {
-        this.prescription = prescription;
     }
 
     public void setDate(LocalDate date) {
