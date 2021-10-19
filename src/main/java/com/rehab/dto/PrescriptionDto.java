@@ -3,17 +3,20 @@ package com.rehab.dto;
 import com.rehab.model.type.CureType;
 import com.rehab.model.type.PatternUnit;
 import com.rehab.model.type.TimeUnit;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class PrescriptionDto {
-    private int id;
+    private Integer id;
     private int patientId;
     private int patientInsuranceNumber;
     private String patientName;
     private int doctorId;
     private String doctorName;
+    private int treatmentId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date = LocalDate.now();
     private int cureId;
     private String cureName;
@@ -30,7 +33,7 @@ public class PrescriptionDto {
     public PrescriptionDto() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -52,6 +55,10 @@ public class PrescriptionDto {
 
     public String getDoctorName() {
         return doctorName;
+    }
+
+    public int getTreatmentId() {
+        return treatmentId;
     }
 
     public LocalDate getDate() {
@@ -102,7 +109,7 @@ public class PrescriptionDto {
         return dose;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -124,6 +131,10 @@ public class PrescriptionDto {
 
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
+    }
+
+    public void setTreatmentId(int treatmentId) {
+        this.treatmentId = treatmentId;
     }
 
     public void setDate(LocalDate date) {

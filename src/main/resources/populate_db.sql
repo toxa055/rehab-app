@@ -1,7 +1,8 @@
 INSERT INTO employees (name, position, email, password)
 VALUES ('doc1_name', 'doc1_position', 'doc1@doc.ru', '$2a$12$T1yui3jXQrGQ7m9OyE13bua2Lx6hpSJNF1V4gmeREbDScJrE4whAa'),
        ('doc2_name', 'doc2_position', 'doc2@doc.ru', '$2a$12$Acl3twa62Xn5MoMix9U4kOMFwPXUIfjjZPfc/mUUsyium3uFG333y'),
-       ('nurse1_name', 'nurse1_position', 'nurse1@nurse.ru', '$2a$12$K88L.PuRN1rt9bOzGk2byex7LTm7POGIygvA4HRSq/d/GJG/b/EXq');
+       ('nurse1_name', 'nurse1_position', 'nurse1@nurse.ru',
+        '$2a$12$K88L.PuRN1rt9bOzGk2byex7LTm7POGIygvA4HRSq/d/GJG/b/EXq');
 
 INSERT INTO employee_roles
 VALUES (1, 'DOCTOR'),
@@ -47,14 +48,6 @@ VALUES (1, 4, 17, 8, 15, 12, 'dose1');
 
 INSERT INTO prescriptions (doctor_id, patient_id, treatment_id, cure_id, pattern_id, period_id)
 VALUES (2, 6, 19, 10, 16, 14);
-
-UPDATE treatments
-SET prescription_id = 20
-WHERE id = 17;
-
-UPDATE treatments
-SET prescription_id = 21
-WHERE id = 19;
 
 INSERT INTO events (patient_id, nurse_id, planned_date, planned_time, cure_id, dose)
 VALUES (4, 3, '2021-10-10', '9:30', 8, 'dose1'),

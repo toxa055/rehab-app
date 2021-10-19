@@ -1,6 +1,8 @@
 package com.rehab.controller;
 
+import com.rehab.dto.PrescriptionDto;
 import com.rehab.service.PrescriptionService;
+import com.rehab.service.TreatmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -15,10 +17,12 @@ public class PrescriptionController {
     private static final String PRESCRIPTIONS = "prescriptions";
     private static final String PRESCRIPTION_LIST = "/prescriptions/list";
     private final PrescriptionService prescriptionService;
+    private final TreatmentService treatmentService;
 
     @Autowired
-    public PrescriptionController(PrescriptionService prescriptionService) {
+    public PrescriptionController(PrescriptionService prescriptionService, TreatmentService treatmentService) {
         this.prescriptionService = prescriptionService;
+        this.treatmentService = treatmentService;
     }
 
     @GetMapping(value = "/getBy", params = "id")
@@ -43,5 +47,17 @@ public class PrescriptionController {
     public String prescriptions(Model model) {
         model.addAttribute(PRESCRIPTIONS, prescriptionService.getAll());
         return PRESCRIPTION_LIST;
+    }
+
+    @GetMapping("/new/{treatmentId}")
+    public String create(@PathVariable int treatmentId, Model model) {
+        model.addAttribute("treatment", treatmentService.getById(treatmentId));
+        return "prescriptions/new";
+    }
+
+    @PostMapping("/new")
+    public String createPrescription(PrescriptionDto prescriptionDto) {
+        prescriptionService.save(prescriptionDto);
+        return "redirect:..";
     }
 }

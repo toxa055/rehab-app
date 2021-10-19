@@ -16,6 +16,7 @@ public class TreatmentController {
 
     private static final String TREATMENTS = "treatments";
     private static final String TREATMENTS_LIST = "/treatments/list";
+    private static final String NEW_TREATMENT = "/treatments/new";
     private final TreatmentService treatmentService;
     private final PatientService patientService;
 
@@ -49,11 +50,17 @@ public class TreatmentController {
         return TREATMENTS_LIST;
     }
 
+    @GetMapping("/new")
+    @Secured("ROLE_DOCTOR")
+    public String create(Model model) {
+        return NEW_TREATMENT;
+    }
+
     @GetMapping("/new/{patientId}")
     @Secured("ROLE_DOCTOR")
     public String create(@PathVariable int patientId, Model model) {
         model.addAttribute("patient", patientService.getById(patientId));
-        return "treatments/new";
+        return NEW_TREATMENT;
     }
 
     @PostMapping("/new")

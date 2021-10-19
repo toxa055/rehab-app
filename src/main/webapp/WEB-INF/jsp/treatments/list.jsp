@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
@@ -39,6 +40,11 @@
             </tr>
         </c:forEach>
     </table>
+    <sec:authorize access="hasRole('DOCTOR')">
+        <a href="/treatments/new">
+            <button type="button" class="btn btn-success">Add new</button>
+        </a>
+    </sec:authorize>
 </div>
 </body>
 </html>
