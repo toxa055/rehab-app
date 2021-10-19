@@ -1,10 +1,9 @@
 package com.rehab.service;
 
 import com.rehab.dto.PrescriptionDto;
-import com.rehab.model.Employee;
 import com.rehab.model.Prescription;
-import com.rehab.model.type.Role;
 import com.rehab.repository.*;
+import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,10 +74,8 @@ public class PrescriptionService {
     }
 
     private Prescription toEntity(PrescriptionDto prescriptionDto) {
-        prescriptionDto.setDoctorId(1);
-        var doctor = new Employee();
-        doctor.setRoles(Set.of(Role.DOCTOR));
-        typeMap.addMappings(modelMapper -> modelMapper.map(src -> doctor, Prescription::setDoctor));
+        var authDoctor = SecurityUtil.getAuthEmployee();
+        typeMap.addMappings(modelMapper -> modelMapper.map(src -> authDoctor, Prescription::setDoctor));
         return modelMapper.map(prescriptionDto, Prescription.class);
     }
 }

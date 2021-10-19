@@ -1,17 +1,15 @@
 package com.rehab.service;
 
 import com.rehab.dto.TreatmentDto;
-import com.rehab.model.Employee;
 import com.rehab.model.Treatment;
-import com.rehab.model.type.Role;
 import com.rehab.repository.TreatmentCrudRepository;
+import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,10 +63,10 @@ public class TreatmentService {
     }
 
     private Treatment toEntity(TreatmentDto treatmentDto) {
-        treatmentDto.setDoctorId(1);
-        Employee doctor = new Employee();
-        doctor.setRoles(Set.of(Role.DOCTOR));
-        typeMap.addMappings(modelMapper -> modelMapper.map(src -> doctor, Treatment::setDoctor));
+        var authDoctor = SecurityUtil.getAuthEmployee();
+        treatmentDto.setDoctorId(authDoctor.getId());
+        treatmentDto.setDoctorName(authDoctor.getName());
+        typeMap.addMappings(modelMapper -> modelMapper.map(src -> authDoctor, Treatment::setDoctor));
         return modelMapper.map(treatmentDto, Treatment.class);
     }
 }
