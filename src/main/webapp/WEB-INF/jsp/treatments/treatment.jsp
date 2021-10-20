@@ -24,6 +24,9 @@
             <th scope="col">Date</th>
             <th scope="col">Diagnosis</th>
             <th scope="col">Closed</th>
+            <sec:authorize access="hasRole('DOCTOR')">
+                <th scope="col">Actions</th>
+            </sec:authorize>
         </tr>
         </thead>
         <tr class="table-light">
@@ -37,7 +40,7 @@
             <td>${treatment.diagnosis}</td>
             <td>${treatment.closed}</td>
             <sec:authorize access="hasRole('DOCTOR')">
-                <td><a href="../prescriptions/new/${treatment.id}">
+                <td><a href="/prescriptions/new/${treatment.id}">
                     <button type="button" class="btn btn-success">New prescription</button>
                 </a></td>
             </sec:authorize>

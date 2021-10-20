@@ -3,6 +3,7 @@ package com.rehab.service;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.model.Prescription;
 import com.rehab.repository.*;
+import com.rehab.util.EventUtil;
 import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -19,16 +20,18 @@ public class PrescriptionService {
     private final PrescriptionCrudRepository prescriptionCrudRepository;
     private final PatternCrudRepository patternCrudRepository;
     private final PeriodCrudRepository periodCrudRepository;
+    private final EventCrudRepository eventCrudRepository;
     private final ModelMapper modelMapper;
     private final TypeMap<PrescriptionDto, Prescription> typeMap;
 
     @Autowired
     public PrescriptionService(PrescriptionCrudRepository prescriptionCrudRepository,
                                PatternCrudRepository patternCrudRepository, PeriodCrudRepository periodCrudRepository,
-                               ModelMapper modelMapper) {
+                               EventCrudRepository eventCrudRepository, ModelMapper modelMapper) {
         this.prescriptionCrudRepository = prescriptionCrudRepository;
         this.patternCrudRepository = patternCrudRepository;
         this.periodCrudRepository = periodCrudRepository;
+        this.eventCrudRepository = eventCrudRepository;
         this.modelMapper = modelMapper;
         typeMap = modelMapper.createTypeMap(PrescriptionDto.class, Prescription.class);
     }
@@ -38,7 +41,9 @@ public class PrescriptionService {
         var prescriptionFromDto = toEntity(prescriptionDto);
         prescriptionFromDto.setPattern(patternCrudRepository.save(prescriptionFromDto.getPattern()));
         prescriptionFromDto.setPeriod(periodCrudRepository.save(prescriptionFromDto.getPeriod()));
-        return prescriptionCrudRepository.save(prescriptionFromDto);
+        Prescription savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
+        eventCrudRepository.saveAll(EventUtil.createEvents(savedPrescription));
+        return savedPrescription;
     }
 
     public PrescriptionDto getById(int id) {
