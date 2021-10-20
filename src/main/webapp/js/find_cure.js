@@ -43,7 +43,6 @@ patternUnit.change(function () {
         $('#patternCount option[value="5"]').remove();
         $('#patternCount option[value="6"]').remove();
         $('#patternCount option[value="7"]').remove();
-        $('#periodUnit').prepend('<option value="DAY">DAY</option>');
         if (limit > 4) {
             limit = 1;
         }
@@ -55,7 +54,6 @@ patternUnit.change(function () {
             .append('<option value="5">5</option>')
             .append('<option value="6">6</option>')
             .append('<option value="7">7</option>');
-        $('#periodUnit option[value="DAY"]').remove();
         $('.parts-of-day').hide();
         $('.days-of-week').attr('hidden', false);
     }

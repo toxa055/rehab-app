@@ -20,6 +20,7 @@
             <th scope="col">Patient</th>
             <th scope="col" style="display: none">Nurse id</th>
             <th scope="col">Nurse</th>
+            <th scope="col" style="display: none">Prescription id</th>
             <th scope="col">Planned Date</th>
             <th scope="col">Planned Time</th>
             <th scope="col">State</th>
@@ -39,6 +40,7 @@
             <td>${event.patientName}</td>
             <td style="display: none">${event.nurseId}</td>
             <td>${event.nurseName}</td>
+            <td style="display: none">${event.prescriptionId}</td>
             <td>${event.plannedDate}</td>
             <td>${event.plannedTime}</td>
             <td>${event.eventState}</td>

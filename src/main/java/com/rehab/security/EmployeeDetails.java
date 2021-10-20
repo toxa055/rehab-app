@@ -21,6 +21,10 @@ public class EmployeeDetails implements UserDetails {
         this.employee = employee;
     }
 
+    public Employee getEmployee() {
+        return employee;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return employee.getRoles();

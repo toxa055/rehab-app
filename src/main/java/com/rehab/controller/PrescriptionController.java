@@ -25,8 +25,8 @@ public class PrescriptionController {
         this.treatmentService = treatmentService;
     }
 
-    @GetMapping(value = "/getBy", params = "id")
-    public String getById(@RequestParam int id, Model model) {
+    @GetMapping("/{id}")
+    public String getById(@PathVariable int id, Model model) {
         model.addAttribute("p", prescriptionService.getById(id));
         return "prescriptions/prescription";
     }
@@ -59,5 +59,11 @@ public class PrescriptionController {
     public String createPrescription(PrescriptionDto prescriptionDto) {
         prescriptionService.save(prescriptionDto);
         return "redirect:..";
+    }
+
+    @GetMapping("/cancel/{id}")
+    public String cancel(@PathVariable int id, Model model) {
+        model.addAttribute("p", prescriptionService.cancel(id));
+        return "redirect:../" + id;
     }
 }

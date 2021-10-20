@@ -29,6 +29,7 @@ public class PrescriptionDto {
     private int periodCount;
     private TimeUnit periodUnit;
     private String dose;
+    private boolean active = true;
 
     public PrescriptionDto() {
     }
@@ -109,6 +110,10 @@ public class PrescriptionDto {
         return dose;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -183,5 +188,9 @@ public class PrescriptionDto {
 
     public void setDose(String dose) {
         this.dose = dose;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

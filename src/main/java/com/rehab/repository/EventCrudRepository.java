@@ -16,4 +16,6 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
     List<Event> findAllByPatientId(int patientId);
 
     List<Event> findAllByNurseId(int nurseId);
+
+    List<Event> findAllByPrescriptionId(int prescriptionId);
 }

@@ -26,8 +26,8 @@ public class TreatmentController {
         this.patientService = patientService;
     }
 
-    @GetMapping(value = "/getBy", params = "id")
-    public String getById(@RequestParam int id, Model model) {
+    @GetMapping(value = "/{id}")
+    public String getById(@PathVariable int id, Model model) {
         model.addAttribute("treatment", treatmentService.getById(id));
         return "treatments/treatment";
     }

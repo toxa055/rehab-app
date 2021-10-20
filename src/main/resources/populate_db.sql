@@ -21,7 +21,7 @@ VALUES ('cure1', 'MEDICINE'),
        ('cure2', 'MEDICINE'),
        ('cure3', 'PROCEDURE'),
        ('cure4', 'PROCEDURE');
-
+/*
 INSERT INTO periods (count, unit)
 VALUES (3, 'DAY'),
        (2, 'WEEK'),
@@ -57,3 +57,4 @@ INSERT INTO events (patient_id, nurse_id, planned_date, cure_id)
 VALUES (5, 3, '2021-10-10', 10),
        (5, 3, '2021-10-12', 10),
        (5, 3, '2021-10-14', 10);
+*/

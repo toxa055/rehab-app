@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
@@ -29,6 +30,10 @@
             <th scope="col" style="display: none">Period id</th>
             <th scope="col">Period</th>
             <th scope="col">Dose</th>
+            <th scope="col">Active</th>
+            <sec:authorize access="hasRole('DOCTOR')">
+                <th scope="col">Actions</th>
+            </sec:authorize>
         </tr>
         </thead>
         <tr class="table-light">
@@ -49,9 +54,21 @@
             </td>
             <td>${p.periodCount} ${p.periodUnit}</td>
             <td>${p.dose}</td>
+            <td>${p.active}</td>
+            <sec:authorize access="hasRole('DOCTOR')">
+                <td><a href="/prescriptions/cancel/${p.id}" id="cancelLink">
+                    <button type="button" class="btn btn-danger" id="cancelButton">Cancel</button>
+                </a></td>
+            </sec:authorize>
         </tr>
     </table>
     <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
+<script language="javascript">
+    if (!${p.active}) {
+        $('#cancelLink').removeAttr('href');
+        $('#cancelButton').attr('disabled', true);
+    }
+</script>
 </body>
 </html>

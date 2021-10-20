@@ -13,6 +13,7 @@ public class EventDto {
     private String patientName;
     private int nurseId;
     private String nurseName;
+    private int prescriptionId;
     private LocalDate plannedDate;
     private LocalTime plannedTime;
     private EventState eventState;
@@ -49,6 +50,10 @@ public class EventDto {
 
     public String getNurseName() {
         return nurseName;
+    }
+
+    public int getPrescriptionId() {
+        return prescriptionId;
     }
 
     public LocalDate getPlannedDate() {
@@ -113,6 +118,10 @@ public class EventDto {
 
     public void setNurseName(String nurseName) {
         this.nurseName = nurseName;
+    }
+
+    public void setPrescriptionId(int prescriptionId) {
+        this.prescriptionId = prescriptionId;
     }
 
     public void setPlannedDate(LocalDate plannedDate) {

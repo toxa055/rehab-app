@@ -26,6 +26,7 @@
             <th scope="col">Patient</th>
             <th scope="col" style="display: none">Nurse id</th>
             <th scope="col">Nurse</th>
+            <th scope="col" style="display: none">Prescription id</th>
             <th scope="col">Planned Date</th>
             <th scope="col">Planned Time</th>
             <th scope="col">State</th>
@@ -46,6 +47,7 @@
                 <td>${e.patientName}</td>
                 <td style="display: none">${e.nurseId}</td>
                 <td>${e.nurseName}</td>
+                <td style="display: none">${e.prescriptionId}</td>
                 <td>${e.plannedDate}</td>
                 <td>${e.plannedTime}</td>
                 <td>${e.eventState}</td>
