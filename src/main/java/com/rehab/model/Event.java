@@ -19,6 +19,10 @@ public class Event extends AbstractIdEntity {
     @JoinColumn(name = "nurse_id")
     private Employee nurse;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prescription_id", nullable = false)
+    private Prescription prescription;
+
     @Column(name = "planned_date", nullable = false)
     private LocalDate plannedDate;
 
@@ -48,14 +52,15 @@ public class Event extends AbstractIdEntity {
     public Event() {
     }
 
-    public Event(Integer id, Patient patient, Employee nurse, LocalDate plannedDate, LocalTime plannedTime,
-                 Cure cure, String dose, LocalDate endDate, LocalTime endTime, String comment) {
+    public Event(Integer id, Patient patient, Employee nurse, Prescription prescription, LocalDate plannedDate,
+                 LocalTime plannedTime, Cure cure, String dose, LocalDate endDate, LocalTime endTime, String comment) {
         super(id);
         if (!nurse.getRoles().contains(Role.NURSE)) {
             throw new IllegalArgumentException();
         }
         this.patient = patient;
         this.nurse = nurse;
+        this.prescription = prescription;
         this.plannedDate = plannedDate;
         this.plannedTime = plannedTime;
         this.cure = cure;
@@ -85,6 +90,10 @@ public class Event extends AbstractIdEntity {
 
     public Employee getNurse() {
         return nurse;
+    }
+
+    public Prescription getPrescription() {
+        return prescription;
     }
 
     public LocalDate getPlannedDate() {
@@ -128,6 +137,10 @@ public class Event extends AbstractIdEntity {
             throw new IllegalArgumentException();
         }
         this.nurse = nurse;
+    }
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
     }
 
     public void setPlannedDate(LocalDate plannedDate) {

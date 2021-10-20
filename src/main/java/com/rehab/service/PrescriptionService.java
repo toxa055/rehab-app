@@ -41,8 +41,10 @@ public class PrescriptionService {
         var prescriptionFromDto = toEntity(prescriptionDto);
         prescriptionFromDto.setPattern(patternCrudRepository.save(prescriptionFromDto.getPattern()));
         prescriptionFromDto.setPeriod(periodCrudRepository.save(prescriptionFromDto.getPeriod()));
-        Prescription savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
-        eventCrudRepository.saveAll(EventUtil.createEvents(savedPrescription));
+        var savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
+        var plannedEvents = EventUtil.createEvents(savedPrescription);
+        plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
+        eventCrudRepository.saveAll(plannedEvents);
         return savedPrescription;
     }
 
