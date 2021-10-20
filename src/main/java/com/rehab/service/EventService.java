@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,38 +29,47 @@ public class EventService {
     }
 
     public List<EventDto> getAll() {
-        return eventCrudRepository
-                .findAll()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return sortByPlannedDateTime(eventCrudRepository.findAll());
     }
 
     public List<EventDto> getAllByPatientId(int patientId) {
-        return eventCrudRepository
-                .findAllByPatientId(patientId)
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return sortByPlannedDateTime(eventCrudRepository.findAllByPatientId(patientId));
+    }
+
+    public List<EventDto> getAllByInsuranceNumber(int insNumber) {
+        return sortByPlannedDateTime(eventCrudRepository.findAllByInsuranceNumber(insNumber));
     }
 
     public List<EventDto> getAllByNurseId(int nurseId) {
-        return eventCrudRepository
-                .findAllByNurseId(nurseId)
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+        return sortByPlannedDateTime(eventCrudRepository.findAllByNurseId(nurseId));
     }
 
-    public List<EventDto> getAllToday() {
-        return eventCrudRepository
-                .findAllToday(LocalDate.now())
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public List<EventDto> getAllByInsuranceNumberAndPlannedDate(int insNumber, LocalDate plannedDate) {
+        return sortByPlannedTime(eventCrudRepository.findAllByInsuranceNumberAndPlannedDate(insNumber, plannedDate));
+    }
+
+    public List<EventDto> getAllByPlannedDate(LocalDate plannedDate) {
+        return sortByPlannedTime(eventCrudRepository.findAllByPlannedDate((plannedDate)));
     }
 
     private EventDto toDto(Event event) {
         return modelMapper.map(event, EventDto.class);
+    }
+
+    private List<EventDto> sortByPlannedDateTime(List<Event> events) {
+        return events
+                .stream()
+                .map(this::toDto)
+                .sorted(Comparator.comparing(EventDto::getPlannedDate)
+                        .thenComparing(EventDto::getPlannedTime))
+                .collect(Collectors.toList());
+    }
+
+    private List<EventDto> sortByPlannedTime(List<Event> events) {
+        return events
+                .stream()
+                .map(this::toDto)
+                .sorted(Comparator.comparing(EventDto::getPlannedTime))
+                .collect(Collectors.toList());
     }
 }

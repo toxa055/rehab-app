@@ -11,12 +11,25 @@
 <br>
 <div class="container-fluid">
     <h2>Events</h2>
-    <a href="/events">
-        <button type="button" class="btn btn-info">All</button>
-    </a>
-    <a href="/events/today">
-        <button type="button" class="btn btn-info">Today</button>
-    </a><br>
+    <div>
+        <form action="/events/filter" method="get">
+            <div class="row mb-3">
+                <label for="plannedDate" class="col-sm-2 col-form-label">Date</label>
+                <div class="col-auto">
+                    <input type="date" class="form-control" name="plannedDate" id="plannedDate">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="insuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
+                <div class="col-auto">
+                    <input type="number" class="form-control" name="insuranceNumber" id="insuranceNumber" min="1">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-warning">Filter</button>
+        </form>
+        <a href="/events"><button type="button" class="btn btn-warning">All Events</button></a>
+        <a href="/events/today"><button type="button" class="btn btn-warning">Today Events</button></a><br>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>
