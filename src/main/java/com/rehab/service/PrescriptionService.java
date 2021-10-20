@@ -37,7 +37,7 @@ public class PrescriptionService {
     }
 
     @Transactional
-    public Prescription save(PrescriptionDto prescriptionDto) {
+    public PrescriptionDto save(PrescriptionDto prescriptionDto) {
         var prescriptionFromDto = toEntity(prescriptionDto);
         prescriptionFromDto.setPattern(patternCrudRepository.save(prescriptionFromDto.getPattern()));
         prescriptionFromDto.setPeriod(periodCrudRepository.save(prescriptionFromDto.getPeriod()));
@@ -45,7 +45,17 @@ public class PrescriptionService {
         var plannedEvents = EventUtil.createEvents(savedPrescription);
         plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
         eventCrudRepository.saveAll(plannedEvents);
-        return savedPrescription;
+        return toDto(savedPrescription);
+    }
+
+    @Transactional
+    public PrescriptionDto cancel(int id) {
+        var eventsByPrescriptionId = eventCrudRepository.findAllByPrescriptionId(id);
+        var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId);
+        eventCrudRepository.saveAll(eventsForCancelling);
+        var cancelledPrescription = prescriptionCrudRepository.findAllById(List.of(id)).get(0);
+        cancelledPrescription.setActive(false);
+        return toDto(prescriptionCrudRepository.save(cancelledPrescription));
     }
 
     public PrescriptionDto getById(int id) {

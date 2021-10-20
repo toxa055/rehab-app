@@ -97,6 +97,7 @@ CREATE TABLE prescriptions
     pattern_id        INTEGER NOT NULL,
     period_id         INTEGER NOT NULL,
     dose              VARCHAR NOT NULL    DEFAULT 'According to instruction.',
+    active            BOOLEAN             DEFAULT TRUE,
     FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE,
     FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
     FOREIGN KEY (treatment_id) REFERENCES treatments (id) ON DELETE CASCADE,

@@ -3,6 +3,7 @@ package com.rehab.util;
 import com.rehab.model.Event;
 import com.rehab.model.Pattern;
 import com.rehab.model.Prescription;
+import com.rehab.model.type.EventState;
 import com.rehab.model.type.PatternUnit;
 import com.rehab.model.type.TimeUnit;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventUtil {
 
@@ -60,6 +62,14 @@ public class EventUtil {
         }
 
         return events;
+    }
+
+    public static List<Event> getEventsForCancelling(List<Event> events) {
+        return events
+                .stream()
+                .filter(e -> e.getEventState() == EventState.PLANNED)
+                .peek(e -> e.setEventState(EventState.CANCELLED))
+                .collect(Collectors.toList());
     }
 
     private static void addEventsForPartsOfDay(Prescription prescription, Pattern pattern, LocalDate plannedDate,

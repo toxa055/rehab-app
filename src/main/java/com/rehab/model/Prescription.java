@@ -39,6 +39,9 @@ public class Prescription extends AbstractIdEntity {
     @Column(name = "dose", nullable = false)
     private String dose = "According to instruction.";
 
+    @Column(name = "active", nullable = false)
+    private boolean isActive = true;
+
     public Prescription() {
     }
 
@@ -88,6 +91,10 @@ public class Prescription extends AbstractIdEntity {
         return dose;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
     public void setDoctor(Employee doctor) {
         if (!doctor.getRoles().contains(Role.DOCTOR)) {
             throw new IllegalArgumentException();
@@ -121,5 +128,9 @@ public class Prescription extends AbstractIdEntity {
 
     public void setDose(String dose) {
         this.dose = dose;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }
