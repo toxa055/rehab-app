@@ -77,11 +77,8 @@
                 <td>${e.comment}</td>
                 <sec:authorize access="hasRole('NURSE')">
                     <td>
-                        <a href="/events/choose/${e.id}">
-                            <button type="button" class="btn btn-success" id="chooseButton${e.id}">Choose</button>
-                        </a>
-                        <a href="/events/discard/${e.id}">
-                            <button type="button" class="btn btn-info" id="discardButton${e.id}">Discard</button>
+                        <a href="/events/${e.id}">
+                            <button type="button" class="btn btn-info" id="chooseButton${e.id}">Details</button>
                         </a>
                     </td>
                 </sec:authorize>

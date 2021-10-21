@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
@@ -31,6 +32,9 @@
             <th scope="col">End Date</th>
             <th scope="col">End Time</th>
             <th scope="col">Comment</th>
+            <sec:authorize access="hasRole('NURSE')">
+                <th scope="col">Actions</th>
+            </sec:authorize>
         </tr>
         </thead>
         <tr class="table-light">
@@ -51,6 +55,22 @@
             <td>${event.endDate}</td>
             <td>${event.endTime}</td>
             <td>${event.comment}</td>
+            <sec:authorize access="hasRole('NURSE')">
+                <td>
+                    <a href="/events/choose/${event.id}">
+                        <button type="button" class="btn btn-success" id="chooseButton">Choose</button>
+                    </a>
+                    <a href="/events/discard/${event.id}">
+                        <button type="button" class="btn btn-info" id="discardButton">Discard</button>
+                    </a>
+                    <a href="/events/change/${event.id}?state=performed">
+                        <button type="button" class="btn btn-success" id="performButton">Perform</button>
+                    </a>
+                    <a href="/events/change/${event.id}?state=cancelled">
+                        <button type="button" class="btn btn-danger" id="cancelButton">Cancel</button>
+                    </a>
+                </td>
+            </sec:authorize>
         </tr>
     </table>
     <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>

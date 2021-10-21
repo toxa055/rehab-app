@@ -25,20 +25,20 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping(value = "/getBy", params = "id")
-    public String getById(@RequestParam int id, Model model) {
-        model.addAttribute("event", eventService.getById(id));
+    @GetMapping("/{eventId}")
+    public String getById(@PathVariable int eventId, Model model) {
+        model.addAttribute("event", eventService.getById(eventId));
         return "/events/event";
     }
 
-    @GetMapping(value = "/getBy", params = "patientId")
-    public String getAllByPatientId(@RequestParam int patientId, Model model) {
+    @GetMapping("/patient/{patientId}")
+    public String getAllByPatientId(@PathVariable int patientId, Model model) {
         model.addAttribute(EVENTS, eventService.getAllByPatientId(patientId));
         return EVENTS_LIST;
     }
 
-    @GetMapping(value = "/getBy", params = "nurseId")
-    public String getAllByNurseId(@RequestParam int nurseId, Model model) {
+    @GetMapping("/nurse/{nurseId}")
+    public String getAllByNurseId(@PathVariable int nurseId, Model model) {
         model.addAttribute(EVENTS, eventService.getAllByNurseId(nurseId));
         return EVENTS_LIST;
     }
@@ -75,6 +75,13 @@ public class EventController {
     @GetMapping("/discard/{eventId}")
     public String discard(@PathVariable int eventId) {
         eventService.unSetNurse(eventId);
+        return "redirect:..";
+    }
+
+    @Secured("ROLE_NURSE")
+    @GetMapping("/change/{eventId}")
+    public String changeState(@PathVariable int eventId, @RequestParam String state) {
+        eventService.changeStatus(eventId, state);
         return "redirect:..";
     }
 

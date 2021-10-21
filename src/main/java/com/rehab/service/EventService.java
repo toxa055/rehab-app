@@ -2,6 +2,7 @@ package com.rehab.service;
 
 import com.rehab.dto.EventDto;
 import com.rehab.model.Event;
+import com.rehab.model.type.EventState;
 import com.rehab.repository.EventCrudRepository;
 import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,6 +46,20 @@ public class EventService {
         }
         eventForUnsettingSetNurse.setNurse(null);
         return toDto(eventCrudRepository.save(eventForUnsettingSetNurse));
+    }
+
+    public EventDto changeStatus(int eventId, String eventState) {
+        var authNurse = SecurityUtil.getAuthEmployee();
+        var eventForChangingState = eventCrudRepository.findById(eventId).get();
+        if ((eventForChangingState.getNurse() == null)
+                || (!authNurse.getId().equals(eventForChangingState.getNurse().getId()))
+                || (eventForChangingState.getEventState() != EventState.PLANNED)) {
+            throw new IllegalArgumentException();
+        }
+        eventForChangingState.setEventState(EventState.valueOf(eventState.toUpperCase()));
+        eventForChangingState.setEndDate(LocalDate.now());
+        eventForChangingState.setEndTime(LocalTime.now());
+        return toDto(eventCrudRepository.save(eventForChangingState));
     }
 
     public EventDto getById(int id) {
