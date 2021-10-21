@@ -133,7 +133,7 @@ public class Event extends AbstractIdEntity {
     }
 
     public void setNurse(Employee nurse) {
-        if (!nurse.getRoles().contains(Role.NURSE)) {
+        if ((nurse != null) && (!nurse.getRoles().contains(Role.NURSE))) {
             throw new IllegalArgumentException();
         }
         this.nurse = nurse;
