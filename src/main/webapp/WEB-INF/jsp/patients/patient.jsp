@@ -32,9 +32,11 @@
             <td>${patient.address}</td>
             <td>${patient.patientState}</td>
             <sec:authorize access="hasRole('DOCTOR')">
-                <td><a href="../treatments/new/${patient.id}">
-                    <button type="button" class="btn btn-success">New treatment</button>
-                </a></td>
+                <td>
+                    <a href="/treatments/new/${patient.id}">
+                        <button type="button" class="btn btn-success">New treatment</button>
+                    </a>
+                </td>
             </sec:authorize>
         </tr>
     </table>

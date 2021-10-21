@@ -20,14 +20,14 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping(value = "/getBy", params = "id")
-    public String getById(@RequestParam int id, Model model) {
+    @GetMapping("/{id}")
+    public String getById(@PathVariable int id, Model model) {
         model.addAttribute("patient", patientService.getById(id));
         return "patients/patient";
     }
 
-    @GetMapping(value = "/getBy", params = "insuranceNumber")
-    public String getByInsuranceNumber(int insuranceNumber, Model model) {
+    @GetMapping("/insNum/{insuranceNumber}")
+    public String getByInsuranceNumber(@PathVariable int insuranceNumber, Model model) {
         model.addAttribute("patient", patientService.getByInsuranceNumber(insuranceNumber));
         return "patients/patient";
     }

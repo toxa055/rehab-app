@@ -32,14 +32,14 @@ public class TreatmentController {
         return "treatments/treatment";
     }
 
-    @GetMapping(value = "/getBy", params = "patientId")
-    public String getAllByPatientId(@RequestParam int patientId, Model model) {
+    @GetMapping("/patient/{patientId}")
+    public String getAllByPatientId(@PathVariable int patientId, Model model) {
         model.addAttribute(TREATMENTS, treatmentService.getAllByPatientId(patientId));
         return TREATMENTS_LIST;
     }
 
-    @GetMapping(value = "/getBy", params = "doctorId")
-    public String getAllByDoctorId(@RequestParam int doctorId, Model model) {
+    @GetMapping("/doctor/{doctorId}")
+    public String getAllByDoctorId(@PathVariable int doctorId, Model model) {
         model.addAttribute(TREATMENTS, treatmentService.getAllByDoctorId(doctorId));
         return TREATMENTS_LIST;
     }
@@ -48,6 +48,13 @@ public class TreatmentController {
     public String treatments(Model model) {
         model.addAttribute(TREATMENTS, treatmentService.getAll());
         return TREATMENTS_LIST;
+    }
+
+    @GetMapping("/close/{id}")
+    @Secured("ROLE_DOCTOR")
+    public String close(@PathVariable int id, Model model) {
+        treatmentService.close(id);
+        return "redirect:..";
     }
 
     @GetMapping("/new")
