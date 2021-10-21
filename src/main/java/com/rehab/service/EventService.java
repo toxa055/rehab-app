@@ -3,6 +3,7 @@ package com.rehab.service;
 import com.rehab.dto.EventDto;
 import com.rehab.model.Event;
 import com.rehab.repository.EventCrudRepository;
+import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,27 @@ public class EventService {
     public EventService(EventCrudRepository eventCrudRepository, ModelMapper modelMapper) {
         this.eventCrudRepository = eventCrudRepository;
         this.modelMapper = modelMapper;
+    }
+
+    public EventDto setNurse(int eventId) {
+        var authNurse = SecurityUtil.getAuthEmployee();
+        var eventForSettingNurse = eventCrudRepository.findById(eventId).get();
+        if (eventForSettingNurse.getNurse() != null) {
+            throw new IllegalArgumentException();
+        }
+        eventForSettingNurse.setNurse(authNurse);
+        return toDto(eventCrudRepository.save(eventForSettingNurse));
+    }
+
+    public EventDto unSetNurse(int eventId) {
+        var authNurse = SecurityUtil.getAuthEmployee();
+        var eventForUnsettingSetNurse = eventCrudRepository.findById(eventId).get();
+        if ((eventForUnsettingSetNurse.getNurse() == null)
+                || (!authNurse.getId().equals(eventForUnsettingSetNurse.getNurse().getId()))) {
+            throw new IllegalArgumentException();
+        }
+        eventForUnsettingSetNurse.setNurse(null);
+        return toDto(eventCrudRepository.save(eventForUnsettingSetNurse));
     }
 
     public EventDto getById(int id) {

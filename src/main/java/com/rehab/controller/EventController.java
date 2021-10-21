@@ -64,6 +64,20 @@ public class EventController {
         return EVENTS_LIST;
     }
 
+    @Secured("ROLE_NURSE")
+    @GetMapping("/choose/{eventId}")
+    public String choose(@PathVariable int eventId) {
+        eventService.setNurse(eventId);
+        return "redirect:..";
+    }
+
+    @Secured("ROLE_NURSE")
+    @GetMapping("/discard/{eventId}")
+    public String discard(@PathVariable int eventId) {
+        eventService.unSetNurse(eventId);
+        return "redirect:..";
+    }
+
     @GetMapping
     public String events(Model model) {
         model.addAttribute(EVENTS, eventService.getAll());

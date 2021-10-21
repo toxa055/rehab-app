@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
@@ -50,6 +51,9 @@
             <th scope="col">End Date</th>
             <th scope="col">End Time</th>
             <th scope="col">Comment</th>
+            <sec:authorize access="hasRole('NURSE')">
+                <th scope="col">Actions</th>
+            </sec:authorize>
         </tr>
         </thead>
         <c:forEach items="${events}" var="e">
@@ -71,6 +75,16 @@
                 <td>${e.endDate}</td>
                 <td>${e.endTime}</td>
                 <td>${e.comment}</td>
+                <sec:authorize access="hasRole('NURSE')">
+                    <td>
+                        <a href="/events/choose/${e.id}">
+                            <button type="button" class="btn btn-success" id="chooseButton${e.id}">Choose</button>
+                        </a>
+                        <a href="/events/discard/${e.id}">
+                            <button type="button" class="btn btn-info" id="discardButton${e.id}">Discard</button>
+                        </a>
+                    </td>
+                </sec:authorize>
             </tr>
         </c:forEach>
     </table>
