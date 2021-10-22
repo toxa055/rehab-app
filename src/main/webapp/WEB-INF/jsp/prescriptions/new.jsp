@@ -11,7 +11,7 @@
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Create new prescription</h3>
+        <h3>Create new prescription for ${treatment.patientName}</h3><br>
         <form action="/prescriptions/new/" method="post">
             <div class="row" style="display: none">
                 <label for="treatmentId" class="col-sm-2 col-form-label">Treatment id</label>
@@ -108,56 +108,65 @@
                     </select>
                 </div>
             </div>
-            <div id="parts-of-day">
+            <div class="row" id="parts-of-day">
                 <label class="col-sm-2 col-form-label">Parts of day</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="MORNING" id="MORNING">
-                    <label class="form-check-label" for="MORNING">MORNING</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="AFTERNOON"
-                           id="AFTERNOON">
-                    <label class="form-check-label" for="AFTERNOON">AFTERNOON</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="EVENING" id="EVENING">
-                    <label class="form-check-label" for="EVENING">EVENING</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="NIGHT" id="NIGHT">
-                    <label class="form-check-label" for="NIGHT">NIGHT</label>
+                <div class="form-group col-lg-4 col-form-label">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="MORNING"
+                               id="MORNING">
+                        <label class="form-check-label" for="MORNING">MORNING</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="AFTERNOON"
+                               id="AFTERNOON">
+                        <label class="form-check-label" for="AFTERNOON">AFTERNOON</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="EVENING"
+                               id="EVENING">
+                        <label class="form-check-label" for="EVENING">EVENING</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="NIGHT" id="NIGHT">
+                        <label class="form-check-label" for="NIGHT">NIGHT</label>
+                    </div>
                 </div>
             </div>
-            <div id="days-of-week" hidden>
+            <div class="row" id="days-of-week" hidden>
                 <label class="col-sm-2 col-form-label">Days of week</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="MONDAY" id="MONDAY">
-                    <label class="form-check-label" for="MONDAY">MONDAY</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="TUESDAY" id="TUESDAY">
-                    <label class="form-check-label" for="TUESDAY">TUESDAY</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="WEDNESDAY"
-                           id="WEDNESDAY">
-                    <label class="form-check-label" for="WEDNESDAY">WEDNESDAY</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="THURSDAY" id="THURSDAY">
-                    <label class="form-check-label" for="THURSDAY">THURSDAY</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="FRIDAY" id="FRIDAY">
-                    <label class="form-check-label" for="FRIDAY">FRIDAY</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="SATURDAY" id="SATURDAY">
-                    <label class="form-check-label" for="SATURDAY">SATURDAY</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="patternUnits" value="SUNDAY" id="SUNDAY">
-                    <label class="form-check-label" for="SUNDAY">SUNDAY</label>
+                <div class="form-group col-lg-4 col-form-label">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="MONDAY" id="MONDAY">
+                        <label class="form-check-label" for="MONDAY">MONDAY</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="TUESDAY"
+                               id="TUESDAY">
+                        <label class="form-check-label" for="TUESDAY">TUESDAY</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="WEDNESDAY"
+                               id="WEDNESDAY">
+                        <label class="form-check-label" for="WEDNESDAY">WEDNESDAY</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="THURSDAY"
+                               id="THURSDAY">
+                        <label class="form-check-label" for="THURSDAY">THURSDAY</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="FRIDAY" id="FRIDAY">
+                        <label class="form-check-label" for="FRIDAY">FRIDAY</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="SATURDAY"
+                               id="SATURDAY">
+                        <label class="form-check-label" for="SATURDAY">SATURDAY</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="patternUnits" value="SUNDAY" id="SUNDAY">
+                        <label class="form-check-label" for="SUNDAY">SUNDAY</label>
+                    </div>
                 </div>
             </div>
             <div class="row">

@@ -12,41 +12,42 @@
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Create new employee</h3>
+        <h3>Create new employee</h3><br>
         <form name="f" action="/employees/new" method='POST'>
             <div class="row">
+                <label for="name" class="col-sm-2 col-form-label">Name, Second Name</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" id="name" class="form-control"/>
+                    <input type="text" name="name" id="name" placeholder="Name, Second name" class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label for="position" class="col-sm-2 col-form-label">Position</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="position">Position</label>
-                    <input type="text" name="position" id="position" class="form-control"/>
+                    <input type="text" name="position" id="position" placeholder="Position" class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" class="form-control"/>
+                    <input type="email" name="email" id="email" placeholder="Email" class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label for="password" class="col-sm-2 col-form-label">Password</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" class="form-control"/>
+                    <input type="password" name="password" id="password" placeholder="Password" class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm password</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="confirmPassword">Confirm password</label>
-                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"/>
+                    <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password"
+                           class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label class="col-sm-2 col-form-label">Roles</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label class="col-sm-2 col-form-label">Roles:</label><br>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" name="roles" value="ADMIN" id="ADMIN">
                         <label class="form-check-label" for="ADMIN">ADMIN</label>

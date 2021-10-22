@@ -11,24 +11,25 @@
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Create new patient</h3>
+        <h3>Create new patient</h3><br>
         <form action="/patients/new" method="post">
             <div class="row">
+                <label for="name" class="col-sm-2 col-form-label">Name, Second Name</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="name">Name, Second Name</label>
-                    <input type="text" name="name" id="name" class="form-control"/>
+                    <input type="text" name="name" id="name" placeholder="Name, Second Name" class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label for="insuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="insuranceNumber">Insurance number</label>
-                    <input type="number" name="insuranceNumber" id="insuranceNumber" class="form-control">
+                    <input type="number" name="insuranceNumber" id="insuranceNumber"
+                           placeholder="insuranceNumber" class="form-control">
                 </div>
             </div>
             <div class="row">
+                <label for="address" class="col-sm-2 col-form-label">Address</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="address">Address</label>
-                    <input type="text" name="address" id="address" class="form-control"/>
+                    <input type="text" name="address" id="address" placeholder="Address" class="form-control"/>
                 </div>
             </div>
             <br>

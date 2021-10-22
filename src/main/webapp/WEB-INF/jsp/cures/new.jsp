@@ -11,17 +11,17 @@
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Create new cure</h3>
+        <h3>Create new cure</h3><br>
         <form action="/cures/new" method="post">
             <div class="row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="name">Name</label>
-                    <input type="text" name="name" id="name" class="form-control"/>
+                    <input type="text" name="name" id="name" placeholder="Name" class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label for="cureType" class="col-sm-2 col-form-label">Type</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label for="cureType">Type</label>
                     <select class="form-select" aria-label="Cure" name="cureType" id="cureType">
                         <option value="MEDICINE">MEDICINE</option>
                         <option value="PROCEDURE">PROCEDURE</option>
