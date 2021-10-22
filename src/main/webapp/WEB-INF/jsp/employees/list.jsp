@@ -39,6 +39,11 @@
             </tr>
         </c:forEach>
     </table>
+    <sec:authorize access="hasRole('ADMIN')">
+        <a href="/employees/new">
+            <button type="button" class="btn btn-success">New Employee</button>
+        </a>
+    </sec:authorize>
 </div>
 </body>
 </html>

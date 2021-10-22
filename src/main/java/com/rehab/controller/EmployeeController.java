@@ -49,6 +49,17 @@ public class EmployeeController {
         return "redirect:../employees/profile";
     }
 
+    @GetMapping("/new")
+    public String create() {
+        return "/employees/new";
+    }
+
+    @PostMapping("/new")
+    public String create(UserDto userDto) {
+        employeeService.save(userDto);
+        return "redirect:";
+    }
+
     @GetMapping
     public String getAll(Model model) {
         model.addAttribute("employees", employeeService.getAll());

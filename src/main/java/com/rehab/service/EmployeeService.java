@@ -36,6 +36,12 @@ public class EmployeeService {
         return getById(SecurityUtil.getAuthEmployee().getId());
     }
 
+    public Employee save(UserDto userDto) {
+        var employeeFromUserDto = toEntity(userDto);
+        employeeFromUserDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return employeeCrudRepository.save(employeeFromUserDto);
+    }
+
     public EmployeeDto changePassword(UserDto userDto) {
         var employee = employeeCrudRepository.findById(userDto.getId()).get();
         if (!employee.getId().equals(userDto.getId())
@@ -56,5 +62,9 @@ public class EmployeeService {
 
     private EmployeeDto toDto(Employee employee) {
         return modelMapper.map(employee, EmployeeDto.class);
+    }
+
+    private Employee toEntity(UserDto userDto) {
+        return modelMapper.map(userDto, Employee.class);
     }
 }
