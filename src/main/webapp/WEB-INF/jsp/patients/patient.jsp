@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <title>Patient ${patient.name}</title>
+    <title>Patient</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>

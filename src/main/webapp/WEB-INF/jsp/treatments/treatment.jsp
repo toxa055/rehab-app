@@ -5,13 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <title>Treatment ${treatment.id}</title>
+    <title>Treatment</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
 <div class="container-fluid">
-    <h2>Treatment ${treatment.id}</h2>
+    <h2>${treatment.patientName}'s treatment</h2>
     <table class="table table-hover">
         <thead>
         <tr>
