@@ -56,12 +56,12 @@
             <td>${p.dose}</td>
             <td id="isActive">${p.active}</td>
             <sec:authorize access="hasRole('DOCTOR')">
-                <td><a href="/prescriptions/cancel/${p.id}" id="cancelLink">
-                    <button type="button" class="btn btn-danger" id="cancelButton">Cancel</button>
-                </a></td>
-                <td><a href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}" id="updateLink">
-                    <button type="button" class="btn btn-warning" id="updateButton">Update</button>
-                </a></td>
+                <td>
+                    <a class="btn btn-danger" href="/prescriptions/cancel/${p.id}"
+                       id="prescriptionCancelButtonLink" role="button">Cancel</a>
+                    <a class="btn btn-warning" href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}"
+                       id="prescriptionUpdateButtonLink" role="button">Update</a>
+                </td>
             </sec:authorize>
         </tr>
     </table>

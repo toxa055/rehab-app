@@ -32,9 +32,9 @@
             <th scope="col">End Date</th>
             <th scope="col">End Time</th>
             <th scope="col">Comment</th>
-            <sec:authorize access="hasRole('NURSE')">
-                <th scope="col">Actions</th>
-            </sec:authorize>
+            <%--            <sec:authorize access="hasRole('NURSE')">--%>
+            <%--                <th scope="col">Actions</th>--%>
+            <%--            </sec:authorize>--%>
         </tr>
         </thead>
         <tr class="table-light">
@@ -55,24 +55,17 @@
             <td>${event.endDate}</td>
             <td>${event.endTime}</td>
             <td>${event.comment}</td>
-            <sec:authorize access="hasRole('NURSE')">
-                <td>
-                    <a href="/events/choose/${event.id}">
-                        <button type="button" class="btn btn-success" id="chooseButton">Choose</button>
-                    </a>
-                    <a href="/events/discard/${event.id}">
-                        <button type="button" class="btn btn-info" id="discardButton">Discard</button>
-                    </a>
-                    <a href="/events/change/${event.id}?state=performed">
-                        <button type="button" class="btn btn-success" id="performButton">Perform</button>
-                    </a>
-                    <a href="/events/change/${event.id}?state=cancelled">
-                        <button type="button" class="btn btn-danger" id="cancelButton">Cancel</button>
-                    </a>
-                </td>
-            </sec:authorize>
         </tr>
     </table>
+    <div>
+        <sec:authorize access="hasRole('NURSE')">
+            <a class="btn btn-success" href="/events/choose/${event.id}" role="button">Choose</a>
+            <a class="btn btn-info" href="/events/discard/${event.id}" role="button">Discard</a>
+            <a class="btn btn-success" href="/events/change/${event.id}?state=performed" role="button">Perform</a>
+            <a class="btn btn-danger" href="/events/change/${event.id}?state=cancelled" role="button">Cancel</a>
+        </sec:authorize>
+    </div>
+    <br>
     <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
 </body>

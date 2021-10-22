@@ -43,12 +43,10 @@
             <td>${treatment.closed}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
-                    <a href="/prescriptions/new/${treatment.id}" id="newPrescrLink">
-                        <button type="button" class="btn btn-success" id="newPrescrButton">New Prescription</button>
-                    </a>
-                    <a href="/treatments/close/${treatment.id}" id="closeLink">
-                        <button type="button" class="btn btn-danger" id="closeButton">Close</button>
-                    </a>
+                    <a class="btn btn-success" href="/prescriptions/new/${treatment.id}"
+                       id="newPrescriptionButtonLink" role="button">New Prescription</a>
+                    <a class="btn btn-danger" href="/treatments/close/${treatment.id}"
+                       id="closeTreatmentButtonLink" role="button">Close</a>
                 </td>
             </sec:authorize>
         </tr>
@@ -57,10 +55,8 @@
 </div>
 <script language="javascript">
     if (${treatment.closed}) {
-        $('#closeLink').removeAttr('href');
-        $('#closeButton').attr('disabled', true);
-        $('#newPrescrLink').removeAttr('href');
-        $('#newPrescrButton').attr('disabled', true);
+        $('#newPrescriptionButtonLink').attr('class', 'btn btn-success disabled');
+        $('#closeTreatmentButtonLink').attr('class', 'btn btn-danger disabled');
     }
 </script>
 </body>

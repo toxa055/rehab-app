@@ -54,7 +54,7 @@ public class TreatmentController {
     @Secured("ROLE_DOCTOR")
     public String close(@PathVariable int id, Model model) {
         treatmentService.close(id);
-        return "redirect:..";
+        return "redirect:../" + id;
     }
 
     @GetMapping("/new")

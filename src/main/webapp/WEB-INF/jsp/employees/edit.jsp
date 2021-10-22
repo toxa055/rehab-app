@@ -12,30 +12,32 @@
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Change your password</h3>
-        <form name="f" action="/employees/edit" method='POST'>
+        <h3>Change your password</h3><br>
+        <form action="/employees/edit" method='POST'>
             <div class="row" style="display: none">
+                <label class="col-sm-2 col-form-label">id</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>id</label>
-                    <input type="number" name="id" class="form-control" value="${employee.id}"/>
+                    <input type="number" name="id" class="form-control" value="${employee.id}" readonly/>
                 </div>
             </div>
             <div class="row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" value="${employee.email}" readonly/>
+                    <input type="email" name="email" class="form-control" id="email"
+                           value="${employee.email}" readonly/>
                 </div>
             </div>
             <div class="row">
+                <label for="password" class="col-sm-2 col-form-label">New password</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>New password</label>
-                    <input type="password" name="password" class="form-control"/>
+                    <input type="password" name="password" id="password" placeholder="Confirm" class="form-control"/>
                 </div>
             </div>
             <div class="row">
+                <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm password</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>Confirm password</label>
-                    <input type="password" name="confirmPassword" class="form-control input-normal"/>
+                    <input type="password" name="confirmPassword" id="confirmPassword"
+                           placeholder="Confirm password" class="form-control input-normal"/>
                 </div>
             </div>
             <br>

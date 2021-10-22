@@ -28,8 +28,11 @@
             </div>
             <button type="submit" class="btn btn-warning">Filter</button>
         </form>
-        <a href="/events"><button type="button" class="btn btn-warning">All Events</button></a>
-        <a href="/events/today"><button type="button" class="btn btn-warning">Today Events</button></a><br>
+        <div>
+            <a class="btn btn-warning" href="/events/" role="button">All Events</a>
+            <a class="btn btn-warning" href="/events/today" role="button">Today Events</a>
+        </div>
+<%--        <br>--%>
     </div>
     <table class="table table-hover">
         <thead>
@@ -77,9 +80,7 @@
                 <td>${e.comment}</td>
                 <sec:authorize access="hasRole('NURSE')">
                     <td>
-                        <a href="/events/${e.id}">
-                            <button type="button" class="btn btn-info" id="chooseButton${e.id}">Details</button>
-                        </a>
+                        <a class="btn btn-info" href="/events/${e.id}" role="button">Details</a>
                     </td>
                 </sec:authorize>
             </tr>
