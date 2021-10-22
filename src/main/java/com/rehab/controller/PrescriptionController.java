@@ -66,4 +66,10 @@ public class PrescriptionController {
         model.addAttribute("p", prescriptionService.cancel(id));
         return "redirect:../" + id;
     }
+
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable int id, @RequestParam int treatmentId, Model model) {
+        prescriptionService.cancel(id);
+        return "redirect:../new/" + treatmentId;
+    }
 }

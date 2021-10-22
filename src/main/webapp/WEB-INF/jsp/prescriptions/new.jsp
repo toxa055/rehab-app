@@ -63,12 +63,6 @@
             </div>
         </div>
         <div class="row mb-3" style="display: none">
-            <label for="date" class="col-sm-2 col-form-label">Date</label>
-            <div class="col-sm-10">
-                <input type="date" class="form-control" name="date" id="date" value="${treatment.date}" readonly>
-            </div>
-        </div>
-        <div class="row mb-3" style="display: none">
             <label for="cureId" class="col-sm-2 col-form-label">Cure id</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" name="cureId" id="cureId" readonly>
