@@ -34,7 +34,7 @@
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
                     <a href="/treatments/new/${patient.id}">
-                        <button type="button" class="btn btn-success">New treatment</button>
+                        <button type="button" class="btn btn-success">New Treatment</button>
                     </a>
                 </td>
                 <td>

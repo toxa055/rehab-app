@@ -52,7 +52,7 @@
     </table>
     <sec:authorize access="hasRole('DOCTOR')">
         <a href="/treatments/new">
-            <button type="button" class="btn btn-success">New treatment</button>
+            <button type="button" class="btn btn-success">New Treatment</button>
         </a>
     </sec:authorize>
 </div>
