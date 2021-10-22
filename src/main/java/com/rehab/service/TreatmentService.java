@@ -3,14 +3,16 @@ package com.rehab.service;
 import com.rehab.dto.TreatmentDto;
 import com.rehab.model.Prescription;
 import com.rehab.model.Treatment;
-import com.rehab.repository.PrescriptionCrudRepository;
-import com.rehab.repository.TreatmentCrudRepository;
+import com.rehab.model.type.PatientState;
+import com.rehab.repository.*;
 import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,20 +20,28 @@ import java.util.stream.Collectors;
 public class TreatmentService {
 
     private final TreatmentCrudRepository treatmentCrudRepository;
+    private final PatientCrudRepository patientCrudRepository;
     private final PrescriptionCrudRepository prescriptionCrudRepository;
     private final ModelMapper modelMapper;
     private final TypeMap<TreatmentDto, Treatment> typeMap;
 
     @Autowired
-    public TreatmentService(TreatmentCrudRepository treatmentCrudRepository,
+    public TreatmentService(TreatmentCrudRepository treatmentCrudRepository, PatientCrudRepository patientCrudRepository,
                             PrescriptionCrudRepository prescriptionCrudRepository, ModelMapper modelMapper) {
         this.treatmentCrudRepository = treatmentCrudRepository;
+        this.patientCrudRepository = patientCrudRepository;
         this.prescriptionCrudRepository = prescriptionCrudRepository;
         this.modelMapper = modelMapper;
         typeMap = modelMapper.createTypeMap(TreatmentDto.class, Treatment.class);
     }
 
+    @Transactional
     public Treatment save(TreatmentDto treatmentDto) {
+        var patient = patientCrudRepository.findById(treatmentDto.getPatientId()).get();
+        if (patient.getPatientState() == PatientState.DISCHARGED) {
+            patient.setPatientState(PatientState.TREATING);
+            patientCrudRepository.save(patient);
+        }
         return treatmentCrudRepository.save(toEntity(treatmentDto));
     }
 
@@ -49,6 +59,7 @@ public class TreatmentService {
             throw new IllegalArgumentException();
         }
         treatmentForClosing.setClosed(true);
+        treatmentForClosing.setCloseDate(LocalDate.now());
         return treatmentCrudRepository.save(treatmentForClosing);
     }
 

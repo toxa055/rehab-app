@@ -81,6 +81,7 @@ CREATE TABLE treatments
     doctor_id      INTEGER NOT NULL,
     treatment_date DATE    NOT NULL    DEFAULT CURRENT_DATE,
     diagnosis      VARCHAR NOT NULL,
+    close_date     DATE,
     closed         BOOLEAN NOT NULL    DEFAULT FALSE,
     FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE

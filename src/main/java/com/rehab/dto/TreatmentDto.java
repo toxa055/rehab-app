@@ -11,6 +11,7 @@ public class TreatmentDto {
     private String doctorName;
     private LocalDate date = LocalDate.now();
     private String diagnosis;
+    private LocalDate closeDate;
     private boolean isClosed = false;
 
     public TreatmentDto() {
@@ -48,6 +49,10 @@ public class TreatmentDto {
         return diagnosis;
     }
 
+    public LocalDate getCloseDate() {
+        return closeDate;
+    }
+
     public boolean isClosed() {
         return isClosed;
     }
@@ -82,6 +87,10 @@ public class TreatmentDto {
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public void setCloseDate(LocalDate closeDate) {
+        this.closeDate = closeDate;
     }
 
     public void setClosed(boolean closed) {

@@ -23,6 +23,7 @@
             <th scope="col">Doctor</th>
             <th scope="col">Date</th>
             <th scope="col">Diagnosis</th>
+            <th scope="col">Close date</th>
             <th scope="col">Closed</th>
             <sec:authorize access="hasRole('DOCTOR')">
                 <th scope="col">Actions</th>
@@ -39,6 +40,7 @@
                 <td>${t.doctorName}</td>
                 <td>${t.date}</td>
                 <td>${t.diagnosis}</td>
+                <td>${t.closeDate}</td>
                 <td>${t.closed}</td>
                 <sec:authorize access="hasRole('DOCTOR')">
                     <td><a href="/treatments/${t.id}">

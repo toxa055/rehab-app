@@ -32,6 +32,12 @@ public class PatientController {
         return "patients/patient";
     }
 
+    @GetMapping("/discharge/{id}")
+    public String discharge(@PathVariable int id, Model model) {
+        patientService.discharge(id);
+        return "redirect:/patients/" + id;
+    }
+
     @GetMapping
     public String patients(Model model) {
         model.addAttribute("patients", patientService.getAll());
