@@ -5,7 +5,6 @@ public class EmployeeDto {
     private String name;
     private String position;
     private String email;
-    private String password;
 
     public EmployeeDto() {
     }
@@ -26,10 +25,6 @@ public class EmployeeDto {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -44,9 +39,5 @@ public class EmployeeDto {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

@@ -1,5 +1,6 @@
 package com.rehab.controller;
 
+import com.rehab.dto.UserDto;
 import com.rehab.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -32,6 +33,20 @@ public class EmployeeController {
     public String getAuth(Model model) {
         model.addAttribute(EMPLOYEE, employeeService.getAuth());
         return EMPLOYEE_URL;
+    }
+
+    @GetMapping("/edit")
+    @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
+    public String edit(Model model) {
+        model.addAttribute(EMPLOYEE, employeeService.getAuth());
+        return "/employees/edit";
+    }
+
+    @PostMapping("/edit")
+    @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
+    public String edit(UserDto userDto) {
+        employeeService.changePassword(userDto);
+        return "redirect:../employees/profile";
     }
 
     @GetMapping
