@@ -8,7 +8,9 @@
 <jsp:include page="nav.jsp"/>
 <br>
 <div class="container-fluid">
-    <h1>This is the custom error page!</h1>
+    <h2>Something went wrong...</h2>
+    <br>
+    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
 </body>
 </html>

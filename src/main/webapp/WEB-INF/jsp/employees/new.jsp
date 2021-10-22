@@ -16,32 +16,32 @@
         <form name="f" action="/employees/new" method='POST'>
             <div class="row">
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>Name</label>
-                    <input type="text" name="name" class="form-control"/>
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name" class="form-control"/>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>Position</label>
-                    <input type="text" name="position" class="form-control"/>
+                    <label for="position">Position</label>
+                    <input type="text" name="position" id="position" class="form-control"/>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control"/>
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control"/>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control"/>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control"/>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-lg-4 col-form-label">
-                    <label>Confirm password</label>
-                    <input type="password" name="confirmPassword" class="form-control input-normal"/>
+                    <label for="confirmPassword">Confirm password</label>
+                    <input type="password" name="confirmPassword" id="confirmPassword" class="form-control"/>
                 </div>
             </div>
             <div class="row">
