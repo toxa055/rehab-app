@@ -3,6 +3,7 @@ package com.rehab.service;
 import com.rehab.dto.EmployeeDto;
 import com.rehab.model.Employee;
 import com.rehab.repository.EmployeeCrudRepository;
+import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,14 @@ public class EmployeeService {
     public EmployeeService(EmployeeCrudRepository employeeCrudRepository, ModelMapper modelMapper) {
         this.employeeCrudRepository = employeeCrudRepository;
         this.modelMapper = modelMapper;
+    }
+
+    public EmployeeDto getById(int id) {
+        return toDto(employeeCrudRepository.findById(id).get());
+    }
+
+    public EmployeeDto getAuth() {
+        return getById(SecurityUtil.getAuthEmployee().getId());
     }
 
     public List<EmployeeDto> getAll() {
