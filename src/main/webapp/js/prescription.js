@@ -1,10 +1,8 @@
 if ($('#isActive').text() === 'false') {
-    $('#cancelLink').removeAttr('href');
-    $('#cancelButton').attr('disabled', true);
-    $('#updateLink').removeAttr('href');
-    $('#updateButton').attr('disabled', true);
+    $('#prescriptionCancelButtonLink').attr('class', 'btn btn-danger disabled');
+    $('#prescriptionUpdateButtonLink').attr('class', 'btn btn-warning disabled');
 }
-let updateButton = $('#updateButton');
-updateButton.click(function () {
+
+$('#prescriptionUpdateButtonLink').click(function () {
     alert('All planned events will be cancelled!!!');
 })

@@ -43,17 +43,15 @@
                 <td>${t.closeDate}</td>
                 <td>${t.closed}</td>
                 <sec:authorize access="hasRole('DOCTOR')">
-                    <td><a href="/treatments/${t.id}">
-                        <button type="button" class="btn btn-info">Details</button>
-                    </a></td>
+                    <td>
+                        <a class="btn btn-info" href="/treatments/${t.id}" role="button">Details</a>
+                    </td>
                 </sec:authorize>
             </tr>
         </c:forEach>
     </table>
     <sec:authorize access="hasRole('DOCTOR')">
-        <a href="/treatments/new">
-            <button type="button" class="btn btn-success">New treatment</button>
-        </a>
+        <a class="btn btn-success" href="/treatments/new" role="button">New Treatment</a>
     </sec:authorize>
 </div>
 </body>

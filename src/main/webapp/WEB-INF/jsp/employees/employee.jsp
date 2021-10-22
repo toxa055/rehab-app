@@ -31,13 +31,12 @@
             <td>${employee.email}</td>
             <sec:authorize access="isAuthenticated()">
                 <td>
-                    <a href="/employees/edit">
-                        <button type="button" class="btn btn-warning">Change Password</button>
-                    </a>
+                    <a class="btn btn-warning" href="/employees/edit" role="button">Change Password</a>
                 </td>
             </sec:authorize>
         </tr>
     </table>
+    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
 </body>
 </html>

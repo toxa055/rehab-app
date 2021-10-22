@@ -31,18 +31,15 @@
                 <td>${e.position}</td>
                 <td>${e.email}</td>
                 <sec:authorize access="hasRole('ADMIN')">
-                    <td><a href="/employees/${e.id}">
-                        <button type="button" class="btn btn-info">Details</button>
-                    </a>
+                    <td>
+                        <a class="btn btn-info" href="/employees/${e.id}" role="button">Details</a>
                     </td>
                 </sec:authorize>
             </tr>
         </c:forEach>
     </table>
     <sec:authorize access="hasRole('ADMIN')">
-        <a href="/employees/new">
-            <button type="button" class="btn btn-success">New Employee</button>
-        </a>
+        <a class="btn btn-success" href="/employees/new" role="button">New Employee</a>
     </sec:authorize>
 </div>
 </body>

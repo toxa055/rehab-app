@@ -34,18 +34,14 @@
                 <td>${p.patientState}</td>
                 <sec:authorize access="hasRole('DOCTOR')">
                     <td>
-                        <a href="/patients/${p.id}">
-                            <button type="button" class="btn btn-info">Details</button>
-                        </a>
+                        <a class="btn btn-info" href="/patients/${p.id}" role="button">Details</a>
                     </td>
                 </sec:authorize>
             </tr>
         </c:forEach>
     </table>
     <sec:authorize access="hasRole('DOCTOR')">
-        <a href="/patients/new">
-            <button type="button" class="btn btn-success">New patient</button>
-        </a>
+        <a class="btn btn-success" href="/patients/new" role="button">New Patient</a>
     </sec:authorize>
 </div>
 </body>

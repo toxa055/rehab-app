@@ -4,33 +4,39 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <title>Add new cure</title>
+    <title>New cure</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
 <div class="container-fluid">
-    <h2>Add new cure</h2>
-    <br>
-    <form action="/cures/new" method="post">
-        <div class="row mb-3">
-            <label for="name" class="col-sm-2 col-form-label">Name</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+    <div class="container">
+        <h3>Create new cure</h3><br>
+        <form action="/cures/new" method="post">
+            <div class="row">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <div class="form-group col-lg-4 col-form-label">
+                    <input type="text" name="name" id="name" placeholder="Name" class="form-control"/>
+                </div>
             </div>
-        </div>
-        <div class="row mb-3">
-            <label for="cureType" class="col-sm-2 col-form-label">Type</label>
-            <div class="col-sm-10">
-                <select class="form-select" aria-label="Cure Type" name="cureType" id="cureType">
-                    <option>MEDICINE</option>
-                    <option>PROCEDURE</option>
-                </select>
+            <div class="row">
+                <label for="cureType" class="col-sm-2 col-form-label">Type</label>
+                <div class="form-group col-lg-4 col-form-label">
+                    <select class="form-select" aria-label="Cure" name="cureType" id="cureType">
+                        <option value="MEDICINE">MEDICINE</option>
+                        <option value="PROCEDURE">PROCEDURE</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-        <button type="submit" class="btn btn-primary">Save</button>
-    </form>
+            <br>
+            <div class="row">
+                <div class="form-group col-lg-4">
+                    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+                    <button type="submit" name="submit" class="btn btn-primary">Create</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 </body>
 </html>

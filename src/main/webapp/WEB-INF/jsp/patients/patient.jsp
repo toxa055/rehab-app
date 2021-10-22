@@ -5,7 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <title>Patient ${patient.name}</title>
+    <title>Patient</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
@@ -33,14 +33,9 @@
             <td id="patientState">${patient.patientState}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
-                    <a href="/treatments/new/${patient.id}">
-                        <button type="button" class="btn btn-success">New treatment</button>
-                    </a>
-                </td>
-                <td>
-                    <a href="/patients/discharge/${patient.id}" id="dischargeLink">
-                        <button type="button" class="btn btn-danger" id="dischargeButton">Discharge</button>
-                    </a>
+                    <a class="btn btn-success" href="/treatments/new/${patient.id}" role="button">New Treatment</a>
+                    <a class="btn btn-danger" href="/patients/discharge/${patient.id}" role="button"
+                       id="dischargeButtonLink">Discharge</a>
                 </td>
             </sec:authorize>
         </tr>
@@ -49,8 +44,7 @@
 </div>
 <script language="javascript">
     if ($('#patientState').text() === 'DISCHARGED') {
-        $('#dischargeLink').removeAttr('href');
-        $('#dischargeButton').attr('disabled', true);
+        $('#dischargeButtonLink').attr('class', 'btn btn-danger disabled');
     }
 </script>
 </body>

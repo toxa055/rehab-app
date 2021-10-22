@@ -57,9 +57,9 @@
                 <td>${p.dose}</td>
                 <td>${p.active}</td>
                 <sec:authorize access="hasRole('DOCTOR')">
-                    <td><a href="/prescriptions/${p.id}">
-                        <button type="button" class="btn btn-info">Details</button>
-                    </a></td>
+                    <td>
+                        <a class="btn btn-info" href="/prescriptions/${p.id}" role="button">Details</a>
+                    </td>
                 </sec:authorize>
             </tr>
         </c:forEach>

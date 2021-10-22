@@ -5,13 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <title>Treatment ${treatment.id}</title>
+    <title>Treatment</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
 <div class="container-fluid">
-    <h2>Treatment ${treatment.id}</h2>
+    <h2>${treatment.patientName}'s treatment</h2>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -43,12 +43,10 @@
             <td>${treatment.closed}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
-                    <a href="/prescriptions/new/${treatment.id}" id="newPrescrLink">
-                        <button type="button" class="btn btn-success" id="newPrescrButton">New prescription</button>
-                    </a>
-                    <a href="/treatments/close/${treatment.id}" id="closeLink">
-                        <button type="button" class="btn btn-danger" id="closeButton">Close</button>
-                    </a>
+                    <a class="btn btn-success" href="/prescriptions/new/${treatment.id}"
+                       id="newPrescriptionButtonLink" role="button">New Prescription</a>
+                    <a class="btn btn-danger" href="/treatments/close/${treatment.id}"
+                       id="closeTreatmentButtonLink" role="button">Close</a>
                 </td>
             </sec:authorize>
         </tr>
@@ -57,10 +55,8 @@
 </div>
 <script language="javascript">
     if (${treatment.closed}) {
-        $('#closeLink').removeAttr('href');
-        $('#closeButton').attr('disabled', true);
-        $('#newPrescrLink').removeAttr('href');
-        $('#newPrescrButton').attr('disabled', true);
+        $('#newPrescriptionButtonLink').attr('class', 'btn btn-success disabled');
+        $('#closeTreatmentButtonLink').attr('class', 'btn btn-danger disabled');
     }
 </script>
 </body>

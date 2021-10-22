@@ -5,13 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <title>Prescription ${p.id}</title>
+    <title>Prescription</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
 <div class="container-fluid">
-    <h2>Prescription ${p.id}</h2>
+    <h2>Prescription for ${p.patientName}</h2>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -56,12 +56,12 @@
             <td>${p.dose}</td>
             <td id="isActive">${p.active}</td>
             <sec:authorize access="hasRole('DOCTOR')">
-                <td><a href="/prescriptions/cancel/${p.id}" id="cancelLink">
-                    <button type="button" class="btn btn-danger" id="cancelButton">Cancel</button>
-                </a></td>
-                <td><a href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}" id="updateLink">
-                    <button type="button" class="btn btn-warning" id="updateButton">Update</button>
-                </a></td>
+                <td>
+                    <a class="btn btn-danger" href="/prescriptions/cancel/${p.id}"
+                       id="prescriptionCancelButtonLink" role="button">Cancel</a>
+                    <a class="btn btn-warning" href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}"
+                       id="prescriptionUpdateButtonLink" role="button">Update</a>
+                </td>
             </sec:authorize>
         </tr>
     </table>

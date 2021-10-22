@@ -16,7 +16,7 @@ searchButton.click(function () {
         changeButton.attr('disabled', false);
         searchButton.attr('disabled', true);
         if ($('#cureType').val() === 'PROCEDURE') {
-            $('#dose').attr('readonly', true);
+            $('#dose').attr('readonly', true).val('According to instruction.');
         } else {
             $('#dose').attr('readonly', false);
         }
@@ -46,16 +46,16 @@ patternUnit.change(function () {
         if (limit > 4) {
             limit = 1;
         }
-        $('.parts-of-day').show();
-        $('.days-of-week').attr('hidden', true);
+        $('#parts-of-day').show();
+        $('#days-of-week').attr('hidden', true);
     }
     if (selectedValue === "WEEK") {
         $('#patternCount')
             .append('<option value="5">5</option>')
             .append('<option value="6">6</option>')
             .append('<option value="7">7</option>');
-        $('.parts-of-day').hide();
-        $('.days-of-week').attr('hidden', false);
+        $('#parts-of-day').hide();
+        $('#days-of-week').attr('hidden', false);
     }
     chooseCheckbox();
 })
