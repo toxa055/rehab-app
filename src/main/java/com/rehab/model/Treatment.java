@@ -23,6 +23,9 @@ public class Treatment extends AbstractIdEntity {
     @Column(name = "diagnosis", nullable = false)
     private String diagnosis;
 
+    @Column(name = "close_date")
+    private LocalDate closeDate;
+
     @Column(name = "closed", nullable = false)
     private boolean isClosed = false;
 
@@ -47,12 +50,16 @@ public class Treatment extends AbstractIdEntity {
         return doctor;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
     public String getDiagnosis() {
         return diagnosis;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getCloseDate() {
+        return closeDate;
     }
 
     public boolean isClosed() {
@@ -76,6 +83,10 @@ public class Treatment extends AbstractIdEntity {
 
     public void setDiagnosis(String diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public void setCloseDate(LocalDate closeDate) {
+        this.closeDate = closeDate;
     }
 
     public void setClosed(boolean closed) {

@@ -23,6 +23,7 @@
             <th scope="col">Doctor</th>
             <th scope="col">Date</th>
             <th scope="col">Diagnosis</th>
+            <th scope="col">Close date</th>
             <th scope="col">Closed</th>
             <sec:authorize access="hasRole('DOCTOR')">
                 <th scope="col">Actions</th>
@@ -38,15 +39,29 @@
             <td>${treatment.doctorName}</td>
             <td>${treatment.date}</td>
             <td>${treatment.diagnosis}</td>
+            <td>${treatment.closeDate}</td>
             <td>${treatment.closed}</td>
             <sec:authorize access="hasRole('DOCTOR')">
-                <td><a href="/prescriptions/new/${treatment.id}">
-                    <button type="button" class="btn btn-success">New prescription</button>
-                </a></td>
+                <td>
+                    <a href="/prescriptions/new/${treatment.id}" id="newPrescrLink">
+                        <button type="button" class="btn btn-success" id="newPrescrButton">New prescription</button>
+                    </a>
+                    <a href="/treatments/close/${treatment.id}" id="closeLink">
+                        <button type="button" class="btn btn-danger" id="closeButton">Close</button>
+                    </a>
+                </td>
             </sec:authorize>
         </tr>
     </table>
     <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
+<script language="javascript">
+    if (${treatment.closed}) {
+        $('#closeLink').removeAttr('href');
+        $('#closeButton').attr('disabled', true);
+        $('#newPrescrLink').removeAttr('href');
+        $('#newPrescrButton').attr('disabled', true);
+    }
+</script>
 </body>
 </html>

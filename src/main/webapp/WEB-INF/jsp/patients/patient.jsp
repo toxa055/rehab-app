@@ -30,15 +30,28 @@
             <td>${patient.insuranceNumber}</td>
             <td>${patient.name}</td>
             <td>${patient.address}</td>
-            <td>${patient.patientState}</td>
+            <td id="patientState">${patient.patientState}</td>
             <sec:authorize access="hasRole('DOCTOR')">
-                <td><a href="../treatments/new/${patient.id}">
-                    <button type="button" class="btn btn-success">New treatment</button>
-                </a></td>
+                <td>
+                    <a href="/treatments/new/${patient.id}">
+                        <button type="button" class="btn btn-success">New treatment</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="/patients/discharge/${patient.id}" id="dischargeLink">
+                        <button type="button" class="btn btn-danger" id="dischargeButton">Discharge</button>
+                    </a>
+                </td>
             </sec:authorize>
         </tr>
     </table>
     <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
+<script language="javascript">
+    if ($('#patientState').text() === 'DISCHARGED') {
+        $('#dischargeLink').removeAttr('href');
+        $('#dischargeButton').attr('disabled', true);
+    }
+</script>
 </body>
 </html>

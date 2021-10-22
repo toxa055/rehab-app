@@ -50,12 +50,16 @@ public class PrescriptionService {
 
     @Transactional
     public PrescriptionDto cancel(int id) {
+        var authDoctor = SecurityUtil.getAuthEmployee();
+        var cancellingPrescription = prescriptionCrudRepository.findAllById(List.of(id)).get(0);
+        if (!authDoctor.getId().equals(cancellingPrescription.getDoctor().getId())) {
+            throw new IllegalStateException();
+        }
         var eventsByPrescriptionId = eventCrudRepository.findAllByPrescriptionId(id);
         var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId);
         eventCrudRepository.saveAll(eventsForCancelling);
-        var cancelledPrescription = prescriptionCrudRepository.findAllById(List.of(id)).get(0);
-        cancelledPrescription.setActive(false);
-        return toDto(prescriptionCrudRepository.save(cancelledPrescription));
+        cancellingPrescription.setActive(false);
+        return toDto(prescriptionCrudRepository.save(cancellingPrescription));
     }
 
     public PrescriptionDto getById(int id) {

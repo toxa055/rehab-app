@@ -54,21 +54,19 @@
             </td>
             <td>${p.periodCount} ${p.periodUnit}</td>
             <td>${p.dose}</td>
-            <td>${p.active}</td>
+            <td id="isActive">${p.active}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td><a href="/prescriptions/cancel/${p.id}" id="cancelLink">
                     <button type="button" class="btn btn-danger" id="cancelButton">Cancel</button>
+                </a></td>
+                <td><a href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}" id="updateLink">
+                    <button type="button" class="btn btn-warning" id="updateButton">Update</button>
                 </a></td>
             </sec:authorize>
         </tr>
     </table>
     <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
 </div>
-<script language="javascript">
-    if (!${p.active}) {
-        $('#cancelLink').removeAttr('href');
-        $('#cancelButton').attr('disabled', true);
-    }
-</script>
+<script src="${pageContext.request.contextPath}/js/prescription.js"></script>
 </body>
 </html>
