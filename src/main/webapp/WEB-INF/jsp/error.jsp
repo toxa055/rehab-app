@@ -7,10 +7,10 @@
 <body>
 <jsp:include page="nav.jsp"/>
 <br>
-<div class="container-fluid">
-    <h2>Something went wrong...</h2>
+<div class="container">
+    <h3>Something went wrong...</h3>
     <br>
-    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 </body>
 </html>

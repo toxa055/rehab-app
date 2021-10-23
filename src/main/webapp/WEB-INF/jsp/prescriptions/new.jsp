@@ -78,8 +78,8 @@
                 <label for="cureName" class="col-sm-2 col-form-label">Cure</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="text" class="form-control" name="cureName" id="cureName" placeholder="Cure"><br>
-                    <input type="button" class="btn btn-primary" id="searchByCureName" value="Search">
-                    <input type="button" class="btn btn-primary" id="changeCure" value="Change" disabled>
+                    <input type="button" class="btn btn-outline-primary" id="searchByCureName" value="Search">
+                    <input type="button" class="btn btn-outline-primary" id="changeCure" value="Change" disabled>
                 </div>
             </div>
             <div class="row">
@@ -189,8 +189,8 @@
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-                    <button type="submit" name="submit" class="btn btn-primary">Create</button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>
+                    <button type="submit" name="submit" class="btn btn-outline-primary">Create</button>
                 </div>
             </div>
         </form>

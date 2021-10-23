@@ -26,13 +26,12 @@
                     <input type="number" class="form-control" name="insuranceNumber" id="insuranceNumber" min="1">
                 </div>
             </div>
-            <button type="submit" class="btn btn-warning">Filter</button>
+            <button type="submit" class="btn btn-outline-dark">Filter</button>
         </form>
         <div>
-            <a class="btn btn-warning" href="/events/" role="button">All Events</a>
-            <a class="btn btn-warning" href="/events/today" role="button">Today Events</a>
+            <a class="btn btn-outline-dark" href="/events/" role="button">All Events</a>
+            <a class="btn btn-outline-dark" href="/events/today" role="button">Today Events</a>
         </div>
-<%--        <br>--%>
     </div>
     <table class="table table-hover">
         <thead>
@@ -60,7 +59,8 @@
         </tr>
         </thead>
         <c:forEach items="${events}" var="e">
-            <tr class="table-light">
+            <tr class="${e.eventState == 'PLANNED' ? 'table-warning' :
+             e.eventState == 'PERFORMED' ? 'table-success' : 'table-danger'}">
                 <td style="display: none">${e.id}</td>
                 <td style="display: none">${e.patientId}</td>
                 <td>${e.patientInsuranceNumber}</td>
@@ -80,7 +80,7 @@
                 <td>${e.comment}</td>
                 <sec:authorize access="hasRole('NURSE')">
                     <td>
-                        <a class="btn btn-info" href="/events/${e.id}" role="button">Details</a>
+                        <a class="btn btn-outline-dark" href="/events/${e.id}" role="button">Details</a>
                     </td>
                 </sec:authorize>
             </tr>

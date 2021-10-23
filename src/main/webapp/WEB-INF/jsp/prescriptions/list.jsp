@@ -37,7 +37,7 @@
         </tr>
         </thead>
         <c:forEach items="${prescriptions}" var="p">
-            <tr class="table-light">
+            <tr class="${p.active ? 'table-warning' : 'table-success'}">
                 <td style="display: none">${p.id}</td>
                 <td style="display: none">${p.patientId}</td>
                 <td>${p.patientInsuranceNumber}</td>
@@ -58,7 +58,7 @@
                 <td>${p.active}</td>
                 <sec:authorize access="hasRole('DOCTOR')">
                     <td>
-                        <a class="btn btn-info" href="/prescriptions/${p.id}" role="button">Details</a>
+                        <a class="btn btn-outline-dark" href="/prescriptions/${p.id}" role="button">Details</a>
                     </td>
                 </sec:authorize>
             </tr>

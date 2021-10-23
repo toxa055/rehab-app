@@ -30,7 +30,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="table-light">
+        <tr class="${treatment.closed ? 'table-success' : 'table-warning'}">
             <td style="display: none">${treatment.id}</td>
             <td style="display: none">${treatment.patientId}</td>
             <td>${treatment.patientInsuranceNumber}</td>
@@ -43,20 +43,20 @@
             <td>${treatment.closed}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
-                    <a class="btn btn-success" href="/prescriptions/new/${treatment.id}"
+                    <a class="btn btn-outline-success" href="/prescriptions/new/${treatment.id}"
                        id="newPrescriptionButtonLink" role="button">New Prescription</a>
-                    <a class="btn btn-danger" href="/treatments/close/${treatment.id}"
+                    <a class="btn btn-outline-danger" href="/treatments/close/${treatment.id}"
                        id="closeTreatmentButtonLink" role="button">Close</a>
                 </td>
             </sec:authorize>
         </tr>
     </table>
-    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 <script language="javascript">
     if (${treatment.closed}) {
-        $('#newPrescriptionButtonLink').attr('class', 'btn btn-success disabled');
-        $('#closeTreatmentButtonLink').attr('class', 'btn btn-danger disabled');
+        $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success disabled');
+        $('#closeTreatmentButtonLink').attr('class', 'btn btn-outline-danger disabled');
     }
 </script>
 </body>

@@ -1,6 +1,6 @@
 if ($('#isActive').text() === 'false') {
-    $('#prescriptionCancelButtonLink').attr('class', 'btn btn-danger disabled');
-    $('#prescriptionUpdateButtonLink').attr('class', 'btn btn-warning disabled');
+    $('#prescriptionCancelButtonLink').attr('class', 'btn btn-outline-danger disabled');
+    $('#prescriptionUpdateButtonLink').attr('class', 'btn btn-outline-primary disabled');
 }
 
 $('#prescriptionUpdateButtonLink').click(function () {

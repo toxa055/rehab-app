@@ -35,8 +35,8 @@
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-                    <button type="submit" name="submit" class="btn btn-primary">Create</button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>
+                    <button type="submit" name="submit" class="btn btn-outline-primary">Create</button>
                 </div>
             </div>
         </form>

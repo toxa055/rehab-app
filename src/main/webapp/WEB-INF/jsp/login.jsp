@@ -26,7 +26,7 @@
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="submit" name="submit" class="btn btn-primary">Log In</button>
+                    <button type="submit" name="submit" class="btn btn-outline-primary">Log In</button>
                 </div>
             </div>
         </form>

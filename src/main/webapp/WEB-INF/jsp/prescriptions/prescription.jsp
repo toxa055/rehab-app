@@ -36,7 +36,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="table-light">
+        <tr class="${p.active ? 'table-warning' : 'table-success'}">
             <td style="display: none">${p.id}</td>
             <td style="display: none">${p.patientId}</td>
             <td>${p.patientInsuranceNumber}</td>
@@ -57,15 +57,15 @@
             <td id="isActive">${p.active}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
-                    <a class="btn btn-danger" href="/prescriptions/cancel/${p.id}"
+                    <a class="btn btn-outline-danger" href="/prescriptions/cancel/${p.id}"
                        id="prescriptionCancelButtonLink" role="button">Cancel</a>
-                    <a class="btn btn-warning" href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}"
+                    <a class="btn btn-outline-primary" href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}"
                        id="prescriptionUpdateButtonLink" role="button">Update</a>
                 </td>
             </sec:authorize>
         </tr>
     </table>
-    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 <script src="${pageContext.request.contextPath}/js/prescription.js"></script>
 </body>

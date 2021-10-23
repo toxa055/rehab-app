@@ -25,7 +25,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="table-light">
+        <tr class="${patient.patientState == 'TREATING' ? 'table-warning' : 'table-success'}">
             <td style="display: none">${patient.id}</td>
             <td>${patient.insuranceNumber}</td>
             <td>${patient.name}</td>
@@ -33,18 +33,18 @@
             <td id="patientState">${patient.patientState}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
-                    <a class="btn btn-success" href="/treatments/new/${patient.id}" role="button">New Treatment</a>
-                    <a class="btn btn-danger" href="/patients/discharge/${patient.id}" role="button"
+                    <a class="btn btn-outline-success" href="/treatments/new/${patient.id}" role="button">New Treatment</a>
+                    <a class="btn btn-outline-danger" href="/patients/discharge/${patient.id}" role="button"
                        id="dischargeButtonLink">Discharge</a>
                 </td>
             </sec:authorize>
         </tr>
     </table>
-    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 <script language="javascript">
     if ($('#patientState').text() === 'DISCHARGED') {
-        $('#dischargeButtonLink').attr('class', 'btn btn-danger disabled');
+        $('#dischargeButtonLink').attr('class', 'btn btn-outline-danger disabled');
     }
 </script>
 </body>

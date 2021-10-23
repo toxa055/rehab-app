@@ -25,8 +25,8 @@
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="number" class="form-control" name="patientInsuranceNumber" id="patientInsuranceNumber"
                            placeholder="Insurance number" value="${patient.insuranceNumber}" readonly><br>
-                    <input type="button" class="btn btn-primary" id="searchByInsNum" value="Search">
-                    <input type="button" class="btn btn-primary" id="changeInsNum" value="Change" disabled>
+                    <input type="button" class="btn btn-outline-primary" id="searchByInsNum" value="Search">
+                    <input type="button" class="btn btn-outline-primary" id="changeInsNum" value="Change" disabled>
                 </div>
             </div>
             <div class="row">
@@ -49,8 +49,8 @@
                     <input type="text" class="form-control" name="diagnosis" id="diagnosis" placeholder="Diagnosis">
                 </div>
             </div>
-            <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-            <button type="submit" class="btn btn-primary" id="saveButton" disabled>Save</button>
+            <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>
+            <button type="submit" class="btn btn-outline-primary" id="saveButton" disabled>Save</button>
         </form>
     </div>
 </div>
