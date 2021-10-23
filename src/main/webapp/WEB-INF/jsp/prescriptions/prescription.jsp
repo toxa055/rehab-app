@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Prescription</title>
 </head>
 <body>
@@ -57,15 +58,63 @@
             <td id="isActive">${p.active}</td>
             <sec:authorize access="hasRole('DOCTOR')">
                 <td>
-                    <a class="btn btn-outline-danger" href="/prescriptions/cancel/${p.id}"
-                       id="prescriptionCancelButtonLink" role="button">Cancel</a>
-                    <a class="btn btn-outline-primary" href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}"
-                       id="prescriptionUpdateButtonLink" role="button">Update</a>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                            data-bs-target="#prescriptionCancelModal" id="prescriptionCancelButton">Cancel
+                    </button>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                            data-bs-target="#prescriptionUpdateModal" id="prescriptionUpdateButton">Update
+                    </button>
                 </td>
             </sec:authorize>
         </tr>
     </table>
     <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
+</div>
+<div class="modal fade" id="prescriptionCancelModal" tabindex="-1" aria-labelledby="prescriptionCancelModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="prescriptionCancelModalLabel">Do you really want to cancel the
+                    prescription?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>
+                    The prescription will be cancelled.<br>
+                    All planned events relating to the prescription will be cancelled.
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a class="btn btn-outline-primary" href="/prescriptions/cancel/${p.id}" role="button">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="prescriptionUpdateModal" tabindex="-1" aria-labelledby="prescriptionUpdateModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="prescriptionUpdateModalLabel">Do you really want to update the
+                    prescription?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>
+                    The prescription will be cancelled.<br>
+                    All planned events relating to the prescription will be cancelled.<br>
+                    New prescription will be created.
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a class="btn btn-outline-primary" href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}"
+                   role="button">Confirm</a>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="${pageContext.request.contextPath}/js/prescription.js"></script>
 </body>
