@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>New prescription</title>
 </head>
 <body>
@@ -78,8 +79,11 @@
                 <label for="cureName" class="col-sm-2 col-form-label">Cure</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="text" class="form-control" name="cureName" id="cureName" placeholder="Cure"><br>
-                    <input type="button" class="btn btn-primary" id="searchByCureName" value="Search">
-                    <input type="button" class="btn btn-primary" id="changeCure" value="Change" disabled>
+                    <input type="button" class="btn btn-outline-primary" id="searchByCureName" value="Search">
+                    <input type="button" class="btn btn-outline-primary" id="changeCure" value="Change" disabled>
+                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                            data-bs-target="#newCureModal" id="newCureModalButton">Create
+                    </button>
                 </div>
             </div>
             <div class="row">
@@ -189,13 +193,47 @@
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
-                    <button type="submit" name="submit" class="btn btn-primary">Create</button>
+                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel
+                    </button>
+                    <button type="submit" name="submit" class="btn btn-outline-primary">Create</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+<div class="modal fade" id="newCureModal" tabindex="-1" aria-labelledby="newCureModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newCureModalLabel">Create new cure</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="name" class="col-form-label">Name</label>
+                        <input type="text" class="form-control" name="name" id="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cureTypeModal" class="col-form-label">Type</label>
+                        <div class="form-group col-auto col-form-label">
+                            <select class="form-select" aria-label="Cure" name="cureTypeModal" id="cureTypeModal">
+                                <option value="MEDICINE">MEDICINE</option>
+                                <option value="PROCEDURE">PROCEDURE</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" name="submit" id="cureCreateButton" class="btn btn-outline-success">Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${pageContext.request.contextPath}/js/new_cure.js"></script>
 <script src="${pageContext.request.contextPath}/js/find_cure.js"></script>
 </body>
 </html>

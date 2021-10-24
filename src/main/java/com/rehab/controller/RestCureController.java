@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/rest/cures")
 public class RestCureController {
 
     private final CureService cureService;
@@ -15,8 +16,13 @@ public class RestCureController {
         this.cureService = cureService;
     }
 
-    @RequestMapping("/rest/cures/{name}")
+    @GetMapping("/{name}")
     public CureDto getByName(@PathVariable String name) {
         return cureService.getByName(name);
+    }
+
+    @PostMapping()
+    public CureDto create(CureDto cureDto) {
+        return cureService.save(cureDto);
     }
 }

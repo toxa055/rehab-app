@@ -32,12 +32,10 @@
             <th scope="col">End Date</th>
             <th scope="col">End Time</th>
             <th scope="col">Comment</th>
-            <%--            <sec:authorize access="hasRole('NURSE')">--%>
-            <%--                <th scope="col">Actions</th>--%>
-            <%--            </sec:authorize>--%>
         </tr>
         </thead>
-        <tr class="table-light">
+        <tr class="${event.eventState == 'PLANNED' ? 'table-warning' :
+        event.eventState == 'PERFORMED' ? 'table-success' : 'table-danger'}">
             <td style="display: none">${event.id}</td>
             <td style="display: none">${event.patientId}</td>
             <td>${event.patientInsuranceNumber}</td>
@@ -59,14 +57,15 @@
     </table>
     <div>
         <sec:authorize access="hasRole('NURSE')">
-            <a class="btn btn-success" href="/events/choose/${event.id}" role="button">Choose</a>
-            <a class="btn btn-info" href="/events/discard/${event.id}" role="button">Discard</a>
-            <a class="btn btn-success" href="/events/change/${event.id}?state=performed" role="button">Perform</a>
-            <a class="btn btn-danger" href="/events/change/${event.id}?state=cancelled" role="button">Cancel</a>
+            <a class="btn btn-outline-success" href="/events/choose/${event.id}" role="button">Choose</a>
+            <a class="btn btn-outline-dark" href="/events/discard/${event.id}" role="button">Discard</a>
+            <a class="btn btn-outline-success" href="/events/change/${event.id}?state=performed"
+               role="button">Perform</a>
+            <a class="btn btn-outline-danger" href="/events/change/${event.id}?state=cancelled" role="button">Cancel</a>
         </sec:authorize>
     </div>
     <br>
-    <button type="reset" class="btn btn-secondary" onclick="window.history.back()">Back</button>
+    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 </body>
 </html>

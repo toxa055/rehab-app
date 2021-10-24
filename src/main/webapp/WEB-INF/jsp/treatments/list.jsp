@@ -31,7 +31,7 @@
         </tr>
         </thead>
         <c:forEach items="${treatments}" var="t">
-            <tr class="table-light">
+            <tr class="${t.closed ? 'table-success' : 'table-warning'}">
                 <td style="display: none">${t.id}</td>
                 <td style="display: none">${t.patientId}</td>
                 <td>${t.patientInsuranceNumber}</td>
@@ -44,14 +44,14 @@
                 <td>${t.closed}</td>
                 <sec:authorize access="hasRole('DOCTOR')">
                     <td>
-                        <a class="btn btn-info" href="/treatments/${t.id}" role="button">Details</a>
+                        <a class="btn btn-outline-dark" href="/treatments/${t.id}" role="button">Details</a>
                     </td>
                 </sec:authorize>
             </tr>
         </c:forEach>
     </table>
     <sec:authorize access="hasRole('DOCTOR')">
-        <a class="btn btn-success" href="/treatments/new" role="button">New Treatment</a>
+        <a class="btn btn-outline-success" href="/treatments/new" role="button">New Treatment</a>
     </sec:authorize>
 </div>
 </body>

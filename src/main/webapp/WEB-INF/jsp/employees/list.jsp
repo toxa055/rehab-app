@@ -32,14 +32,14 @@
                 <td>${e.email}</td>
                 <sec:authorize access="hasRole('ADMIN')">
                     <td>
-                        <a class="btn btn-info" href="/employees/${e.id}" role="button">Details</a>
+                        <a class="btn btn-outline-dark" href="/employees/${e.id}" role="button">Details</a>
                     </td>
                 </sec:authorize>
             </tr>
         </c:forEach>
     </table>
     <sec:authorize access="hasRole('ADMIN')">
-        <a class="btn btn-success" href="/employees/new" role="button">New Employee</a>
+        <a class="btn btn-outline-success" href="/employees/new" role="button">New Employee</a>
     </sec:authorize>
 </div>
 </body>

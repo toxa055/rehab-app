@@ -27,7 +27,7 @@
             </tr>
         </c:forEach>
     </table>
-    <a class="btn btn-success" href="/cures/new" role="button">New Cure</a>
+    <a class="btn btn-outline-success" href="/cures/new" role="button">New Cure</a>
 </div>
 </body>
 </html>
