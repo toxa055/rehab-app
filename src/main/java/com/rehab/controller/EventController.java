@@ -2,6 +2,8 @@ package com.rehab.controller;
 
 import com.rehab.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
@@ -16,7 +18,7 @@ import java.time.LocalDate;
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class EventController {
 
-    private static final String EVENTS = "events";
+    private static final String PAGE = "page";
     private static final String EVENTS_LIST = "/events/list";
     private final EventService eventService;
 
@@ -32,34 +34,36 @@ public class EventController {
     }
 
     @GetMapping("/patient/{patientId}")
-    public String getAllByPatientId(@PathVariable int patientId, Model model) {
-        model.addAttribute(EVENTS, eventService.getAllByPatientId(patientId));
+    public String getAllByPatientId(@PathVariable int patientId, Model model,
+                                    @PageableDefault(value = 25) Pageable pageable) {
+        model.addAttribute(PAGE, eventService.getAllByPatientId(patientId, pageable));
         return EVENTS_LIST;
     }
 
     @GetMapping("/nurse/{nurseId}")
-    public String getAllByNurseId(@PathVariable int nurseId, Model model) {
-        model.addAttribute(EVENTS, eventService.getAllByNurseId(nurseId));
+    public String getAllByNurseId(@PathVariable int nurseId, Model model,
+                                  @PageableDefault(value = 25) Pageable pageable) {
+        model.addAttribute(PAGE, eventService.getAllByNurseId(nurseId, pageable));
         return EVENTS_LIST;
     }
 
     @GetMapping("/filter")
     public String filter(@RequestParam @Nullable
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedDate,
-                         @RequestParam @Nullable Integer insuranceNumber,
-                         Model model) {
+                         @RequestParam @Nullable Integer insuranceNumber, Model model,
+                         @PageableDefault(value = 25) Pageable pageable) {
         if ((plannedDate != null) && (insuranceNumber != null)) {
-            model.addAttribute(EVENTS, eventService.getAllByInsuranceNumberAndPlannedDate(insuranceNumber,
-                    plannedDate));
+            model.addAttribute(PAGE, eventService.getAllByInsuranceNumberAndPlannedDate(insuranceNumber,
+                    plannedDate, pageable));
         }
         if ((plannedDate == null) && (insuranceNumber != null)) {
-            model.addAttribute(EVENTS, eventService.getAllByInsuranceNumber(insuranceNumber));
+            model.addAttribute(PAGE, eventService.getAllByInsuranceNumber(insuranceNumber, pageable));
         }
         if ((plannedDate != null) && (insuranceNumber == null)) {
-            model.addAttribute(EVENTS, eventService.getAllByPlannedDate(plannedDate));
+            model.addAttribute(PAGE, eventService.getAllByPlannedDate(plannedDate, pageable));
         }
         if ((plannedDate == null) && (insuranceNumber == null)) {
-            model.addAttribute(EVENTS, eventService.getAll());
+            model.addAttribute(PAGE, eventService.getAll(pageable));
         }
         return EVENTS_LIST;
     }
@@ -86,14 +90,13 @@ public class EventController {
     }
 
     @GetMapping
-    public String events(Model model) {
-        model.addAttribute(EVENTS, eventService.getAll());
+    public String events(@PageableDefault(value = 25) Pageable pageable, Model model) {
+        model.addAttribute(PAGE, eventService.getAll(pageable));
         return EVENTS_LIST;
     }
 
     @GetMapping("/today")
     public String todayEvents(Model model) {
-        model.addAttribute(EVENTS, eventService.getAllByPlannedDate(LocalDate.now()));
-        return EVENTS_LIST;
+        return "redirect:/events/filter?plannedDate=" + LocalDate.now() + "&insuranceNumber=";
     }
 }

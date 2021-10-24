@@ -29,7 +29,7 @@
             <button type="submit" class="btn btn-outline-dark">Filter</button>
         </form>
         <div>
-            <a class="btn btn-outline-dark" href="/events/" role="button">All Events</a>
+            <a class="btn btn-outline-dark" href="/events" role="button">All Events</a>
             <a class="btn btn-outline-dark" href="/events/today" role="button">Today Events</a>
         </div>
     </div>
@@ -50,15 +50,14 @@
             <th scope="col">Cure</th>
             <th scope="col">Cure type</th>
             <th scope="col">Dose</th>
-            <th scope="col">End Date</th>
-            <th scope="col">End Time</th>
+            <th scope="col">End Date / Time</th>
             <th scope="col">Comment</th>
             <sec:authorize access="hasRole('NURSE')">
                 <th scope="col">Actions</th>
             </sec:authorize>
         </tr>
         </thead>
-        <c:forEach items="${events}" var="e">
+        <c:forEach items="${page.content}" var="e">
             <tr class="${e.eventState == 'PLANNED' ? 'table-warning' :
              e.eventState == 'PERFORMED' ? 'table-success' : 'table-danger'}">
                 <td style="display: none">${e.id}</td>
@@ -75,8 +74,7 @@
                 <td>${e.cureName}</td>
                 <td>${e.cureType}</td>
                 <td>${e.dose}</td>
-                <td>${e.endDate}</td>
-                <td>${e.endTime}</td>
+                <td>${e.endDate} ${e.endTime}</td>
                 <td>${e.comment}</td>
                 <sec:authorize access="hasRole('NURSE')">
                     <td>
@@ -86,6 +84,31 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="container">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <c:forEach begin="1" end="${page.totalPages}" var="loop">
+                    <li class=" ${loop - 1 == page.number ? 'page-item active' : 'page-item'}">
+                        <a class="page-link" id="pageHref${loop - 1}" href="#">${loop}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </nav>
+    </div>
 </div>
+<script>
+    let pageCount = ${page.totalPages};
+    let currentUrl = window.location.href.toString().replace('http://localhost:8080', '');
+    let urlOfPage = currentUrl.split('page=')[0];
+    for (let i = 0; i < pageCount; i++) {
+        if (urlOfPage === '/events') {
+            $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
+        } else if (urlOfPage === '/events?' || urlOfPage.endsWith('&')) {
+            $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
+        } else {
+            $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+        }
+    }
+</script>
 </body>
 </html>
