@@ -13,14 +13,15 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
 
     Page<Event> findAll(Pageable pageable);
 
-    Page<Event> findAllByPlannedDate(LocalDate plannedDate, Pageable pageable);
-
     Page<Event> findAllByPatientId(int patientId, Pageable pageable);
 
-    Page<Event> findAllByPatientInsuranceNumber(int insuranceNumber, Pageable pageable);
-
-    @Query("SELECT e FROM Event e WHERE e.patient.insuranceNumber=:insuranceNumber AND e.plannedDate=:plannedDate")
-    Page<Event> findAllByInsuranceNumberAndPlannedDate(int insuranceNumber, LocalDate plannedDate, Pageable pageable);
+    @Query("""
+            SELECT e FROM Event e
+            WHERE ((cast(:plannedDate AS date) IS NULL) OR e.plannedDate=:plannedDate)
+            AND (:insuranceNumber IS NULL OR e.patient.insuranceNumber=:insuranceNumber)
+            AND (:nurseId IS NULL OR e.nurse.id=:nurseId)
+            """)
+    Page<Event> filter(LocalDate plannedDate, Integer insuranceNumber, Integer nurseId, Pageable pageable);
 
     Page<Event> findAllByNurseId(int nurseId, Pageable pageable);
 

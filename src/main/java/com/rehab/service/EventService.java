@@ -73,20 +73,13 @@ public class EventService {
         return eventCrudRepository.findAllByPatientId(patientId, pageable).map(this::toDto);
     }
 
-    public Page<EventDto> getAllByInsuranceNumber(int insNumber, Pageable pageable) {
-        return eventCrudRepository.findAllByPatientInsuranceNumber(insNumber, pageable).map(this::toDto);
-    }
-
     public Page<EventDto> getAllByNurseId(int nurseId, Pageable pageable) {
         return eventCrudRepository.findAllByNurseId(nurseId, pageable).map(this::toDto);
     }
 
-    public Page<EventDto> getAllByInsuranceNumberAndPlannedDate(int insNumber, LocalDate plannedDate, Pageable pageable) {
-        return eventCrudRepository.findAllByInsuranceNumberAndPlannedDate(insNumber, plannedDate, pageable).map(this::toDto);
-    }
-
-    public Page<EventDto> getAllByPlannedDate(LocalDate plannedDate, Pageable pageable) {
-        return eventCrudRepository.findAllByPlannedDate(plannedDate, pageable).map(this::toDto);
+    public Page<EventDto> filter(LocalDate plannedDate, Integer insuranceNumber, boolean authNurse, Pageable pageable) {
+        var nurseId = authNurse ? SecurityUtil.getAuthEmployee().getId() : null;
+        return eventCrudRepository.filter(plannedDate, insuranceNumber, nurseId, pageable).map(this::toDto);
     }
 
     private EventDto toDto(Event event) {

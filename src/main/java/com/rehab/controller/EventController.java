@@ -1,6 +1,7 @@
 package com.rehab.controller;
 
 import com.rehab.service.EventService;
+import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,6 +21,7 @@ public class EventController {
 
     private static final String PAGE = "page";
     private static final String EVENTS_LIST = "/events/list";
+    private static final String REDIRECT = "redirect:../";
     private final EventService eventService;
 
     @Autowired
@@ -30,6 +32,7 @@ public class EventController {
     @GetMapping("/{eventId}")
     public String getById(@PathVariable int eventId, Model model) {
         model.addAttribute("event", eventService.getById(eventId));
+        model.addAttribute("authNurseId", SecurityUtil.getAuthEmployee().getId());
         return "/events/event";
     }
 
@@ -50,21 +53,10 @@ public class EventController {
     @GetMapping("/filter")
     public String filter(@RequestParam @Nullable
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedDate,
-                         @RequestParam @Nullable Integer insuranceNumber, Model model,
-                         @PageableDefault(value = 25) Pageable pageable) {
-        if ((plannedDate != null) && (insuranceNumber != null)) {
-            model.addAttribute(PAGE, eventService.getAllByInsuranceNumberAndPlannedDate(insuranceNumber,
-                    plannedDate, pageable));
-        }
-        if ((plannedDate == null) && (insuranceNumber != null)) {
-            model.addAttribute(PAGE, eventService.getAllByInsuranceNumber(insuranceNumber, pageable));
-        }
-        if ((plannedDate != null) && (insuranceNumber == null)) {
-            model.addAttribute(PAGE, eventService.getAllByPlannedDate(plannedDate, pageable));
-        }
-        if ((plannedDate == null) && (insuranceNumber == null)) {
-            model.addAttribute(PAGE, eventService.getAll(pageable));
-        }
+                         @RequestParam @Nullable Integer insuranceNumber,
+                         @RequestParam @Nullable boolean authNurse,
+                         Model model, @PageableDefault(value = 25) Pageable pageable) {
+        model.addAttribute(PAGE, eventService.filter(plannedDate, insuranceNumber, authNurse, pageable));
         return EVENTS_LIST;
     }
 
@@ -72,21 +64,21 @@ public class EventController {
     @GetMapping("/choose/{eventId}")
     public String choose(@PathVariable int eventId) {
         eventService.setNurse(eventId);
-        return "redirect:..";
+        return REDIRECT + eventId;
     }
 
     @Secured("ROLE_NURSE")
     @GetMapping("/discard/{eventId}")
     public String discard(@PathVariable int eventId) {
         eventService.unSetNurse(eventId);
-        return "redirect:..";
+        return REDIRECT + eventId;
     }
 
     @Secured("ROLE_NURSE")
     @GetMapping("/change/{eventId}")
     public String changeState(@PathVariable int eventId, @RequestParam String state) {
         eventService.changeStatus(eventId, state);
-        return "redirect:..";
+        return REDIRECT + eventId;
     }
 
     @GetMapping

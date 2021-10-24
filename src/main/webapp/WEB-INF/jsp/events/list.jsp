@@ -26,6 +26,16 @@
                     <input type="number" class="form-control" name="insuranceNumber" id="insuranceNumber" min="1">
                 </div>
             </div>
+            <sec:authorize access="hasRole('NURSE')">
+                <div class="row mb-3">
+                    <label for="authNurse" class="col-sm-2 col-form-label">Only my events</label>
+                    <div class="form-group col-lg-4 col-form-label">
+                        <div class="form-check form-check-inline">
+                            <input type="checkbox" class="form-check-input" name="authNurse" id="authNurse">
+                        </div>
+                    </div>
+                </div>
+            </sec:authorize>
             <button type="submit" class="btn btn-outline-dark">Filter</button>
         </form>
         <div>
