@@ -47,7 +47,7 @@ public class EventService {
         return toDto(eventCrudRepository.save(eventForUnsettingSetNurse));
     }
 
-    public EventDto changeStatus(int eventId, String eventState) {
+    public EventDto changeStatus(int eventId, String eventState, String comment) {
         var authNurse = SecurityUtil.getAuthEmployee();
         var eventForChangingState = eventCrudRepository.findById(eventId).get();
         if ((eventForChangingState.getNurse() == null)
@@ -58,6 +58,7 @@ public class EventService {
         eventForChangingState.setEventState(EventState.valueOf(eventState.toUpperCase()));
         eventForChangingState.setEndDate(LocalDate.now());
         eventForChangingState.setEndTime(LocalTime.now());
+        eventForChangingState.setComment(comment);
         return toDto(eventCrudRepository.save(eventForChangingState));
     }
 

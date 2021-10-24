@@ -3,3 +3,5 @@ if ($('#isActive').text() === 'false') {
     $('#prescriptionUpdateButton').attr('disabled', 'true');
 }
 
+let pattern = $('#pattern').text();
+$('#pattern').text(pattern.replace('; )', ')'));

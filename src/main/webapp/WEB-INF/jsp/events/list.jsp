@@ -53,14 +53,13 @@
             <th scope="col" style="display: none">Nurse id</th>
             <th scope="col">Nurse</th>
             <th scope="col" style="display: none">Prescription id</th>
-            <th scope="col">Planned Date</th>
-            <th scope="col">Planned Time</th>
+            <th scope="col">Planned Date/Time</th>
             <th scope="col">State</th>
             <th scope="col" style="display: none">Cure id</th>
             <th scope="col">Cure</th>
             <th scope="col">Cure type</th>
             <th scope="col">Dose</th>
-            <th scope="col">End Date / Time</th>
+            <th scope="col">End Date/Time</th>
             <th scope="col">Comment</th>
             <sec:authorize access="hasRole('NURSE')">
                 <th scope="col">Actions</th>
@@ -77,8 +76,7 @@
                 <td style="display: none">${e.nurseId}</td>
                 <td>${e.nurseName}</td>
                 <td style="display: none">${e.prescriptionId}</td>
-                <td>${e.plannedDate}</td>
-                <td>${e.plannedTime}</td>
+                <td>${e.plannedDate} ${e.plannedTime}</td>
                 <td>${e.eventState}</td>
                 <td style="display: none">${e.cureId}</td>
                 <td>${e.cureName}</td>
@@ -94,7 +92,7 @@
             </tr>
         </c:forEach>
     </table>
-    <div class="container">
+    <div class="container" id="pageNav">
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <c:forEach begin="1" end="${page.totalPages}" var="loop">
@@ -108,15 +106,19 @@
 </div>
 <script>
     let pageCount = ${page.totalPages};
-    let currentUrl = window.location.href.toString().replace('http://localhost:8080', '');
-    let urlOfPage = currentUrl.split('page=')[0];
-    for (let i = 0; i < pageCount; i++) {
-        if (urlOfPage === '/events') {
-            $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
-        } else if (urlOfPage === '/events?' || urlOfPage.endsWith('&')) {
-            $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
-        } else {
-            $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+    if (pageCount === 1) {
+        $('#pageNav').hide();
+    } else {
+        let currentUrl = window.location.href.toString().replace('http://localhost:8080', '');
+        let urlOfPage = currentUrl.split('page=')[0];
+        for (let i = 0; i < pageCount; i++) {
+            if (urlOfPage === '/events') {
+                $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
+            } else if (urlOfPage === '/events?' || urlOfPage.endsWith('&')) {
+                $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
+            } else {
+                $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+            }
         }
     }
 </script>

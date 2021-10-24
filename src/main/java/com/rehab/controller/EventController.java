@@ -76,8 +76,9 @@ public class EventController {
 
     @Secured("ROLE_NURSE")
     @GetMapping("/change/{eventId}")
-    public String changeState(@PathVariable int eventId, @RequestParam String state) {
-        eventService.changeStatus(eventId, state);
+    public String changeState(@PathVariable int eventId, @RequestParam String state,
+                              @RequestParam @Nullable String comment) {
+        eventService.changeStatus(eventId, state, comment);
         return REDIRECT + eventId;
     }
 
