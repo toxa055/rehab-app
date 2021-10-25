@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class PatientController {
 
+    private static final String PATIENT = "patients/patient";
+    private static final String PATIENT_URL = "patients";
     private final PatientService patientService;
 
     @Autowired
@@ -22,14 +24,14 @@ public class PatientController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
-        model.addAttribute("patient", patientService.getById(id));
-        return "patients/patient";
+        model.addAttribute(PATIENT, patientService.getById(id));
+        return PATIENT_URL;
     }
 
     @GetMapping("/insNum/{insuranceNumber}")
     public String getByInsuranceNumber(@PathVariable int insuranceNumber, Model model) {
-        model.addAttribute("patient", patientService.getByInsuranceNumber(insuranceNumber));
-        return "patients/patient";
+        model.addAttribute(PATIENT, patientService.getByInsuranceNumber(insuranceNumber));
+        return PATIENT_URL;
     }
 
     @GetMapping("/discharge/{id}")

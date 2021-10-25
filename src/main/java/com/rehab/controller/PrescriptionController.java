@@ -17,6 +17,7 @@ public class PrescriptionController {
 
     private static final String PRESCRIPTIONS = "prescriptions";
     private static final String PRESCRIPTION_LIST = "/prescriptions/list";
+    private static final String REDIRECT = "redirect:../";
     private final PrescriptionService prescriptionService;
     private final TreatmentService treatmentService;
 
@@ -33,14 +34,14 @@ public class PrescriptionController {
         return "prescriptions/prescription";
     }
 
-    @GetMapping(value = "/getBy", params = "patientId")
-    public String getAllByPatientId(@RequestParam int patientId, Model model) {
+    @GetMapping("/patient/{patientId}")
+    public String getAllByPatientId(@PathVariable int patientId, Model model) {
         model.addAttribute(PRESCRIPTIONS, prescriptionService.getAllByPatientId(patientId));
         return PRESCRIPTION_LIST;
     }
 
-    @GetMapping(value = "/getBy", params = "doctorId")
-    public String getAllByDoctorId(@RequestParam int doctorId, Model model) {
+    @GetMapping( "/doctor/{doctorId}")
+    public String getAllByDoctorId(@PathVariable int doctorId, Model model) {
         model.addAttribute(PRESCRIPTIONS, prescriptionService.getAllByDoctorId(doctorId));
         return PRESCRIPTION_LIST;
     }
@@ -59,14 +60,14 @@ public class PrescriptionController {
 
     @PostMapping("/new")
     public String createPrescription(PrescriptionDto prescriptionDto) {
-        prescriptionService.save(prescriptionDto);
-        return "redirect:..";
+        var savedPrescription = prescriptionService.save(prescriptionDto);
+        return REDIRECT + savedPrescription.getId();
     }
 
     @GetMapping("/cancel/{id}")
     public String cancel(@PathVariable int id, Model model) {
         model.addAttribute("p", prescriptionService.cancel(id));
-        return "redirect:../" + id;
+        return REDIRECT + id;
     }
 
     @GetMapping("/update/{id}")

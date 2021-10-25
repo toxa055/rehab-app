@@ -18,6 +18,7 @@ public class TreatmentController {
     private static final String TREATMENTS = "treatments";
     private static final String TREATMENTS_LIST = "/treatments/list";
     private static final String NEW_TREATMENT = "/treatments/new";
+    private static final String REDIRECT = "redirect:../";
     private final TreatmentService treatmentService;
     private final PatientService patientService;
 
@@ -56,7 +57,7 @@ public class TreatmentController {
     @Secured("ROLE_DOCTOR")
     public String close(@PathVariable int id, Model model) {
         treatmentService.close(id);
-        return "redirect:../" + id;
+        return REDIRECT + id;
     }
 
     @GetMapping("/new")
@@ -75,7 +76,7 @@ public class TreatmentController {
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String createTreatment(TreatmentDto treatmentDto) {
-        treatmentService.save(treatmentDto);
-        return "redirect:..";
+        var savedTreatment = treatmentService.save(treatmentDto);
+        return REDIRECT + savedTreatment.getId();
     }
 }
