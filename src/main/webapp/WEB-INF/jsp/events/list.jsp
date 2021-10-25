@@ -14,28 +14,46 @@
     <h2>Events</h2>
     <div>
         <form action="/events/filter" method="get">
-            <div class="row mb-3">
-                <label for="plannedDate" class="col-sm-2 col-form-label">Date</label>
-                <div class="col-auto">
-                    <input type="date" class="form-control" name="plannedDate" id="plannedDate">
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label for="insuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
-                <div class="col-auto">
-                    <input type="number" class="form-control" name="insuranceNumber" id="insuranceNumber" min="1">
-                </div>
-            </div>
-            <sec:authorize access="hasRole('NURSE')">
-                <div class="row mb-3">
-                    <label for="authNurse" class="col-sm-2 col-form-label">Only my events</label>
-                    <div class="form-group col-lg-4 col-form-label">
-                        <div class="form-check form-check-inline">
-                            <input type="checkbox" class="form-check-input" name="authNurse" id="authNurse">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="row mb-3">
+                        <label for="plannedDate" class="col-sm-5 col-form-label">Date</label>
+                        <div class="col-lg-7">
+                            <input type="date" class="form-control" name="plannedDate" id="plannedDate"
+                                   value="${param.get("plannedDate")}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="insuranceNumber" class="col-sm-5 col-form-label">Insurance number</label>
+                        <div class="col-lg-7">
+                            <input type="number" class="form-control " name="insuranceNumber" id="insuranceNumber"
+                                   min="1" value="${param.get("insuranceNumber")}">
                         </div>
                     </div>
                 </div>
-            </sec:authorize>
+                <div class="col-lg-4">
+                    <sec:authorize access="hasRole('NURSE')">
+                        <div class="row mb-3">
+                            <label for="authNurse" class="col-sm-5 col-form-label">Only my events</label>
+                            <div class="form-group col-lg-2 col-form-label">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="authNurse" id="authNurse"
+                                           <c:if test="${param.get(\"authNurse\") != null}">checked="checked"</c:if>>
+                                </div>
+                            </div>
+                        </div>
+                    </sec:authorize>
+                    <div class="row mb-3">
+                        <label for="onlyPlanned" class="col-sm-5 col-form-label">Only planned events</label>
+                        <div class="form-group col-lg-2 col-form-label">
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input" name="onlyPlanned" id="onlyPlanned"
+                                       <c:if test="${param.get(\"onlyPlanned\") != null}">checked="checked"</c:if>>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <button type="submit" class="btn btn-outline-dark">Filter</button>
         </form>
         <div>

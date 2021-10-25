@@ -1,6 +1,7 @@
 package com.rehab.repository;
 
 import com.rehab.model.Event;
+import com.rehab.model.type.EventState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,8 +21,10 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
             WHERE ((cast(:plannedDate AS date) IS NULL) OR e.plannedDate=:plannedDate)
             AND (:insuranceNumber IS NULL OR e.patient.insuranceNumber=:insuranceNumber)
             AND (:nurseId IS NULL OR e.nurse.id=:nurseId)
+            AND (:planned IS NULL OR e.eventState=:planned)
             """)
-    Page<Event> filter(LocalDate plannedDate, Integer insuranceNumber, Integer nurseId, Pageable pageable);
+    Page<Event> filter(LocalDate plannedDate, Integer insuranceNumber, Integer nurseId, EventState planned,
+                       Pageable pageable);
 
     Page<Event> findAllByNurseId(int nurseId, Pageable pageable);
 

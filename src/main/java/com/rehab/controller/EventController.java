@@ -55,8 +55,9 @@ public class EventController {
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedDate,
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authNurse,
+                         @RequestParam @Nullable boolean onlyPlanned,
                          Model model, @PageableDefault(value = 25) Pageable pageable) {
-        model.addAttribute(PAGE, eventService.filter(plannedDate, insuranceNumber, authNurse, pageable));
+        model.addAttribute(PAGE, eventService.filter(plannedDate, insuranceNumber, authNurse, onlyPlanned, pageable));
         return EVENTS_LIST;
     }
 
