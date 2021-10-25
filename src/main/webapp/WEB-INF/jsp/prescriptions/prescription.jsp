@@ -42,7 +42,7 @@
             <td style="display: none">${p.patientId}</td>
             <td>${p.patientInsuranceNumber}</td>
             <td>${p.patientName}</td>
-            <td style="display: none">${p.doctorId}</td>
+            <td id = "doctorId"  style="display: none">${p.doctorId}</td>
             <td>${p.doctorName}</td>
             <td>${p.date}</td>
             <td style="display: none">${p.cureId}</td>
@@ -115,6 +115,20 @@
         </div>
     </div>
 </div>
-<script src="${pageContext.request.contextPath}/js/prescription.js"></script>
+<script>
+    if ($('#doctorId').text() != ${authDoctorId}) {
+        $('#prescriptionCancelButton').attr('disabled', 'true');
+        $('#prescriptionUpdateButton').attr('disabled', 'true');
+    } else {
+        $('#prescriptionCancelButton').attr('disabled', false);
+        $('#prescriptionUpdateButton').attr('disabled', false);
+    }
+    if ($('#isActive').text() === 'false') {
+        $('#prescriptionCancelButton').attr('disabled', 'true');
+        $('#prescriptionUpdateButton').attr('disabled', 'true');
+    }
+    let pattern = $('#pattern').text();
+    $('#pattern').text(pattern.replace('; )', ')'));
+</script>
 </body>
 </html>

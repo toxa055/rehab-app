@@ -3,6 +3,7 @@ package com.rehab.controller;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.service.PrescriptionService;
 import com.rehab.service.TreatmentService;
+import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ public class PrescriptionController {
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
         model.addAttribute("p", prescriptionService.getById(id));
+        model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
         return "prescriptions/prescription";
     }
 
