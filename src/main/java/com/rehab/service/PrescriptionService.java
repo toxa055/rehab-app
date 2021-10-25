@@ -56,7 +56,8 @@ public class PrescriptionService {
             throw new IllegalStateException();
         }
         var eventsByPrescriptionId = eventCrudRepository.findAllByPrescriptionId(id);
-        var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId);
+        var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId,
+                authDoctor.getName());
         eventCrudRepository.saveAll(eventsForCancelling);
         cancellingPrescription.setActive(false);
         return toDto(prescriptionCrudRepository.save(cancellingPrescription));
