@@ -1,9 +1,9 @@
 INSERT INTO employees (name, position, email, password)
-VALUES ('doc1_name', 'doc1_position', 'doc1@doc.ru', '$2a$12$T1yui3jXQrGQ7m9OyE13bua2Lx6hpSJNF1V4gmeREbDScJrE4whAa'),
-       ('doc2_name', 'doc2_position', 'doc2@doc.ru', '$2a$12$Acl3twa62Xn5MoMix9U4kOMFwPXUIfjjZPfc/mUUsyium3uFG333y'),
-       ('nurse1_name', 'nurse1_position', 'nurse1@nurse.ru',
+VALUES ('Ivanov Andey Alekseevich', 'Surgeon', 'doc1@doc.ru', '$2a$12$T1yui3jXQrGQ7m9OyE13bua2Lx6hpSJNF1V4gmeREbDScJrE4whAa'),
+       ('Petrova Anna Pavlovna', 'Therapist', 'doc2@doc.ru', '$2a$12$Acl3twa62Xn5MoMix9U4kOMFwPXUIfjjZPfc/mUUsyium3uFG333y'),
+       ('Klimova Natalya Olegovna', 'Nurse', 'nurse1@nurse.ru',
         '$2a$12$K88L.PuRN1rt9bOzGk2byex7LTm7POGIygvA4HRSq/d/GJG/b/EXq'),
-       ('nurse2_name', 'nurse2_position', 'nurse2@nurse.ru',
+       ('Pavlova Olga Andreevna', 'Nurse', 'nurse2@nurse.ru',
         '$2a$12$dhY9EPQDQUkF9H7VZVtGautMwTQIu8CVpcth6qrjzmuriY8NZSma2');
 
 INSERT INTO employee_roles
@@ -14,16 +14,16 @@ VALUES (1, 'DOCTOR'),
        (4, 'NURSE');
 
 INSERT INTO patients (insurance_number, name, address)
-VALUES (1001, 'patient1', 'pat1_address'),
-       (1002, 'patient2', 'pat2_address'),
-       (1003, 'patient3', 'pat3_address'),
-       (1004, 'patient4', 'pat4_address');
+VALUES (1001, 'Andreeva Irina Anatolyevna', 'Saint-Petersburg, Nevsky, 13-28'),
+       (1002, 'Saharov Dmitry Markovich', 'Saint-Petersburg, Frunze, 62/3-11'),
+       (1003, 'Alekseev Ivan Ivanovich', 'Saint-Petersburg, Korablestroiteley, 102-210'),
+       (1004, 'Ignatyev Pavel Alekseevich', 'Saint-Petersburg, Optikov, 12a-51');
 
 INSERT INTO cures (name, cure_type)
-VALUES ('cure1', 'MEDICINE'),
-       ('cure2', 'MEDICINE'),
-       ('cure3', 'PROCEDURE'),
-       ('cure4', 'PROCEDURE');
+VALUES ('Aspirin', 'MEDICINE'),
+       ('Metamizol', 'MEDICINE'),
+       ('Electrocardiography', 'PROCEDURE'),
+       ('Electrophoresis', 'PROCEDURE');
 /*
 INSERT INTO periods (count, unit)
 VALUES (3, 'DAY'),

@@ -7,13 +7,12 @@ import com.rehab.repository.EventCrudRepository;
 import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -48,7 +47,7 @@ public class EventService {
         return toDto(eventCrudRepository.save(eventForUnsettingSetNurse));
     }
 
-    public EventDto changeStatus(int eventId, String eventState) {
+    public EventDto changeStatus(int eventId, String eventState, String comment) {
         var authNurse = SecurityUtil.getAuthEmployee();
         var eventForChangingState = eventCrudRepository.findById(eventId).get();
         if ((eventForChangingState.getNurse() == null)
@@ -59,6 +58,7 @@ public class EventService {
         eventForChangingState.setEventState(EventState.valueOf(eventState.toUpperCase()));
         eventForChangingState.setEndDate(LocalDate.now());
         eventForChangingState.setEndTime(LocalTime.now());
+        eventForChangingState.setComment(comment);
         return toDto(eventCrudRepository.save(eventForChangingState));
     }
 
@@ -66,48 +66,27 @@ public class EventService {
         return toDto(eventCrudRepository.findById(id).get());
     }
 
-    public List<EventDto> getAll() {
-        return sortByPlannedDateTime(eventCrudRepository.findAll());
+    public Page<EventDto> getAll(Pageable pageable) {
+        return eventCrudRepository.findAll(pageable).map(this::toDto);
     }
 
-    public List<EventDto> getAllByPatientId(int patientId) {
-        return sortByPlannedDateTime(eventCrudRepository.findAllByPatientId(patientId));
+    public Page<EventDto> getAllByPatientId(int patientId, Pageable pageable) {
+        return eventCrudRepository.findAllByPatientId(patientId, pageable).map(this::toDto);
     }
 
-    public List<EventDto> getAllByInsuranceNumber(int insNumber) {
-        return sortByPlannedDateTime(eventCrudRepository.findAllByInsuranceNumber(insNumber));
+    public Page<EventDto> getAllByNurseId(int nurseId, Pageable pageable) {
+        return eventCrudRepository.findAllByNurseId(nurseId, pageable).map(this::toDto);
     }
 
-    public List<EventDto> getAllByNurseId(int nurseId) {
-        return sortByPlannedDateTime(eventCrudRepository.findAllByNurseId(nurseId));
-    }
-
-    public List<EventDto> getAllByInsuranceNumberAndPlannedDate(int insNumber, LocalDate plannedDate) {
-        return sortByPlannedTime(eventCrudRepository.findAllByInsuranceNumberAndPlannedDate(insNumber, plannedDate));
-    }
-
-    public List<EventDto> getAllByPlannedDate(LocalDate plannedDate) {
-        return sortByPlannedTime(eventCrudRepository.findAllByPlannedDate((plannedDate)));
+    public Page<EventDto> filter(LocalDate plannedDate, Integer insuranceNumber, boolean authNurse,
+                                 boolean onlyPlanned, Pageable pageable) {
+        return eventCrudRepository.filter(plannedDate, insuranceNumber,
+                authNurse ? SecurityUtil.getAuthEmployee().getId() : null,
+                onlyPlanned ? EventState.PLANNED : null,
+                pageable).map(this::toDto);
     }
 
     private EventDto toDto(Event event) {
         return modelMapper.map(event, EventDto.class);
-    }
-
-    private List<EventDto> sortByPlannedDateTime(List<Event> events) {
-        return events
-                .stream()
-                .map(this::toDto)
-                .sorted(Comparator.comparing(EventDto::getPlannedDate)
-                        .thenComparing(EventDto::getPlannedTime))
-                .collect(Collectors.toList());
-    }
-
-    private List<EventDto> sortByPlannedTime(List<Event> events) {
-        return events
-                .stream()
-                .map(this::toDto)
-                .sorted(Comparator.comparing(EventDto::getPlannedTime))
-                .collect(Collectors.toList());
     }
 }

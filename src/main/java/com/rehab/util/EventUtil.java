@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 
 public class EventUtil {
 
+    private static final long DAYS_IN_WEEK = 7L;
+    private static final long DAYS_IN_MONTH = 30L;
+
     private EventUtil() {
     }
 
@@ -31,12 +34,12 @@ public class EventUtil {
                     case DAY -> addEventsForPartsOfDay(prescription, pattern, date.plusDays(i + 1), events);
                     case WEEK -> {
                         for (int j = 1; j < 8; j++) {
-                            addEventsForPartsOfDay(prescription, pattern, date.plusDays(i * 7L + j), events);
+                            addEventsForPartsOfDay(prescription, pattern, date.plusDays(i * DAYS_IN_WEEK + j), events);
                         }
                     }
                     case MONTH -> {
                         for (int j = 1; j < 31; j++) {
-                            addEventsForPartsOfDay(prescription, pattern, date.plusDays(i * 30L + j), events);
+                            addEventsForPartsOfDay(prescription, pattern, date.plusDays(i * DAYS_IN_MONTH + j), events);
                         }
                     }
                 }
@@ -49,12 +52,12 @@ public class EventUtil {
                     case DAY -> addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i + 1), events);
                     case WEEK -> {
                         for (int j = 1; j < 8; j++) {
-                            addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i * 7L + j), events);
+                            addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i * DAYS_IN_WEEK + j), events);
                         }
                     }
                     case MONTH -> {
                         for (int j = 1; j < 31; j++) {
-                            addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i * 30L + j), events);
+                            addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i * DAYS_IN_MONTH + j), events);
                         }
                     }
                 }
@@ -64,11 +67,16 @@ public class EventUtil {
         return events;
     }
 
-    public static List<Event> getEventsForCancelling(List<Event> events) {
+    public static List<Event> getEventsForCancelling(List<Event> events, String doctorName) {
         return events
                 .stream()
                 .filter(e -> e.getEventState() == EventState.PLANNED)
-                .peek(e -> e.setEventState(EventState.CANCELLED))
+                .peek(e -> {
+                    e.setEventState(EventState.CANCELLED);
+                    e.setEndDate(LocalDate.now());
+                    e.setEndTime(LocalTime.now());
+                    e.setComment("Cancelled by " + doctorName);
+                })
                 .collect(Collectors.toList());
     }
 

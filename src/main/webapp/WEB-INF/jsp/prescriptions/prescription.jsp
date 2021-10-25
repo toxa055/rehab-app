@@ -42,16 +42,15 @@
             <td style="display: none">${p.patientId}</td>
             <td>${p.patientInsuranceNumber}</td>
             <td>${p.patientName}</td>
-            <td style="display: none">${p.doctorId}</td>
+            <td id = "doctorId"  style="display: none">${p.doctorId}</td>
             <td>${p.doctorName}</td>
             <td>${p.date}</td>
             <td style="display: none">${p.cureId}</td>
             <td>${p.cureName}</td>
             <td style="display: none">${p.cureType}</td>
             <td style="display: none">${p.patternId}</td>
-            <td>${p.patternCount} times a ${p.patternUnit}
-                (<c:forEach items="${p.patternUnits}" var="unit">${unit};
-                </c:forEach>)
+            <td id="pattern">${p.patternCount} times a ${p.patternUnit}
+                (<c:forEach items="${p.patternUnits}" var="unit">${unit}; </c:forEach>)
             </td>
             <td>${p.periodCount} ${p.periodUnit}</td>
             <td>${p.dose}</td>
@@ -116,6 +115,20 @@
         </div>
     </div>
 </div>
-<script src="${pageContext.request.contextPath}/js/prescription.js"></script>
+<script>
+    if ($('#doctorId').text() != ${authDoctorId}) {
+        $('#prescriptionCancelButton').attr('disabled', 'true');
+        $('#prescriptionUpdateButton').attr('disabled', 'true');
+    } else {
+        $('#prescriptionCancelButton').attr('disabled', false);
+        $('#prescriptionUpdateButton').attr('disabled', false);
+    }
+    if ($('#isActive').text() === 'false') {
+        $('#prescriptionCancelButton').attr('disabled', 'true');
+        $('#prescriptionUpdateButton').attr('disabled', 'true');
+    }
+    let pattern = $('#pattern').text();
+    $('#pattern').text(pattern.replace('; )', ')'));
+</script>
 </body>
 </html>

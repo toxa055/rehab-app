@@ -3,6 +3,7 @@ package com.rehab.controller;
 import com.rehab.dto.TreatmentDto;
 import com.rehab.service.PatientService;
 import com.rehab.service.TreatmentService;
+import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ public class TreatmentController {
     private static final String TREATMENTS = "treatments";
     private static final String TREATMENTS_LIST = "/treatments/list";
     private static final String NEW_TREATMENT = "/treatments/new";
+    private static final String REDIRECT = "redirect:../";
     private final TreatmentService treatmentService;
     private final PatientService patientService;
 
@@ -29,6 +31,7 @@ public class TreatmentController {
     @GetMapping(value = "/{id}")
     public String getById(@PathVariable int id, Model model) {
         model.addAttribute("treatment", treatmentService.getById(id));
+        model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
         return "treatments/treatment";
     }
 
@@ -54,7 +57,7 @@ public class TreatmentController {
     @Secured("ROLE_DOCTOR")
     public String close(@PathVariable int id, Model model) {
         treatmentService.close(id);
-        return "redirect:../" + id;
+        return REDIRECT + id;
     }
 
     @GetMapping("/new")
@@ -73,7 +76,7 @@ public class TreatmentController {
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String createTreatment(TreatmentDto treatmentDto) {
-        treatmentService.save(treatmentDto);
-        return "redirect:..";
+        var savedTreatment = treatmentService.save(treatmentDto);
+        return REDIRECT + savedTreatment.getId();
     }
 }

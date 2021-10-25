@@ -49,9 +49,8 @@
                 <td>${p.cureName}</td>
                 <td style="display: none">${p.cureType}</td>
                 <td style="display: none">${p.patternId}</td>
-                <td>${p.patternCount} times a ${p.patternUnit}
-                    (<c:forEach items="${p.patternUnits}" var="unit">${unit};
-                    </c:forEach>)
+                <td class="items">${p.patternCount} times a ${p.patternUnit}
+                    (<c:forEach items="${p.patternUnits}" var="unit">${unit}; </c:forEach>)
                 </td>
                 <td>${p.periodCount} ${p.periodUnit}</td>
                 <td>${p.dose}</td>
@@ -65,5 +64,11 @@
         </c:forEach>
     </table>
 </div>
+<script>
+    $('.items').each(function () {
+        let pattern = $(this).text();
+        $(this).text(pattern.replace('; )', ')'));
+    });
+</script>
 </body>
 </html>

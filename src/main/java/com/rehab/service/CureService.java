@@ -27,7 +27,7 @@ public class CureService {
     }
 
     public CureDto getByName(String name) {
-        return toDto(cureCrudRepository.getByName(name));
+        return toDto(cureCrudRepository.getByNameIgnoreCase(name));
     }
 
     public CureDto save(CureDto cureDto) {

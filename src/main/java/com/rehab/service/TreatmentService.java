@@ -36,13 +36,13 @@ public class TreatmentService {
     }
 
     @Transactional
-    public Treatment save(TreatmentDto treatmentDto) {
+    public TreatmentDto save(TreatmentDto treatmentDto) {
         var patient = patientCrudRepository.findById(treatmentDto.getPatientId()).get();
         if (patient.getPatientState() == PatientState.DISCHARGED) {
             patient.setPatientState(PatientState.TREATING);
             patientCrudRepository.save(patient);
         }
-        return treatmentCrudRepository.save(toEntity(treatmentDto));
+        return toDto(treatmentCrudRepository.save(toEntity(treatmentDto)));
     }
 
     public Treatment close(int id) {

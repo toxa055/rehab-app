@@ -35,7 +35,7 @@
             <td style="display: none">${treatment.patientId}</td>
             <td>${treatment.patientInsuranceNumber}</td>
             <td>${treatment.patientName}</td>
-            <td style="display: none">${treatment.doctorId}</td>
+            <td id="doctorId" style="display: none">${treatment.doctorId}</td>
             <td>${treatment.doctorName}</td>
             <td>${treatment.date}</td>
             <td>${treatment.diagnosis}</td>
@@ -53,7 +53,14 @@
     </table>
     <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
-<script language="javascript">
+<script>
+    if ($('#doctorId').text() != ${authDoctorId}) {
+        $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success disabled');
+        $('#closeTreatmentButtonLink').attr('class', 'btn btn-outline-danger disabled');
+    } else {
+        $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success');
+        $('#closeTreatmentButtonLink').attr('class', 'btn btn-outline-danger');
+    }
     if (${treatment.closed}) {
         $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success disabled');
         $('#closeTreatmentButtonLink').attr('class', 'btn btn-outline-danger disabled');
