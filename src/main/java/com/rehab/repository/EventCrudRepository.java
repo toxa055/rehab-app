@@ -12,10 +12,6 @@ import java.util.List;
 
 public interface EventCrudRepository extends JpaRepository<Event, Integer> {
 
-    Page<Event> findAll(Pageable pageable);
-
-    Page<Event> findAllByPatientId(int patientId, Pageable pageable);
-
     @Query("""
             SELECT e FROM Event e
             WHERE ((cast(:plannedDate AS date) IS NULL) OR e.plannedDate=:plannedDate)
@@ -25,8 +21,6 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
             """)
     Page<Event> filter(LocalDate plannedDate, Integer insuranceNumber, Integer nurseId, EventState planned,
                        Pageable pageable);
-
-    Page<Event> findAllByNurseId(int nurseId, Pageable pageable);
 
     List<Event> findAllByPrescriptionId(int prescriptionId);
 }

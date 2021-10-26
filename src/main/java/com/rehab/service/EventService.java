@@ -66,18 +66,6 @@ public class EventService {
         return toDto(eventCrudRepository.findById(id).get());
     }
 
-    public Page<EventDto> getAll(Pageable pageable) {
-        return eventCrudRepository.findAll(pageable).map(this::toDto);
-    }
-
-    public Page<EventDto> getAllByPatientId(int patientId, Pageable pageable) {
-        return eventCrudRepository.findAllByPatientId(patientId, pageable).map(this::toDto);
-    }
-
-    public Page<EventDto> getAllByNurseId(int nurseId, Pageable pageable) {
-        return eventCrudRepository.findAllByNurseId(nurseId, pageable).map(this::toDto);
-    }
-
     public Page<EventDto> filter(LocalDate plannedDate, Integer insuranceNumber, boolean authNurse,
                                  boolean onlyPlanned, Pageable pageable) {
         return eventCrudRepository.filter(plannedDate, insuranceNumber,

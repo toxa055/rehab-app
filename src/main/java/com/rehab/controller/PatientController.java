@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class PatientController {
 
-    private static final String PATIENT = "patients/patient";
-    private static final String PATIENT_URL = "patients";
+    private static final String PATIENT = "patient";
+    private static final String PATIENT_URL = "patients/patient";
     private final PatientService patientService;
 
     @Autowired

@@ -24,7 +24,7 @@
                 </sec:authorize>
                 <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
                     <li class="nav-item">
-                        <a class="nav-link" href="/treatments">Treatments</a>
+                        <a class="nav-link" href="/treatments/today">Treatments</a>
                     </li>
                 </sec:authorize>
                 <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
@@ -34,7 +34,7 @@
                 </sec:authorize>
                 <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')">
                     <li class="nav-item">
-                        <a class="nav-link" href="/events">Events</a>
+                        <a class="nav-link" href="/events/today">Events</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/cures">Cures</a>

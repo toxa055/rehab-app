@@ -5,20 +5,25 @@ import com.rehab.service.PatientService;
 import com.rehab.service.TreatmentService;
 import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/treatments")
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
 public class TreatmentController {
 
-    private static final String TREATMENTS = "treatments";
-    private static final String TREATMENTS_LIST = "/treatments/list";
     private static final String NEW_TREATMENT = "/treatments/new";
     private static final String REDIRECT = "redirect:../";
+    private static final String PAGE = "page";
     private final TreatmentService treatmentService;
     private final PatientService patientService;
 
@@ -35,22 +40,26 @@ public class TreatmentController {
         return "treatments/treatment";
     }
 
-    @GetMapping("/patient/{patientId}")
-    public String getAllByPatientId(@PathVariable int patientId, Model model) {
-        model.addAttribute(TREATMENTS, treatmentService.getAllByPatientId(patientId));
-        return TREATMENTS_LIST;
-    }
-
-    @GetMapping("/doctor/{doctorId}")
-    public String getAllByDoctorId(@PathVariable int doctorId, Model model) {
-        model.addAttribute(TREATMENTS, treatmentService.getAllByDoctorId(doctorId));
-        return TREATMENTS_LIST;
+    @GetMapping("/filter")
+    public String filter(@RequestParam @Nullable
+                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tDate,
+                         @RequestParam @Nullable Integer insuranceNumber,
+                         @RequestParam @Nullable boolean authDoctor,
+                         @RequestParam @Nullable boolean onlyOpen,
+                         Model model, @PageableDefault(value = 15) Pageable pageable) {
+        model.addAttribute(PAGE, treatmentService.filter(tDate, insuranceNumber, authDoctor,
+                onlyOpen, pageable));
+        return "/treatments/list";
     }
 
     @GetMapping
     public String treatments(Model model) {
-        model.addAttribute(TREATMENTS, treatmentService.getAll());
-        return TREATMENTS_LIST;
+        return "redirect:/treatments/filter?tDate=&insuranceNumber=";
+    }
+
+    @GetMapping("/today")
+    public String todayTreatments(Model model) {
+        return "redirect:/treatments/filter?tDate=" + LocalDate.now() + "&insuranceNumber=";
     }
 
     @GetMapping("/close/{id}")
