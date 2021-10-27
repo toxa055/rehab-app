@@ -122,7 +122,7 @@
         let currentUrl = window.location.href.toString().replace('http://localhost:8080', '');
         let urlOfPage = currentUrl.split('page=')[0];
         for (let i = 0; i < pageCount; i++) {
-            if (urlOfPage === '/events') {
+            if (urlOfPage === '/treatments') {
                 $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
             } else if (urlOfPage === '/treatments?' || urlOfPage.endsWith('&')) {
                 $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);

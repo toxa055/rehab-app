@@ -14,7 +14,7 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
 
     @Query("""
             SELECT e FROM Event e
-            WHERE ((cast(:plannedDate AS date) IS NULL) OR e.plannedDate=:plannedDate)
+            WHERE (cast(:plannedDate AS date) IS NULL OR e.plannedDate=:plannedDate)
             AND (:insuranceNumber IS NULL OR e.patient.insuranceNumber=:insuranceNumber)
             AND (:nurseId IS NULL OR e.nurse.id=:nurseId)
             AND (:planned IS NULL OR e.eventState=:planned)

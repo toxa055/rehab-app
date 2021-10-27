@@ -29,7 +29,7 @@
                 </sec:authorize>
                 <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
                     <li class="nav-item">
-                        <a class="nav-link" href="/prescriptions">Prescriptions</a>
+                        <a class="nav-link" href="/prescriptions/today">Prescriptions</a>
                     </li>
                 </sec:authorize>
                 <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR', 'NURSE')">

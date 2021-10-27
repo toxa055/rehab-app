@@ -8,11 +8,13 @@ import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PrescriptionService {
@@ -67,28 +69,12 @@ public class PrescriptionService {
         return toDto(prescriptionCrudRepository.findAllById(List.of(id)).get(0));
     }
 
-    public List<PrescriptionDto> getAllByPatientId(int patientId) {
-        return prescriptionCrudRepository
-                .findAllByPatientId(patientId)
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<PrescriptionDto> getAllByDoctorId(int doctorId) {
-        return prescriptionCrudRepository
-                .findAllByDoctorId(doctorId)
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<PrescriptionDto> getAll() {
-        return prescriptionCrudRepository
-                .findAll()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<PrescriptionDto> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
+                                        boolean onlyActive, Pageable pageable) {
+        return prescriptionCrudRepository.filter(pDate, insuranceNumber,
+                authDoctor ? SecurityUtil.getAuthEmployee().getId() : null,
+                onlyActive ? true : null,
+                pageable).map(this::toDto);
     }
 
     private PrescriptionDto toDto(Prescription prescription) {

@@ -23,7 +23,6 @@ public class TreatmentController {
 
     private static final String NEW_TREATMENT = "/treatments/new";
     private static final String REDIRECT = "redirect:../";
-    private static final String PAGE = "page";
     private final TreatmentService treatmentService;
     private final PatientService patientService;
 
@@ -47,7 +46,7 @@ public class TreatmentController {
                          @RequestParam @Nullable boolean authDoctor,
                          @RequestParam @Nullable boolean onlyOpen,
                          Model model, @PageableDefault(value = 15) Pageable pageable) {
-        model.addAttribute(PAGE, treatmentService.filter(tDate, insuranceNumber, authDoctor,
+        model.addAttribute("page", treatmentService.filter(tDate, insuranceNumber, authDoctor,
                 onlyOpen, pageable));
         return "/treatments/list";
     }
