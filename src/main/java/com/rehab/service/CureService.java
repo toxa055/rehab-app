@@ -5,10 +5,9 @@ import com.rehab.model.Cure;
 import com.rehab.repository.CureCrudRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CureService {
@@ -34,12 +33,8 @@ public class CureService {
         return toDto(cureCrudRepository.save(toEntity(cureDto)));
     }
 
-    public List<CureDto> getAll() {
-        return cureCrudRepository
-                .findAll()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<CureDto> getAll(Pageable pageable) {
+        return cureCrudRepository.findAll(pageable).map(this::toDto);
     }
 
     private CureDto toDto(Cure cure) {

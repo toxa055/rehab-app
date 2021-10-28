@@ -45,7 +45,7 @@ public class TreatmentController {
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authDoctor,
                          @RequestParam @Nullable boolean onlyOpen,
-                         Model model, @PageableDefault(value = 15) Pageable pageable) {
+                         Model model, @PageableDefault(15) Pageable pageable) {
         model.addAttribute("page", treatmentService.filter(tDate, insuranceNumber, authDoctor,
                 onlyOpen, pageable));
         return "/treatments/list";

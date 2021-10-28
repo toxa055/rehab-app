@@ -3,6 +3,8 @@ package com.rehab.controller;
 import com.rehab.dto.UserDto;
 import com.rehab.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,8 +63,8 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public String getAll(Model model) {
-        model.addAttribute("employees", employeeService.getAll());
+    public String getAll(@PageableDefault Pageable pageable, Model model) {
+        model.addAttribute("page", employeeService.getAll(pageable));
         return "/employees/list";
     }
 }

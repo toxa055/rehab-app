@@ -41,7 +41,7 @@ public class EventController {
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authNurse,
                          @RequestParam @Nullable boolean onlyPlanned,
-                         Model model, @PageableDefault(value = 25) Pageable pageable) {
+                         Model model, @PageableDefault(25) Pageable pageable) {
         model.addAttribute(PAGE, eventService.filter(plannedDate, insuranceNumber, authNurse, onlyPlanned, pageable));
         return "/events/list";
     }

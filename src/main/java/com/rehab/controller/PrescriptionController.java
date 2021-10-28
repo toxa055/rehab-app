@@ -44,7 +44,7 @@ public class PrescriptionController {
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authDoctor,
                          @RequestParam @Nullable boolean onlyActive,
-                         Model model, @PageableDefault(value = 15) Pageable pageable) {
+                         Model model, @PageableDefault(15) Pageable pageable) {
         model.addAttribute("page", prescriptionService.filter(pDate, insuranceNumber, authDoctor,
                 onlyActive, pageable));
         return "/prescriptions/list";
