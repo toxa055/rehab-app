@@ -12,6 +12,55 @@
 <br>
 <div class="container-fluid">
     <h2>Prescriptions</h2>
+    <div>
+        <form action="/prescriptions/filter" method="get">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="row mb-3">
+                        <label for="pDate" class="col-sm-5 col-form-label">Date</label>
+                        <div class="col-lg-7">
+                            <input type="date" class="form-control" name="pDate" id="pDate"
+                                   value="${param.get("pDate")}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="insuranceNumber" class="col-sm-5 col-form-label">Insurance number</label>
+                        <div class="col-lg-7">
+                            <input type="number" class="form-control " name="insuranceNumber" id="insuranceNumber"
+                                   min="1" value="${param.get("insuranceNumber")}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <sec:authorize access="hasRole('DOCTOR')">
+                        <div class="row mb-3">
+                            <label for="authDoctor" class="col-sm-5 col-form-label">Only my prescriptions</label>
+                            <div class="form-group col-lg-2 col-form-label">
+                                <div class="form-check form-check-inline">
+                                    <input type="checkbox" class="form-check-input" name="authDoctor" id="authDoctor"
+                                           <c:if test="${param.get(\"authDoctor\") != null}">checked="checked"</c:if>>
+                                </div>
+                            </div>
+                        </div>
+                    </sec:authorize>
+                    <div class="row mb-3">
+                        <label for="onlyActive" class="col-sm-5 col-form-label">Only active prescriptions</label>
+                        <div class="form-group col-lg-2 col-form-label">
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input" name="onlyActive" id="onlyActive"
+                                       <c:if test="${param.get(\"onlyActive\") != null}">checked="checked"</c:if>>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-outline-dark">Filter</button>
+        </form>
+        <div>
+            <a class="btn btn-outline-dark" href="/prescriptions" role="button">All Prescriptions</a>
+            <a class="btn btn-outline-dark" href="/prescriptions/today" role="button">Today Prescriptions</a>
+        </div>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -36,7 +85,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <c:forEach items="${prescriptions}" var="p">
+        <c:forEach items="${page.content}" var="p">
             <tr class="${p.active ? 'table-warning' : 'table-success'}">
                 <td style="display: none">${p.id}</td>
                 <td style="display: none">${p.patientId}</td>
@@ -63,12 +112,40 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="container" id="pageNav">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <c:forEach begin="1" end="${page.totalPages}" var="loop">
+                    <li class=" ${loop - 1 == page.number ? 'page-item active' : 'page-item'}">
+                        <a class="page-link" id="pageHref${loop - 1}" href="#">${loop}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </nav>
+    </div>
 </div>
 <script>
     $('.items').each(function () {
         let pattern = $(this).text();
         $(this).text(pattern.replace('; )', ')'));
     });
+
+    let pageCount = ${page.totalPages};
+    if (pageCount === 1) {
+        $('#pageNav').hide();
+    } else {
+        let currentUrl = window.location.href.toString().replace('http://localhost:8080', '');
+        let urlOfPage = currentUrl.split('page=')[0];
+        for (let i = 0; i < pageCount; i++) {
+            if (urlOfPage === '/prescriptions') {
+                $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
+            } else if (urlOfPage === '/prescriptions?' || urlOfPage.endsWith('&')) {
+                $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
+            } else {
+                $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+            }
+        }
+    }
 </script>
 </body>
 </html>

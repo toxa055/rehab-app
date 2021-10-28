@@ -9,12 +9,12 @@ import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TreatmentService {
@@ -67,28 +67,12 @@ public class TreatmentService {
         return toDto(treatmentCrudRepository.findById(id).get());
     }
 
-    public List<TreatmentDto> getAllByPatientId(int patientId) {
-        return treatmentCrudRepository
-                .findAllByPatientId(patientId)
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<TreatmentDto> getAllByDoctorId(int doctorId) {
-        return treatmentCrudRepository
-                .findAllByDoctorId(doctorId)
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<TreatmentDto> getAll() {
-        return treatmentCrudRepository
-                .findAll()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<TreatmentDto> filter(LocalDate date, Integer insuranceNumber, boolean authDoctor, boolean onlyOpen,
+                                     Pageable pageable) {
+        return treatmentCrudRepository.filter(date, insuranceNumber,
+                authDoctor ? SecurityUtil.getAuthEmployee().getId() : null,
+                onlyOpen ? false : null,
+                pageable).map(this::toDto);
     }
 
     private TreatmentDto toDto(Treatment treatment) {

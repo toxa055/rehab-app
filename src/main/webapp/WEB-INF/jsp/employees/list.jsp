@@ -24,7 +24,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <c:forEach items="${employees}" var="e">
+        <c:forEach items="${page.content}" var="e">
             <tr class="table-light">
                 <td>${e.id}</td>
                 <td>${e.name}</td>
@@ -38,9 +38,26 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="container" id="pageNav">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <c:forEach begin="1" end="${page.totalPages}" var="loop">
+                    <li class="${loop - 1 == page.number ? 'page-item active' : 'page-item'}">
+                        <a class="page-link" href="/employees?page=${loop - 1}">${loop}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </nav>
+    </div>
     <sec:authorize access="hasRole('ADMIN')">
         <a class="btn btn-outline-success" href="/employees/new" role="button">New Employee</a>
     </sec:authorize>
 </div>
+<script>
+    let pageCount = ${page.totalPages};
+    if (pageCount === 1) {
+        $('#pageNav').hide();
+    }
+</script>
 </body>
 </html>

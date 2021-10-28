@@ -8,10 +8,9 @@ import com.rehab.repository.PatientCrudRepository;
 import com.rehab.repository.TreatmentCrudRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PatientService {
@@ -53,12 +52,8 @@ public class PatientService {
         return patientCrudRepository.save(dischargingPatient);
     }
 
-    public List<PatientDto> getAll() {
-        return patientCrudRepository
-                .findAll()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<PatientDto> getAll(Pageable pageable) {
+        return patientCrudRepository.findAll(pageable).map(this::toDto);
     }
 
     private PatientDto toDto(Patient patient) {

@@ -3,6 +3,8 @@ package com.rehab.controller;
 import com.rehab.dto.CureDto;
 import com.rehab.service.CureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -44,8 +46,8 @@ public class CureController {
     }
 
     @GetMapping
-    public String cures(Model model) {
-        model.addAttribute("cures", cureService.getAll());
+    public String cures(@PageableDefault(15) Pageable pageable, Model model) {
+        model.addAttribute("page", cureService.getAll(pageable));
         return "/cures/list";
     }
 }

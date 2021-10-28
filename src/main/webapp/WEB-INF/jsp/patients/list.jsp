@@ -25,7 +25,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <c:forEach items="${patients}" var="p">
+        <c:forEach items="${page.content}" var="p">
             <tr class="${p.patientState == 'TREATING' ? 'table-warning' : 'table-success'}">
                 <td style="display: none">${p.id}</td>
                 <td>${p.insuranceNumber}</td>
@@ -40,9 +40,26 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="container" id="pageNav">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <c:forEach begin="1" end="${page.totalPages}" var="loop">
+                    <li class="${loop - 1 == page.number ? 'page-item active' : 'page-item'}">
+                        <a class="page-link" href="/patients?page=${loop - 1}">${loop}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </nav>
+    </div>
     <sec:authorize access="hasRole('DOCTOR')">
         <a class="btn btn-outline-success" href="/patients/new" role="button">New Patient</a>
     </sec:authorize>
 </div>
+<script>
+    let pageCount = ${page.totalPages};
+    if (pageCount === 1) {
+        $('#pageNav').hide();
+    }
+</script>
 </body>
 </html>

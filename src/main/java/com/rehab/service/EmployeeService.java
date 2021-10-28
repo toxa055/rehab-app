@@ -7,11 +7,10 @@ import com.rehab.repository.EmployeeCrudRepository;
 import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -55,12 +54,8 @@ public class EmployeeService {
         return toDto(employeeCrudRepository.save(employee));
     }
 
-    public List<EmployeeDto> getAll() {
-        return employeeCrudRepository
-                .findAll()
-                .stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
+    public Page<EmployeeDto> getAll(Pageable pageable) {
+        return employeeCrudRepository.findAll(pageable).map(this::toDto);
     }
 
     private EmployeeDto toDto(Employee employee) {

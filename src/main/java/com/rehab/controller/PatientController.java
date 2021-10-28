@@ -3,6 +3,8 @@ package com.rehab.controller;
 import com.rehab.dto.PatientDto;
 import com.rehab.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class PatientController {
 
-    private static final String PATIENT = "patients/patient";
-    private static final String PATIENT_URL = "patients";
+    private static final String PATIENT = "patient";
+    private static final String PATIENT_URL = "patients/patient";
     private final PatientService patientService;
 
     @Autowired
@@ -41,8 +43,8 @@ public class PatientController {
     }
 
     @GetMapping
-    public String patients(Model model) {
-        model.addAttribute("patients", patientService.getAll());
+    public String patients(@PageableDefault(15) Pageable pageable, Model model) {
+        model.addAttribute("page", patientService.getAll(pageable));
         return "patients/list";
     }
 

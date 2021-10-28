@@ -19,7 +19,7 @@
             <th scope="col">Type</th>
         </tr>
         </thead>
-        <c:forEach items="${cures}" var="cure">
+        <c:forEach items="${page.content}" var="cure">
             <tr class="table-light">
                 <td>${cure.id}</td>
                 <td>${cure.name}</td>
@@ -27,7 +27,24 @@
             </tr>
         </c:forEach>
     </table>
+    <div class="container" id="pageNav">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <c:forEach begin="1" end="${page.totalPages}" var="loop">
+                    <li class="${loop - 1 == page.number ? 'page-item active' : 'page-item'}">
+                        <a class="page-link" href="/cures?page=${loop - 1}">${loop}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </nav>
+    </div>
     <a class="btn btn-outline-success" href="/cures/new" role="button">New Cure</a>
 </div>
+<script>
+    let pageCount = ${page.totalPages};
+    if (pageCount === 1) {
+        $('#pageNav').hide();
+    }
+</script>
 </body>
 </html>

@@ -20,7 +20,6 @@ import java.time.LocalDate;
 public class EventController {
 
     private static final String PAGE = "page";
-    private static final String EVENTS_LIST = "/events/list";
     private static final String REDIRECT = "redirect:../";
     private final EventService eventService;
 
@@ -36,29 +35,15 @@ public class EventController {
         return "/events/event";
     }
 
-    @GetMapping("/patient/{patientId}")
-    public String getAllByPatientId(@PathVariable int patientId, Model model,
-                                    @PageableDefault(value = 25) Pageable pageable) {
-        model.addAttribute(PAGE, eventService.getAllByPatientId(patientId, pageable));
-        return EVENTS_LIST;
-    }
-
-    @GetMapping("/nurse/{nurseId}")
-    public String getAllByNurseId(@PathVariable int nurseId, Model model,
-                                  @PageableDefault(value = 25) Pageable pageable) {
-        model.addAttribute(PAGE, eventService.getAllByNurseId(nurseId, pageable));
-        return EVENTS_LIST;
-    }
-
     @GetMapping("/filter")
     public String filter(@RequestParam @Nullable
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedDate,
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authNurse,
                          @RequestParam @Nullable boolean onlyPlanned,
-                         Model model, @PageableDefault(value = 25) Pageable pageable) {
+                         Model model, @PageableDefault(25) Pageable pageable) {
         model.addAttribute(PAGE, eventService.filter(plannedDate, insuranceNumber, authNurse, onlyPlanned, pageable));
-        return EVENTS_LIST;
+        return "/events/list";
     }
 
     @Secured("ROLE_NURSE")
@@ -84,9 +69,8 @@ public class EventController {
     }
 
     @GetMapping
-    public String events(@PageableDefault(value = 25) Pageable pageable, Model model) {
-        model.addAttribute(PAGE, eventService.getAll(pageable));
-        return EVENTS_LIST;
+    public String events(Model model) {
+        return "redirect:/events/filter?plannedDate=&insuranceNumber=";
     }
 
     @GetMapping("/today")
