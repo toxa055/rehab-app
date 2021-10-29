@@ -68,9 +68,7 @@ public class PatientController {
                     .collect(Collectors.toMap(f -> f.getField() + "Error", FieldError::getDefaultMessage,
                             (m1, m2) -> String.join("<br>", m1, m2)));
             model.addAllAttributes(errorsMap);
-            model.addAttribute("name", patientDto.getName());
-            model.addAttribute("insuranceNumber", patientDto.getInsuranceNumber());
-            model.addAttribute("address", patientDto.getAddress());
+            model.addAttribute("p", patientDto);
             return NEW_PATIENT_URL;
         }
         patientService.save(patientDto);

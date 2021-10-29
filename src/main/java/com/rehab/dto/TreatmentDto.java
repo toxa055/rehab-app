@@ -1,21 +1,27 @@
 package com.rehab.dto;
 
+import org.hibernate.validator.constraints.Range;
+
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class TreatmentDto {
     private int id;
     private int patientId;
-    private int patientInsuranceNumber;
+    @NotNull(message = "Insurance number cannot be empty")
+    @Range(min = 1_000, max = 99_999_999, message = "Insurance number must contain from 4 to 8 digits")
+    private Integer patientInsuranceNumber;
+    @NotBlank(message = "Name cannot be empty")
+    @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String patientName;
     private int doctorId;
     private String doctorName;
     private LocalDate date = LocalDate.now();
+    @NotBlank(message = "Name cannot be empty")
+    @Size(min = 3, max = 50, message = "Length must be from 3 to 50 symbols")
     private String diagnosis;
     private LocalDate closeDate;
     private boolean isClosed = false;
-
-    public TreatmentDto() {
-    }
 
     public int getId() {
         return id;
@@ -25,7 +31,7 @@ public class TreatmentDto {
         return patientId;
     }
 
-    public int getPatientInsuranceNumber() {
+    public Integer getPatientInsuranceNumber() {
         return patientInsuranceNumber;
     }
 
@@ -65,7 +71,7 @@ public class TreatmentDto {
         this.patientId = patientId;
     }
 
-    public void setPatientInsuranceNumber(int patientInsuranceNumber) {
+    public void setPatientInsuranceNumber(Integer patientInsuranceNumber) {
         this.patientInsuranceNumber = patientInsuranceNumber;
     }
 

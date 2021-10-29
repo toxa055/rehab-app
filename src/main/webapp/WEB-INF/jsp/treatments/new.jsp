@@ -16,15 +16,21 @@
             <div class="row" style="display: none">
                 <label for="patientId" class="col-sm-2 col-form-label">Patient id</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="number" class="form-control" name="patientId"
-                           id="patientId" value="${patient.id}" readonly>
+                    <input type="number" class="form-control" name="patientId" id="patientId" value="${patient.id}"
+                           readonly>
                 </div>
             </div>
             <div class="row">
                 <label for="patientInsuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="number" class="form-control" name="patientInsuranceNumber" id="patientInsuranceNumber"
-                           placeholder="Insurance number" value="${patient.insuranceNumber}" readonly><br>
+                    <input type="number" class="form-control"
+                           name="patientInsuranceNumber" id="patientInsuranceNumber" placeholder="Insurance number"
+                           value="${patient.insuranceNumber != null ? patient.insuranceNumber :
+                           (t.patientInsuranceNumber != null ? t.patientInsuranceNumber : '')}" readonly>
+                    <div class="invalid-feedback" id="invalidInsNum">
+                        ${patientInsuranceNumberError}
+                    </div>
+                    <br>
                     <input type="button" class="btn btn-outline-primary" id="searchByInsNum" value="Search">
                     <input type="button" class="btn btn-outline-primary" id="changeInsNum" value="Change" disabled>
                 </div>
@@ -33,23 +39,28 @@
                 <label for="patientName" class="col-sm-2 col-form-label">Name, Second Name</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="text" class="form-control" name="patientName" id="patientName"
-                           placeholder="Name, Second Name" value="${patient.name}" readonly>
+                           placeholder="Name, Second Name" value="${patient.name != null ? patient.name :
+                           (t.patientName != null ? t.patientName : '')}" readonly>
                 </div>
             </div>
             <div class="row" style="display: none">
                 <label for="address" class="col-sm-2 col-form-label">Address</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" class="form-control" name="address" id="address"
-                           value="${patient.address}" readonly>
+                    <input type="text" class="form-control" name="address" id="address" value="${patient.address}"
+                           readonly>
                 </div>
             </div>
             <div class="row">
                 <label for="diagnosis" class="col-sm-2 col-form-label">Diagnosis</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" class="form-control" name="diagnosis" id="diagnosis" placeholder="Diagnosis">
+                    <input type="text" class="form-control ${t.diagnosis != null ? 'is-invalid' : ''}" name="diagnosis"
+                           id="diagnosis" value="${t.diagnosis != null ? t.diagnosis : ''}" placeholder="Diagnosis">
+                    <div class="invalid-feedback">
+                        ${diagnosisError}
+                    </div>
                 </div>
             </div>
-            <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>
+            <a class="btn btn-outline-secondary" href="/treatments/today" role="button">Cancel</a>
             <button type="submit" class="btn btn-outline-primary" id="saveButton" disabled>Save</button>
         </form>
     </div>

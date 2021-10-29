@@ -51,7 +51,7 @@
             </sec:authorize>
         </tr>
     </table>
-    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
+    <a class="btn btn-outline-secondary" href="/treatments/today" role="button">Back</a>
 </div>
 <script>
     if ($('#doctorId').text() != ${authDoctorId}) {

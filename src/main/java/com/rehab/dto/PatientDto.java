@@ -14,7 +14,7 @@ public class PatientDto {
     @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String name;
     @NotBlank(message = "Address cannot be empty")
-    @Size(min = 8, max = 30, message = "Length must be from 8 to 50 symbols")
+    @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String address;
     private PatientState patientState = PatientState.TREATING;
 

@@ -12,9 +12,13 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/treatments")
@@ -83,7 +87,15 @@ public class TreatmentController {
 
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")
-    public String createTreatment(TreatmentDto treatmentDto) {
+    public String createTreatment(@Valid TreatmentDto treatmentDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            var errorsMap = bindingResult.getFieldErrors().stream()
+                    .collect(Collectors.toMap(f -> f.getField() + "Error", FieldError::getDefaultMessage,
+                            (m1, m2) -> String.join("<br>", m1, m2)));
+            model.addAllAttributes(errorsMap);
+            model.addAttribute("t", treatmentDto);
+            return NEW_TREATMENT;
+        }
         var savedTreatment = treatmentService.save(treatmentDto);
         return REDIRECT + savedTreatment.getId();
     }
