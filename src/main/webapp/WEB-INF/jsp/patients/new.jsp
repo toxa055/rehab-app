@@ -16,26 +16,40 @@
             <div class="row">
                 <label for="name" class="col-sm-2 col-form-label">Name, Second Name</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" name="name" id="name" placeholder="Name, Second Name" class="form-control"/>
+                    <input type="text" name="name" id="name" placeholder="Name, Second Name"
+                           value="${name != null ? name : ''}"
+                           class="form-control ${nameError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${nameError}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <label for="insuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="number" name="insuranceNumber" id="insuranceNumber"
-                           placeholder="insuranceNumber" class="form-control">
+                    <input type="number" name="insuranceNumber" id="insuranceNumber" placeholder="insuranceNumber"
+                           value="${insuranceNumber != null ? insuranceNumber : ''}"
+                           class="form-control ${insuranceNumberError != null ? 'is-invalid' : ''}">
+                    <div class="invalid-feedback">
+                        ${insuranceNumberError}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <label for="address" class="col-sm-2 col-form-label">Address</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" name="address" id="address" placeholder="Address" class="form-control"/>
+                    <input type="text" name="address" id="address" placeholder="Address"
+                           value="${address != null ? address : ''}"
+                           class="form-control ${addressError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${addressError}
+                    </div>
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>
+                    <a class="btn btn-outline-secondary" href="/patients" role="button">Cancel</a>
                     <button type="submit" name="submit" class="btn btn-outline-primary">Create</button>
                 </div>
             </div>

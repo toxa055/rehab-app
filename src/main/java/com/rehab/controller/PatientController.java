@@ -8,15 +8,21 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/patients")
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class PatientController {
 
-    private static final String PATIENT = "patient";
+    private static final String NEW_PATIENT_URL = "patients/new";
     private static final String PATIENT_URL = "patients/patient";
+    private static final String PATIENT = "patient";
     private final PatientService patientService;
 
     @Autowired
@@ -51,12 +57,22 @@ public class PatientController {
     @GetMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String create() {
-        return "patients/new";
+        return NEW_PATIENT_URL;
     }
 
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")
-    public String createPatient(PatientDto patientDto) {
+    public String createPatient(@Valid PatientDto patientDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            var errorsMap = bindingResult.getFieldErrors().stream()
+                    .collect(Collectors.toMap(f -> f.getField() + "Error", FieldError::getDefaultMessage,
+                            (m1, m2) -> String.join("<br>", m1, m2)));
+            model.addAllAttributes(errorsMap);
+            model.addAttribute("name", patientDto.getName());
+            model.addAttribute("insuranceNumber", patientDto.getInsuranceNumber());
+            model.addAttribute("address", patientDto.getAddress());
+            return NEW_PATIENT_URL;
+        }
         patientService.save(patientDto);
         return "redirect:";
     }
