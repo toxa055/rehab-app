@@ -12,15 +12,20 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/prescriptions")
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
 public class PrescriptionController {
 
+    private static final String NEW_PRESCRIPTION_URL = "/prescriptions/new";
     private static final String REDIRECT = "redirect:../";
     private final PrescriptionService prescriptionService;
     private final TreatmentService treatmentService;
@@ -63,11 +68,20 @@ public class PrescriptionController {
     @GetMapping("/new/{treatmentId}")
     public String create(@PathVariable int treatmentId, Model model) {
         model.addAttribute("treatment", treatmentService.getById(treatmentId));
-        return "prescriptions/new";
+        return NEW_PRESCRIPTION_URL;
     }
 
     @PostMapping("/new")
-    public String createPrescription(PrescriptionDto prescriptionDto) {
+    public String createPrescription(@Valid PrescriptionDto prescriptionDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            var errorsMap = bindingResult.getFieldErrors().stream()
+                    .collect(Collectors.toMap(f -> f.getField() + "Error", FieldError::getDefaultMessage,
+                            (m1, m2) -> String.join("<br>", m1, m2)));
+            model.addAllAttributes(errorsMap);
+            model.addAttribute("p", prescriptionDto);
+            model.addAttribute("treatment", treatmentService.getById(prescriptionDto.getTreatmentId()));
+            return NEW_PRESCRIPTION_URL;
+        }
         var savedPrescription = prescriptionService.save(prescriptionDto);
         return REDIRECT + savedPrescription.getId();
     }

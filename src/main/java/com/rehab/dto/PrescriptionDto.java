@@ -3,8 +3,10 @@ package com.rehab.dto;
 import com.rehab.model.type.CureType;
 import com.rehab.model.type.PatternUnit;
 import com.rehab.model.type.TimeUnit;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class PrescriptionDto {
     private int treatmentId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date = LocalDate.now();
-    private int cureId;
+    private Integer cureId;
     private String cureName;
     private CureType cureType;
     private int patternId;
@@ -26,8 +28,12 @@ public class PrescriptionDto {
     private TimeUnit patternUnit;
     private List<PatternUnit> patternUnits;
     private int periodId;
-    private int periodCount;
+    @NotNull(message = "Count cannot be empty")
+    @Range(min = 1, max = 90, message = "Period count must be from 1 to 90")
+    private Integer periodCount;
     private TimeUnit periodUnit;
+    @NotBlank(message = "Diagnosis cannot be empty")
+    @Size(min = 3, max = 20, message = "Length must be from 3 to 20 symbols")
     private String dose;
     private boolean active = true;
 
@@ -66,7 +72,7 @@ public class PrescriptionDto {
         return date;
     }
 
-    public int getCureId() {
+    public Integer getCureId() {
         return cureId;
     }
 
@@ -98,7 +104,7 @@ public class PrescriptionDto {
         return periodId;
     }
 
-    public int getPeriodCount() {
+    public Integer getPeriodCount() {
         return periodCount;
     }
 
@@ -146,7 +152,7 @@ public class PrescriptionDto {
         this.date = date;
     }
 
-    public void setCureId(int cureId) {
+    public void setCureId(Integer cureId) {
         this.cureId = cureId;
     }
 
@@ -178,7 +184,7 @@ public class PrescriptionDto {
         this.periodId = periodId;
     }
 
-    public void setPeriodCount(int periodCount) {
+    public void setPeriodCount(Integer periodCount) {
         this.periodCount = periodCount;
     }
 

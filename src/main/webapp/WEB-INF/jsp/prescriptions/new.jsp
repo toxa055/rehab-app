@@ -68,20 +68,27 @@
                     <div class="row" style="display: none">
                         <label for="cureId" class="col-sm-4 col-form-label">Cure id</label>
                         <div class="form-group col-lg-7 col-form-label">
-                            <input type="number" class="form-control" name="cureId" id="cureId" readonly>
+                            <input type="number" class="form-control" name="cureId" id="cureId"
+                                   value="${p.cureId}" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <label for="cureType" class="col-sm-4 col-form-label">Cure type</label>
                         <div class="form-group col-lg-7 col-form-label">
-                            <input type="text" class="form-control" name="cureType" id="cureType" readonly>
+                            <input type="text" class="form-control" name="cureType" id="cureType"
+                                   value="${p.cureType != null ? p.cureType : ''}" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <label for="cureName" class="col-sm-4 col-form-label">Cure</label>
                         <div class="form-group col-lg-7 col-form-label">
-                            <input type="text" class="form-control" name="cureName" id="cureName"
-                                   placeholder="Cure"><br>
+                            <input type="text" class="form-control ${cureNameError != null ? 'is-invalid' : ''}"
+                                   value="${p.cureName != null ? p.cureName : ''}"
+                                   name="cureName" id="cureName" placeholder="Cure">
+                            <div class="invalid-feedback" id="invalidCureName">
+                                ${cureNameError}
+                            </div>
+                            <br>
                             <input type="button" class="btn btn-outline-primary" id="searchByCureName" value="Search">
                             <input type="button" class="btn btn-outline-primary" id="changeCure" value="Change"
                                    disabled>
@@ -93,7 +100,11 @@
                     <div class="row">
                         <label for="dose" class="col-sm-4 col-form-label">Dose</label>
                         <div class="form-group col-lg-7 col-form-label">
-                            <input type="text" class="form-control" name="dose" id="dose" placeholder="Dose">
+                            <input type="text" class="form-control ${doseError != null ? 'is-invalid' : ''}"
+                                   value="${p.dose != null ? p.dose : ''}" name="dose" id="dose" placeholder="Dose">
+                            <div class="invalid-feedback">
+                                ${doseError}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -186,8 +197,12 @@
                     <div class="row">
                         <label for="periodCount" class="col-sm-4 col-form-label">Period</label>
                         <div class="form-group col-lg-7 col-form-label">
-                            <input type="number" class="form-control" name="periodCount" id="periodCount"
-                                   placeholder="Count" min="1" max="300">
+                            <input type="number" class="form-control ${periodCountError != null ? 'is-invalid' : ''}"
+                                   value="${p.periodCount != null ? p.periodCount : ''}"
+                                   name="periodCount" id="periodCount" placeholder="Count">
+                            <div class="invalid-feedback">
+                                ${periodCountError}
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -205,9 +220,10 @@
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel
+                    <a class="btn btn-outline-secondary" href="/treatments/${treatment.id}" role="button">Cancel</a>
+                    <button type="submit" name="submit" id="sendFormButton" class="btn btn-outline-primary" disabled>
+                        Create
                     </button>
-                    <button type="submit" name="submit" class="btn btn-outline-primary">Create</button>
                 </div>
             </div>
         </form>
@@ -225,6 +241,7 @@
                     <div class="mb-3">
                         <label for="name" class="col-form-label">Name</label>
                         <input type="text" class="form-control" name="name" id="name">
+                        <div class="invalid-feedback" id="invalidCureNameModal"></div>
                     </div>
                     <div class="mb-3">
                         <label for="cureTypeModal" class="col-form-label">Type</label>
