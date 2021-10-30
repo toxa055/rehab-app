@@ -26,6 +26,7 @@ public class PrescriptionDto {
     private int patternId;
     private int patternCount;
     private TimeUnit patternUnit;
+    @NotEmpty(message = "Times of day must be chosen")
     private List<PatternUnit> patternUnits;
     private int periodId;
     @NotNull(message = "Count cannot be empty")

@@ -3,6 +3,7 @@ package com.rehab.controller;
 import com.rehab.dto.TreatmentDto;
 import com.rehab.service.PatientService;
 import com.rehab.service.TreatmentService;
+import com.rehab.util.ControllerUtil;
 import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,19 +14,17 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/treatments")
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
 public class TreatmentController {
 
-    private static final String NEW_TREATMENT = "/treatments/new";
+    private static final String NEW_TREATMENT_URL = "/treatments/new";
     private static final String REDIRECT = "redirect:../";
     private final TreatmentService treatmentService;
     private final PatientService patientService;
@@ -75,26 +74,23 @@ public class TreatmentController {
     @GetMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String create(Model model) {
-        return NEW_TREATMENT;
+        return NEW_TREATMENT_URL;
     }
 
     @GetMapping("/new/{patientId}")
     @Secured("ROLE_DOCTOR")
     public String create(@PathVariable int patientId, Model model) {
         model.addAttribute("patient", patientService.getById(patientId));
-        return NEW_TREATMENT;
+        return NEW_TREATMENT_URL;
     }
 
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String createTreatment(@Valid TreatmentDto treatmentDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            var errorsMap = bindingResult.getFieldErrors().stream()
-                    .collect(Collectors.toMap(f -> f.getField() + "Error", FieldError::getDefaultMessage,
-                            (m1, m2) -> String.join("<br>", m1, m2)));
-            model.addAllAttributes(errorsMap);
+            model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
             model.addAttribute("t", treatmentDto);
-            return NEW_TREATMENT;
+            return NEW_TREATMENT_URL;
         }
         var savedTreatment = treatmentService.save(treatmentDto);
         return REDIRECT + savedTreatment.getId();

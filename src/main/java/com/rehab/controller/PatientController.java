@@ -2,6 +2,7 @@ package com.rehab.controller;
 
 import com.rehab.dto.PatientDto;
 import com.rehab.service.PatientService;
+import com.rehab.util.ControllerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -9,11 +10,9 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/patients")
@@ -64,10 +63,7 @@ public class PatientController {
     @Secured("ROLE_DOCTOR")
     public String createPatient(@Valid PatientDto patientDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            var errorsMap = bindingResult.getFieldErrors().stream()
-                    .collect(Collectors.toMap(f -> f.getField() + "Error", FieldError::getDefaultMessage,
-                            (m1, m2) -> String.join("<br>", m1, m2)));
-            model.addAllAttributes(errorsMap);
+            model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
             model.addAttribute("p", patientDto);
             return NEW_PATIENT_URL;
         }

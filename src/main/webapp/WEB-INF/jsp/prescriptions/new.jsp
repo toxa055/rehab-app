@@ -76,15 +76,14 @@
                         <label for="cureType" class="col-sm-4 col-form-label">Cure type</label>
                         <div class="form-group col-lg-7 col-form-label">
                             <input type="text" class="form-control" name="cureType" id="cureType"
-                                   value="${p.cureType != null ? p.cureType : ''}" readonly>
+                                   value="${p.cureType}" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <label for="cureName" class="col-sm-4 col-form-label">Cure</label>
                         <div class="form-group col-lg-7 col-form-label">
                             <input type="text" class="form-control ${cureNameError != null ? 'is-invalid' : ''}"
-                                   value="${p.cureName != null ? p.cureName : ''}"
-                                   name="cureName" id="cureName" placeholder="Cure">
+                                   value="${p.cureName}" name="cureName" id="cureName" placeholder="Cure">
                             <div class="invalid-feedback" id="invalidCureName">
                                 ${cureNameError}
                             </div>
@@ -101,7 +100,7 @@
                         <label for="dose" class="col-sm-4 col-form-label">Dose</label>
                         <div class="form-group col-lg-7 col-form-label">
                             <input type="text" class="form-control ${doseError != null ? 'is-invalid' : ''}"
-                                   value="${p.dose != null ? p.dose : ''}" name="dose" id="dose" placeholder="Dose">
+                                   value="${p.dose}" name="dose" id="dose" placeholder="Dose">
                             <div class="invalid-feedback">
                                 ${doseError}
                             </div>
@@ -152,6 +151,10 @@
                                        id="NIGHT">
                                 <label class="form-check-label" for="NIGHT">NIGHT</label>
                             </div>
+                            <input class="form-control is-invalid" hidden>
+                            <div class="invalid-feedback">
+                                ${patternUnitsError}
+                            </div>
                         </div>
                     </div>
                     <div class="row" id="days-of-week" hidden>
@@ -198,8 +201,7 @@
                         <label for="periodCount" class="col-sm-4 col-form-label">Period</label>
                         <div class="form-group col-lg-7 col-form-label">
                             <input type="number" class="form-control ${periodCountError != null ? 'is-invalid' : ''}"
-                                   value="${p.periodCount != null ? p.periodCount : ''}"
-                                   name="periodCount" id="periodCount" placeholder="Count">
+                                   value="${p.periodCount}" name="periodCount" id="periodCount" placeholder="Count">
                             <div class="invalid-feedback">
                                 ${periodCountError}
                             </div>
@@ -210,8 +212,8 @@
                         <div class="form-group col-lg-7 col-form-label">
                             <select class="form-select" aria-label="Unit" name="periodUnit" id="periodUnit">
                                 <option value="DAY">DAY</option>
-                                <option value="WEEK">WEEK</option>
-                                <option value="MONTH">MONTH</option>
+                                <option value="WEEK" ${p.periodUnit == 'WEEK' ? 'selected' : ''}>WEEK</option>
+                                <option value="MONTH" ${p.periodUnit == 'MONTH' ? 'selected' : ''}>MONTH</option>
                             </select>
                         </div>
                     </div>

@@ -3,6 +3,7 @@ package com.rehab.controller;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.service.PrescriptionService;
 import com.rehab.service.TreatmentService;
+import com.rehab.util.ControllerUtil;
 import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -13,12 +14,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/prescriptions")
@@ -74,10 +73,7 @@ public class PrescriptionController {
     @PostMapping("/new")
     public String createPrescription(@Valid PrescriptionDto prescriptionDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            var errorsMap = bindingResult.getFieldErrors().stream()
-                    .collect(Collectors.toMap(f -> f.getField() + "Error", FieldError::getDefaultMessage,
-                            (m1, m2) -> String.join("<br>", m1, m2)));
-            model.addAllAttributes(errorsMap);
+            model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
             model.addAttribute("p", prescriptionDto);
             model.addAttribute("treatment", treatmentService.getById(prescriptionDto.getTreatmentId()));
             return NEW_PRESCRIPTION_URL;
