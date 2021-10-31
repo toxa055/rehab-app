@@ -17,8 +17,7 @@
                 <label for="name" class="col-sm-2 col-form-label">Name, Second Name</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="text" name="name" id="name" placeholder="Name, Second Name"
-                           value="${p.name != null ? p.name : ''}"
-                           class="form-control ${nameError != null ? 'is-invalid' : ''}"/>
+                           value="${p.name}" class="form-control ${nameError != null ? 'is-invalid' : ''}"/>
                     <div class="invalid-feedback">
                         ${nameError}
                     </div>
@@ -28,7 +27,7 @@
                 <label for="insuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="number" name="insuranceNumber" id="insuranceNumber" placeholder="insuranceNumber"
-                           value="${p.insuranceNumber != null ? p.insuranceNumber : ''}"
+                           value="${p.insuranceNumber}"
                            class="form-control ${insuranceNumberError != null ? 'is-invalid' : ''}">
                     <div class="invalid-feedback">
                         ${insuranceNumberError}
@@ -39,8 +38,7 @@
                 <label for="address" class="col-sm-2 col-form-label">Address</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="text" name="address" id="address" placeholder="Address"
-                           value="${p.address != null ? p.address : ''}"
-                           class="form-control ${addressError != null ? 'is-invalid' : ''}"/>
+                           value="${p.address}" class="form-control ${addressError != null ? 'is-invalid' : ''}"/>
                     <div class="invalid-feedback">
                         ${addressError}
                     </div>

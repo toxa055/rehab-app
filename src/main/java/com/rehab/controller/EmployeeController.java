@@ -2,21 +2,26 @@ package com.rehab.controller;
 
 import com.rehab.dto.UserDto;
 import com.rehab.service.EmployeeService;
+import com.rehab.util.ControllerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/employees")
 @Secured("ROLE_ADMIN")
 public class EmployeeController {
 
-    private static final String EMPLOYEE = "employee";
+    private static final String NEW_EMPLOYEE_URL = "/employees/new";
     private static final String EMPLOYEE_URL = "/employees/employee";
+    private static final String EMPLOYEE = "employee";
     private final EmployeeService employeeService;
 
     @Autowired
@@ -53,11 +58,26 @@ public class EmployeeController {
 
     @GetMapping("/new")
     public String create() {
-        return "/employees/new";
+        return NEW_EMPLOYEE_URL;
     }
 
     @PostMapping("/new")
-    public String create(UserDto userDto) {
+    public String create(@Valid UserDto userDto, BindingResult bindingResult, Model model) {
+        model.addAttribute("e", userDto);
+        var isDifferentPasswords = (userDto.getPassword() != null)
+                && (!userDto.getPassword().equals(userDto.getConfirmPassword()));
+        if (isDifferentPasswords) {
+            var diffPasswords = "Passwords are not equal";
+            model.addAttribute("passwordError", diffPasswords);
+            model.addAttribute("confirmPasswordError", diffPasswords);
+        }
+        if (bindingResult.hasErrors()) {
+            model.mergeAttributes(ControllerUtil.getErrorsMap(bindingResult));
+            return NEW_EMPLOYEE_URL;
+        }
+        if (isDifferentPasswords) {
+            return NEW_EMPLOYEE_URL;
+        }
         employeeService.save(userDto);
         return "redirect:";
     }

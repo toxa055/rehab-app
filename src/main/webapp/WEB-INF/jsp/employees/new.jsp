@@ -17,32 +17,51 @@
             <div class="row">
                 <label for="name" class="col-sm-2 col-form-label">Name, Second Name</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" name="name" id="name" placeholder="Name, Second name" class="form-control"/>
+                    <input type="text" name="name" id="name" placeholder="Name, Second name" value="${e.name}"
+                           class="form-control ${nameError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${nameError}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <label for="position" class="col-sm-2 col-form-label">Position</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" name="position" id="position" placeholder="Position" class="form-control"/>
+                    <input type="text" name="position" id="position" placeholder="Position" value="${e.position}"
+                           class="form-control ${positionError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${positionError}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <label for="email" class="col-sm-2 col-form-label">Email</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="email" name="email" id="email" placeholder="Email" class="form-control"/>
+                    <input type="email" name="email" id="email" placeholder="Email" value="${e.email}"
+                           class="form-control ${emailError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${emailError}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <label for="password" class="col-sm-2 col-form-label">Password</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="password" name="password" id="password" placeholder="Password" class="form-control"/>
+                    <input type="password" name="password" id="password" placeholder="Password"
+                           class="form-control ${passwordError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${passwordError}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm password</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password"
-                           class="form-control"/>
+                           class="form-control ${confirmPasswordError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${confirmPasswordError}
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -60,12 +79,16 @@
                         <input class="form-check-input" type="checkbox" name="roles" value="NURSE" id="NURSE">
                         <label class="form-check-label" for="NURSE">NURSE</label>
                     </div>
+                    <input class="form-control is-invalid" hidden>
+                    <div class="invalid-feedback">
+                        ${rolesError}
+                    </div>
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>
+                    <a class="btn btn-outline-secondary" href="/employees" role="button">Cancel</a>
                     <button type="submit" name="submit" class="btn btn-outline-primary">Create</button>
                 </div>
             </div>

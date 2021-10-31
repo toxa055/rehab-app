@@ -36,9 +36,6 @@ public class EmployeeService {
     }
 
     public Employee save(UserDto userDto) {
-        if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
-            throw new IllegalArgumentException();
-        }
         var employeeFromUserDto = toEntity(userDto);
         employeeFromUserDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return employeeCrudRepository.save(employeeFromUserDto);
