@@ -35,16 +35,15 @@ public class EmployeeService {
         return getById(SecurityUtil.getAuthEmployee().getId());
     }
 
-    public Employee save(UserDto userDto) {
+    public EmployeeDto save(UserDto userDto) {
         var employeeFromUserDto = toEntity(userDto);
         employeeFromUserDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        return employeeCrudRepository.save(employeeFromUserDto);
+        return toDto(employeeCrudRepository.save(employeeFromUserDto));
     }
 
     public EmployeeDto changePassword(UserDto userDto) {
         var employee = employeeCrudRepository.findById(userDto.getId()).get();
-        if (!employee.getId().equals(userDto.getId())
-                || !userDto.getPassword().equals(userDto.getConfirmPassword())) {
+        if (!employee.getId().equals(userDto.getId())) {
             throw new IllegalArgumentException();
         }
         employee.setPassword(passwordEncoder.encode(userDto.getPassword()));

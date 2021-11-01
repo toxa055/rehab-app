@@ -17,7 +17,7 @@
             <div class="row">
                 <label for="name" class="col-sm-2 col-form-label">Name, Second Name</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" name="name" id="name" placeholder="Name, Second name" value="${e.name}"
+                    <input type="text" name="name" id="name" placeholder="Name, Second name" value="${employee.name}"
                            class="form-control ${nameError != null ? 'is-invalid' : ''}"/>
                     <div class="invalid-feedback">
                         ${nameError}
@@ -27,7 +27,7 @@
             <div class="row">
                 <label for="position" class="col-sm-2 col-form-label">Position</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" name="position" id="position" placeholder="Position" value="${e.position}"
+                    <input type="text" name="position" id="position" placeholder="Position" value="${employee.position}"
                            class="form-control ${positionError != null ? 'is-invalid' : ''}"/>
                     <div class="invalid-feedback">
                         ${positionError}
@@ -37,7 +37,7 @@
             <div class="row">
                 <label for="email" class="col-sm-2 col-form-label">Email</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="email" name="email" id="email" placeholder="Email" value="${e.email}"
+                    <input type="email" name="email" id="email" placeholder="Email" value="${employee.email}"
                            class="form-control ${emailError != null ? 'is-invalid' : ''}"/>
                     <div class="invalid-feedback">
                         ${emailError}
