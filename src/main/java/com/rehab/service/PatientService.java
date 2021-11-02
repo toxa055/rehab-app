@@ -1,6 +1,5 @@
 package com.rehab.service;
 
-
 import com.rehab.dto.PatientDto;
 import com.rehab.model.Patient;
 import com.rehab.model.type.PatientState;
@@ -52,8 +51,11 @@ public class PatientService {
         return patientCrudRepository.save(dischargingPatient);
     }
 
-    public Page<PatientDto> getAll(Pageable pageable) {
-        return patientCrudRepository.findAll(pageable).map(this::toDto);
+    public Page<PatientDto> filter(Integer insuranceNumber, String nameLike, boolean onlyTreating, Pageable pageable) {
+        return patientCrudRepository.filter(insuranceNumber,
+                nameLike == null ? null : nameLike.strip().toLowerCase(),
+                onlyTreating ? PatientState.TREATING : null,
+                pageable).map(this::toDto);
     }
 
     private PatientDto toDto(Patient patient) {

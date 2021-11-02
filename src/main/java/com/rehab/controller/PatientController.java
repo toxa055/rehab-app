@@ -6,6 +6,7 @@ import com.rehab.util.ControllerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,8 +50,17 @@ public class PatientController {
     }
 
     @GetMapping
-    public String patients(@PageableDefault(15) Pageable pageable, Model model) {
-        model.addAttribute("page", patientService.getAll(pageable));
+    public String patients() {
+        return "redirect:/patients/filter";
+    }
+
+    @GetMapping("/filter")
+    public String filter(@RequestParam @Nullable Integer insuranceNumber,
+                         @RequestParam @Nullable String nameLike,
+                         @RequestParam @Nullable boolean onlyTreating,
+                         @PageableDefault(value = 15, sort = "name") Pageable pageable,
+                         Model model) {
+        model.addAttribute("page", patientService.filter(insuranceNumber, nameLike, onlyTreating, pageable));
         return "patients/list";
     }
 

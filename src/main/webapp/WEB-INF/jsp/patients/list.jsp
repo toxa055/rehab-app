@@ -12,6 +12,48 @@
 <br>
 <div class="container-fluid">
     <h2>Patients</h2>
+    <div>
+        <form action="/patients/filter" method="get">
+            <div class="row" id="filterDiv">
+                <div class="col-lg-4">
+                    <div class="row mb-3">
+                        <label for="insuranceNumber" class="col-sm-5 col-form-label">Insurance number</label>
+                        <div class="col-lg-6">
+                            <input type="number" class="form-control " name="insuranceNumber" id="insuranceNumber"
+                                   min="1000" value="${param.get("insuranceNumber")}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="row mb-3">
+                        <label for="nameLike" class="col-sm-3 col-form-label">Name</label>
+                        <div class="col-lg-9">
+                            <input type="text" class="form-control " name="nameLike" id="nameLike"
+                                   placeholder="Name like..." value="${param.get("nameLike")}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="row mb-3">
+                        <label for="onlyTreating" class="col-sm-8 col-form-label">Only treating</label>
+                        <div class="form-group col-lg-2 col-form-label">
+                            <div class="form-check form-check-inline">
+                                <input type="checkbox" class="form-check-input" name="onlyTreating" id="onlyTreating"
+                                       <c:if test="${param.get(\"onlyTreating\") != null}">checked="checked"</c:if>>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="row mb-3">
+                        <div class="form-group col-lg-2">
+                            <button type="submit" class="btn btn-outline-dark">Filter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -44,8 +86,8 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination">
                 <c:forEach begin="1" end="${page.totalPages}" var="loop">
-                    <li class="${loop - 1 == page.number ? 'page-item active' : 'page-item'}">
-                        <a class="page-link" href="/patients?page=${loop - 1}">${loop}</a>
+                    <li class=" ${loop - 1 == page.number ? 'page-item active' : 'page-item'}">
+                        <a class="page-link" id="pageHref${loop - 1}" href="#">${loop}</a>
                     </li>
                 </c:forEach>
             </ul>
@@ -59,6 +101,18 @@
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {
         $('#pageNav').hide();
+    } else {
+        let currentUrl = window.location.href.toString().replace('http://localhost:8080', '');
+        let urlOfPage = currentUrl.split('page=')[0];
+        for (let i = 0; i < pageCount; i++) {
+            if (urlOfPage === '/patients/filter') {
+                $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
+            } else if (urlOfPage === '/patients/filter?' || urlOfPage.endsWith('&')) {
+                $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
+            } else {
+                $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+            }
+        }
     }
 </script>
 </body>
