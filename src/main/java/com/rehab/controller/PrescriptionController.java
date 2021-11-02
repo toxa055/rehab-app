@@ -48,7 +48,8 @@ public class PrescriptionController {
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authDoctor,
                          @RequestParam @Nullable boolean onlyActive,
-                         Model model, @PageableDefault(15) Pageable pageable) {
+                         @PageableDefault(value = 15, sort = "date") Pageable pageable,
+                         Model model) {
         model.addAttribute("page", prescriptionService.filter(pDate, insuranceNumber, authDoctor,
                 onlyActive, pageable));
         return "/prescriptions/list";
@@ -56,7 +57,7 @@ public class PrescriptionController {
 
     @GetMapping("/today")
     public String today(Model model) {
-        return "redirect:/prescriptions/filter?pDate=" + LocalDate.now() + "&insuranceNumber=";
+        return "redirect:/prescriptions/filter?pDate=" + LocalDate.now() + "&insuranceNumber=&authDoctor=on";
     }
 
     @GetMapping

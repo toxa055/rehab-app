@@ -10,6 +10,7 @@ import com.rehab.model.type.TimeUnit;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +75,7 @@ public class EventUtil {
                 .peek(e -> {
                     e.setEventState(EventState.CANCELLED);
                     e.setEndDate(LocalDate.now());
-                    e.setEndTime(LocalTime.now());
+                    e.setEndTime(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
                     e.setComment("Cancelled by " + doctorName);
                 })
                 .collect(Collectors.toList());

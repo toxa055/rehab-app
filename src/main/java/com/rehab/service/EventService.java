@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class EventService {
@@ -57,7 +58,7 @@ public class EventService {
         }
         eventForChangingState.setEventState(EventState.valueOf(eventState.toUpperCase()));
         eventForChangingState.setEndDate(LocalDate.now());
-        eventForChangingState.setEndTime(LocalTime.now());
+        eventForChangingState.setEndTime(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
         eventForChangingState.setComment(comment);
         return toDto(eventCrudRepository.save(eventForChangingState));
     }

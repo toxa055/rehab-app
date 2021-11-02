@@ -48,7 +48,8 @@ public class TreatmentController {
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authDoctor,
                          @RequestParam @Nullable boolean onlyOpen,
-                         Model model, @PageableDefault(15) Pageable pageable) {
+                         @PageableDefault(value = 15, sort = "date") Pageable pageable,
+                         Model model) {
         model.addAttribute("page", treatmentService.filter(tDate, insuranceNumber, authDoctor,
                 onlyOpen, pageable));
         return "/treatments/list";
@@ -61,7 +62,7 @@ public class TreatmentController {
 
     @GetMapping("/today")
     public String todayTreatments(Model model) {
-        return "redirect:/treatments/filter?tDate=" + LocalDate.now() + "&insuranceNumber=";
+        return "redirect:/treatments/filter?tDate=" + LocalDate.now() + "&insuranceNumber=&authDoctor=on";
     }
 
     @GetMapping("/close/{id}")
