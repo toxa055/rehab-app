@@ -20,7 +20,7 @@
             <th scope="col">Name</th>
             <th scope="col">Address</th>
             <th scope="col">State</th>
-            <sec:authorize access="hasRole('DOCTOR')">
+            <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
                 <th scope="col">Actions</th>
             </sec:authorize>
         </tr>
@@ -31,16 +31,20 @@
             <td>${patient.name}</td>
             <td>${patient.address}</td>
             <td id="patientState">${patient.patientState}</td>
-            <sec:authorize access="hasRole('DOCTOR')">
-                <td>
-                    <a class="btn btn-outline-success" href="/treatments/new/${patient.id}" role="button">New Treatment</a>
+            <td>
+                <sec:authorize access="hasRole('DOCTOR')">
+                    <a class="btn btn-outline-success" href="/treatments/new/${patient.id}" role="button">
+                        New Treatment</a>
                     <a class="btn btn-outline-danger" href="/patients/discharge/${patient.id}" role="button"
                        id="dischargeButtonLink">Discharge</a>
-                </td>
-            </sec:authorize>
+                </sec:authorize>
+                <sec:authorize access="hasRole('ADMIN')">
+                    <a class="btn btn-outline-dark" href="/patients/edit/${patient.id}" role="button">Edit</a>
+                </sec:authorize>
+            </td>
         </tr>
     </table>
-    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
+    <a class="btn btn-outline-secondary" href="/patients" role="button">Back</a>
 </div>
 <script language="javascript">
     if ($('#patientState').text() === 'DISCHARGED') {
