@@ -25,7 +25,7 @@
             <td>${cure.cureType}</td>
         </tr>
     </table>
-    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
+    <a class="btn btn-outline-secondary" href="/cures" role="button">Back</a>
 </div>
 </body>
 </html>

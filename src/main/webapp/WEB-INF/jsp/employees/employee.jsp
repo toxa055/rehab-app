@@ -19,9 +19,7 @@
             <th scope="col">Name</th>
             <th scope="col">Position</th>
             <th scope="col">Email</th>
-            <sec:authorize access="isAuthenticated()">
-                <th scope="col">Actions</th>
-            </sec:authorize>
+            <th scope="col">Actions</th>
         </tr>
         </thead>
         <tr class="table-light">
@@ -29,14 +27,11 @@
             <td>${employee.name}</td>
             <td>${employee.position}</td>
             <td>${employee.email}</td>
-            <sec:authorize access="isAuthenticated()">
-                <td>
-                    <a class="btn btn-outline-dark" href="/employees/edit" role="button">Change Password</a>
-                </td>
-            </sec:authorize>
+            <td>
+                <a class="btn btn-outline-dark" href="/employees/edit" role="button">Change Password</a>
+            </td>
         </tr>
     </table>
-    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 </body>
 </html>

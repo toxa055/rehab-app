@@ -3,6 +3,7 @@ package com.rehab.controller;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.service.PrescriptionService;
 import com.rehab.service.TreatmentService;
+import com.rehab.util.ControllerUtil;
 import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +13,10 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 
 @Controller
@@ -21,6 +24,7 @@ import java.time.LocalDate;
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
 public class PrescriptionController {
 
+    private static final String NEW_PRESCRIPTION_URL = "/prescriptions/new";
     private static final String REDIRECT = "redirect:../";
     private final PrescriptionService prescriptionService;
     private final TreatmentService treatmentService;
@@ -63,11 +67,17 @@ public class PrescriptionController {
     @GetMapping("/new/{treatmentId}")
     public String create(@PathVariable int treatmentId, Model model) {
         model.addAttribute("treatment", treatmentService.getById(treatmentId));
-        return "prescriptions/new";
+        return NEW_PRESCRIPTION_URL;
     }
 
     @PostMapping("/new")
-    public String createPrescription(PrescriptionDto prescriptionDto) {
+    public String createPrescription(@Valid PrescriptionDto prescriptionDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
+            model.addAttribute("p", prescriptionDto);
+            model.addAttribute("treatment", treatmentService.getById(prescriptionDto.getTreatmentId()));
+            return NEW_PRESCRIPTION_URL;
+        }
         var savedPrescription = prescriptionService.save(prescriptionDto);
         return REDIRECT + savedPrescription.getId();
     }

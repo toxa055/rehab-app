@@ -30,20 +30,28 @@
             <div class="row">
                 <label for="password" class="col-sm-2 col-form-label">New password</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="password" name="password" id="password" placeholder="Confirm" class="form-control"/>
+                    <input type="password" name="password" id="password" placeholder="New password"
+                           class="form-control ${passwordError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${passwordError}
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm password</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="password" name="confirmPassword" id="confirmPassword"
-                           placeholder="Confirm password" class="form-control input-normal"/>
+                           placeholder="Confirm new password"
+                           class="form-control ${passwordError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${passwordError}
+                    </div>
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel</button>
+                    <a class="btn btn-outline-secondary" href="/employees/profile" role="button">Cancel</a>
                     <button type="submit" name="submit" class="btn btn-outline-primary">Change</button>
                 </div>
             </div>

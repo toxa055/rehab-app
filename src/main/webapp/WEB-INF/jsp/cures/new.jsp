@@ -16,7 +16,11 @@
             <div class="row">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="text" name="name" id="name" placeholder="Name" class="form-control"/>
+                    <input type="text" name="name" id="name" placeholder="Name" value="${name != null ? name : ''}"
+                           class="form-control ${nameError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${nameError}
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -24,15 +28,14 @@
                 <div class="form-group col-lg-4 col-form-label">
                     <select class="form-select" aria-label="Cure" name="cureType" id="cureType">
                         <option value="MEDICINE">MEDICINE</option>
-                        <option value="PROCEDURE">PROCEDURE</option>
+                        <option value="PROCEDURE" ${cureType == "PROCEDURE" ? 'selected' : ''}>PROCEDURE</option>
                     </select>
                 </div>
             </div>
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Cancel
-                    </button>
+                    <a class="btn btn-outline-secondary" href="/cures" role="button">Cancel</a>
                     <button type="submit" name="submit" class="btn btn-outline-primary">Create</button>
                 </div>
             </div>

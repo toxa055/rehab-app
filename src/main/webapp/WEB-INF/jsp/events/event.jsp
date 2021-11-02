@@ -81,6 +81,7 @@
                     <div class="mb-3">
                         <label for="commentModal" class="col-form-label">Comment</label>
                         <input type="text" class="form-control" name="commentModal" id="commentModal">
+                        <div class="invalid-feedback" id="errorCommentModal"></div>
                     </div>
                 </form>
             </div>
@@ -95,8 +96,13 @@
 <script>
     $('#cancelEventButton').click(function () {
         let comm = $('#commentModal').val();
-        $('#cancelEventModal').modal('hide');
-        window.location = '/events/change/${event.id}?state=cancelled&comment=' + comm;
+        if ((comm.length < 8) || (comm.length > 30)) {
+            $('#commentModal').attr('class', 'form-control is-invalid');
+            $('#errorCommentModal').text('Length must be from 8 to 30 symbols');
+        } else {
+            $('#cancelEventModal').modal('hide');
+            window.location = '/events/change/${event.id}?state=cancelled&comment=' + comm;
+        }
     });
 
     let chooseEventButton = $('#chooseEventButton');

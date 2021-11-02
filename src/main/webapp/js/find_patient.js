@@ -15,23 +15,33 @@ if ($('#patientInsuranceNumber').val() !== '') {
 }
 
 searchButton.click(function () {
-    $.ajax({
-        url: "http://localhost:8080/rest/patients/" + $('#patientInsuranceNumber').val()
-    }).done(function (patientDto) {
-        $('#patientInsuranceNumber').attr('readonly', true);
-        $('#patientId').val(patientDto.id);
-        $('#patientName').val(patientDto.name);
-        $('#address').val(patientDto.address);
-        changeButton.attr('disabled', false);
-        searchButton.attr('disabled', true);
-        saveButton.attr('disabled', false);
-    })
+    let insNum = $('#patientInsuranceNumber');
+    if (insNum.val() === '') {
+        insNum.attr('class', 'form-control is-invalid');
+        $('#invalidInsNum').text('Insurance number cannot be empty');
+    } else {
+        $.ajax({
+            url: "http://localhost:8080/rest/patients/" + insNum.val()
+        }).done(function (patientDto) {
+            $('#patientInsuranceNumber').attr('readonly', true);
+            $('#patientId').val(patientDto.id);
+            $('#patientName').val(patientDto.name).attr('class', 'form-control is-valid');
+            $('#address').val(patientDto.address);
+            changeButton.attr('disabled', false);
+            searchButton.attr('disabled', true);
+            saveButton.attr('disabled', false);
+            insNum.attr('class', 'form-control is-valid');
+        }).fail(function () {
+            insNum.attr('class', 'form-control is-invalid');
+            $('#invalidInsNum').text('Incorrect Insurance number');
+        })
+    }
 })
 
 changeButton.click(function () {
-    $('#patientInsuranceNumber').attr('readonly', false).val('')
+    $('#patientInsuranceNumber').attr('readonly', false).attr('class', 'form-control').val('')
     $('#patientId').val('');
-    $('#patientName').val('');
+    $('#patientName').val('').attr('class', 'form-control');
     $('#address').val('');
     changeButton.attr('disabled', true);
     searchButton.attr('disabled', false);

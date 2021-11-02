@@ -2,21 +2,26 @@ package com.rehab.controller;
 
 import com.rehab.dto.PatientDto;
 import com.rehab.service.PatientService;
+import com.rehab.util.ControllerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/patients")
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class PatientController {
 
-    private static final String PATIENT = "patient";
+    private static final String NEW_PATIENT_URL = "patients/new";
     private static final String PATIENT_URL = "patients/patient";
+    private static final String PATIENT = "patient";
     private final PatientService patientService;
 
     @Autowired
@@ -51,12 +56,17 @@ public class PatientController {
     @GetMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String create() {
-        return "patients/new";
+        return NEW_PATIENT_URL;
     }
 
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")
-    public String createPatient(PatientDto patientDto) {
+    public String createPatient(@Valid PatientDto patientDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
+            model.addAttribute("p", patientDto);
+            return NEW_PATIENT_URL;
+        }
         patientService.save(patientDto);
         return "redirect:";
     }
