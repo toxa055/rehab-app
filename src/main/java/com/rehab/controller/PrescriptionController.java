@@ -25,7 +25,9 @@ import java.time.LocalDate;
 public class PrescriptionController {
 
     private static final String NEW_PRESCRIPTION_URL = "/prescriptions/new";
+    private static final String PRESCRIPTIONS_URL = "/prescriptions/list";
     private static final String REDIRECT = "redirect:../";
+    private static final String PAGE = "page";
     private final PrescriptionService prescriptionService;
     private final TreatmentService treatmentService;
 
@@ -42,6 +44,13 @@ public class PrescriptionController {
         return "prescriptions/prescription";
     }
 
+    @GetMapping("/treatment/{treatmentId}")
+    public String getByTreatmentId(@PathVariable int treatmentId,
+                                   @PageableDefault(value = 15, sort = "date") Pageable pageable, Model model) {
+        model.addAttribute(PAGE, prescriptionService.getByTreatmentId(treatmentId, pageable));
+        return PRESCRIPTIONS_URL;
+    }
+
     @GetMapping("/filter")
     public String filter(@RequestParam @Nullable
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate pDate,
@@ -50,18 +59,17 @@ public class PrescriptionController {
                          @RequestParam @Nullable boolean onlyActive,
                          @PageableDefault(value = 15, sort = "date") Pageable pageable,
                          Model model) {
-        model.addAttribute("page", prescriptionService.filter(pDate, insuranceNumber, authDoctor,
-                onlyActive, pageable));
-        return "/prescriptions/list";
+        model.addAttribute(PAGE, prescriptionService.filter(pDate, insuranceNumber, authDoctor, onlyActive, pageable));
+        return PRESCRIPTIONS_URL;
     }
 
     @GetMapping("/today")
-    public String today(Model model) {
+    public String today() {
         return "redirect:/prescriptions/filter?pDate=" + LocalDate.now() + "&insuranceNumber=&authDoctor=on";
     }
 
     @GetMapping
-    public String prescriptions(Model model) {
+    public String prescriptions() {
         return "redirect:/prescriptions/filter?pDate=&insuranceNumber=";
     }
 

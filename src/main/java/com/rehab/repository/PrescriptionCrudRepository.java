@@ -21,5 +21,7 @@ public interface PrescriptionCrudRepository extends JpaRepository<Prescription, 
     Page<Prescription> filter(LocalDate pDate, Integer insuranceNumber, Integer doctorId, Boolean active,
                               Pageable pageable);
 
+    Page<Prescription> findAllByTreatmentId(int treatmentId, Pageable pageable);
+
     List<Prescription> findAllByTreatmentId(int treatmentId);
 }

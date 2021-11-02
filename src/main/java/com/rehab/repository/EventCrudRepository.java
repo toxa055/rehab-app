@@ -22,5 +22,7 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
     Page<Event> filter(LocalDate plannedDate, Integer insuranceNumber, Integer nurseId, EventState planned,
                        Pageable pageable);
 
+    Page<Event> findAllByPrescriptionId(int prescriptionId, Pageable pageable);
+
     List<Event> findAllByPrescriptionId(int prescriptionId);
 }

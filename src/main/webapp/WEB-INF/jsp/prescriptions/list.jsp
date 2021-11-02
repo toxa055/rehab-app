@@ -14,7 +14,7 @@
     <h2>Prescriptions</h2>
     <div>
         <form action="/prescriptions/filter" method="get">
-            <div class="row">
+            <div class="row" id="filterDiv">
                 <div class="col-lg-4">
                     <div class="row mb-3">
                         <label for="pDate" class="col-sm-5 col-form-label">Date</label>
@@ -131,7 +131,9 @@
         let pattern = $(this).text();
         $(this).text(pattern.replace('; )', ')'));
     });
-
+    if (window.location.href.toString().includes('treatment')) {
+        $('#filterDiv').hide();
+    }
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {
         $('#pageNav').hide();
@@ -145,6 +147,13 @@
                 $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
             } else {
                 $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+            }
+            if (urlOfPage.includes('treatment')) {
+                if (urlOfPage.includes('?')) {
+                    $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
+                } else {
+                    $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
+                }
             }
         }
     }

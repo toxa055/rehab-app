@@ -44,6 +44,17 @@
             </td>
         </tr>
     </table>
+    <div>
+        <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
+            <a class="btn btn-outline-dark" role="button" target="_blank"
+               href="/treatments/filter?insuranceNumber=${patient.insuranceNumber}">All Treatments</a>
+            <a class="btn btn-outline-dark" role="button" target="_blank"
+               href="/prescriptions/filter?insuranceNumber=${patient.insuranceNumber}">All Prescriptions</a>
+            <a class="btn btn-outline-dark" role="button" target="_blank"
+               href="/events/filter?insuranceNumber=${patient.insuranceNumber}">All Events</a>
+        </sec:authorize>
+    </div>
+    <br>
     <a class="btn btn-outline-secondary" href="/patients" role="button">Back</a>
 </div>
 <script language="javascript">

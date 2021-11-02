@@ -14,7 +14,7 @@
     <h2>Events</h2>
     <div>
         <form action="/events/filter" method="get">
-            <div class="row">
+            <div class="row" id="filterDiv">
                 <div class="col-lg-4">
                     <div class="row mb-3">
                         <label for="plannedDate" class="col-sm-5 col-form-label">Date</label>
@@ -125,6 +125,9 @@
     </div>
 </div>
 <script>
+    if (window.location.href.toString().includes('prescription')) {
+        $('#filterDiv').hide();
+    }
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {
         $('#pageNav').hide();
@@ -138,6 +141,13 @@
                 $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
             } else {
                 $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+            }
+            if (urlOfPage.includes('prescription')) {
+                if (urlOfPage.includes('?')) {
+                    $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
+                } else {
+                    $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
+                }
             }
         }
     }

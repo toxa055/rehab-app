@@ -43,7 +43,7 @@ public class PatientController {
 
     @GetMapping("/discharge/{id}")
     @Secured("ROLE_DOCTOR")
-    public String discharge(@PathVariable int id, Model model) {
+    public String discharge(@PathVariable int id) {
         patientService.discharge(id);
         return "redirect:/patients/" + id;
     }

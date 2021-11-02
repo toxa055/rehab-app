@@ -67,6 +67,10 @@ public class EventService {
         return toDto(eventCrudRepository.findById(id).get());
     }
 
+    public Page<EventDto> getByPrescriptionId(int prescriptionId, Pageable pageable) {
+        return eventCrudRepository.findAllByPrescriptionId(prescriptionId, pageable).map(this::toDto);
+    }
+
     public Page<EventDto> filter(LocalDate plannedDate, Integer insuranceNumber, boolean authNurse,
                                  boolean onlyPlanned, Pageable pageable) {
         return eventCrudRepository.filter(plannedDate, insuranceNumber,

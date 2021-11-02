@@ -69,6 +69,10 @@ public class PrescriptionService {
         return toDto(prescriptionCrudRepository.findAllById(List.of(id)).get(0));
     }
 
+    public Page<PrescriptionDto> getByTreatmentId(int treatmentId, Pageable pageable) {
+        return prescriptionCrudRepository.findAllByTreatmentId(treatmentId, pageable).map(this::toDto);
+    }
+
     public Page<PrescriptionDto> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
                                         boolean onlyActive, Pageable pageable) {
         return prescriptionCrudRepository.filter(pDate, insuranceNumber,

@@ -21,6 +21,7 @@ public class EventController {
 
     private static final String PAGE = "page";
     private static final String REDIRECT = "redirect:../";
+    private static final String EVENTS_URL = "/events/list";
     private final EventService eventService;
 
     @Autowired
@@ -35,6 +36,14 @@ public class EventController {
         return "/events/event";
     }
 
+    @GetMapping("/prescription/{prescriptionId}")
+    public String getByPrescriptionId(@PathVariable int prescriptionId,
+                                      @PageableDefault(value = 25, sort = {"plannedDate", "plannedTime"})
+                                              Pageable pageable, Model model) {
+        model.addAttribute(PAGE, eventService.getByPrescriptionId(prescriptionId, pageable));
+        return EVENTS_URL;
+    }
+
     @GetMapping("/filter")
     public String filter(@RequestParam @Nullable
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate plannedDate,
@@ -44,7 +53,7 @@ public class EventController {
                          @PageableDefault(value = 25, sort = {"plannedDate", "plannedTime"}) Pageable pageable,
                          Model model) {
         model.addAttribute(PAGE, eventService.filter(plannedDate, insuranceNumber, authNurse, onlyPlanned, pageable));
-        return "/events/list";
+        return EVENTS_URL;
     }
 
     @Secured("ROLE_NURSE")
@@ -70,12 +79,12 @@ public class EventController {
     }
 
     @GetMapping
-    public String events(Model model) {
+    public String events() {
         return "redirect:/events/filter?plannedDate=&insuranceNumber=";
     }
 
     @GetMapping("/today")
-    public String todayEvents(Model model) {
+    public String todayEvents() {
         return "redirect:/events/filter?plannedDate=" + LocalDate.now() + "&insuranceNumber=";
     }
 }
