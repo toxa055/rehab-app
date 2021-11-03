@@ -85,7 +85,11 @@ public class PatientController {
             model.addAttribute(PATIENT, patientDto);
             return CREATE_OR_UPDATE_PATIENT_URL;
         }
-        patientService.save(patientDto);
+        if (patientDto.getId() == null) {
+            patientService.save(patientDto);
+        } else {
+            patientService.update(patientDto);
+        }
         return "redirect:";
     }
 }

@@ -6,7 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Controller;
 
+import java.util.Optional;
+
+@Controller
 public interface PatientCrudRepository extends JpaRepository<Patient, Integer> {
 
     @Query("""
@@ -17,5 +21,5 @@ public interface PatientCrudRepository extends JpaRepository<Patient, Integer> {
             """)
     Page<Patient> filter(Integer insuranceNumber, String nameLike, PatientState treating, Pageable pageable);
 
-    Patient getByInsuranceNumber(int insuranceNumber);
+    Optional<Patient> findByInsuranceNumber(int insuranceNumber);
 }

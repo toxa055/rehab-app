@@ -4,14 +4,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <title>New patient</title>
+    <title>${patient.id == null ? 'New patient' : 'Edit patient'}</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Create new patient</h3><br>
+        <h3>${patient.id == null ? 'Create new patient' : 'Edit patient'}</h3><br>
         <form action="/patients/new" method="post">
             <div class="row" style="display: none">
                 <label for="id" class="col-sm-2 col-form-label">id</label>
