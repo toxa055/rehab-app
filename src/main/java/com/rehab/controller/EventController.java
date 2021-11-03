@@ -74,7 +74,7 @@ public class EventController {
     @GetMapping("/change/{eventId}")
     public String changeState(@PathVariable int eventId, @RequestParam String state,
                               @RequestParam @Nullable String comment) {
-        eventService.changeStatus(eventId, state, comment);
+        eventService.changeState(eventId, state, comment);
         return REDIRECT + eventId;
     }
 
