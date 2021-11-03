@@ -30,16 +30,16 @@ public class CureService {
     }
 
     public CureDto getByName(String name) {
-        return toDto(cureCrudRepository.getByNameIgnoreCase(name).orElseThrow(() ->
+        return toDto(cureCrudRepository.findByNameIgnoreCase(name).orElseThrow(() ->
                 new NoSuchElementException("Cure with name " + name + " not found.")));
     }
 
     public CureDto save(CureDto cureDto) {
-        if (cureCrudRepository.getByNameIgnoreCase(cureDto.getName()).isEmpty()) {
-            return toDto(cureCrudRepository.save(toEntity(cureDto)));
-        } else {
-            throw new ApplicationException("Cure with name " + cureDto.getName() + " already exists.");
+        var name = cureDto.getName();
+        if (cureCrudRepository.findByNameIgnoreCase(name).isPresent()) {
+            throw new ApplicationException("Cure with name " + name + " already exists.");
         }
+        return toDto(cureCrudRepository.save(toEntity(cureDto)));
     }
 
     public Page<CureDto> getAll(Pageable pageable) {

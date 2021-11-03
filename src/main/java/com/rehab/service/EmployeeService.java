@@ -2,6 +2,7 @@ package com.rehab.service;
 
 import com.rehab.dto.EmployeeDto;
 import com.rehab.dto.UserDto;
+import com.rehab.exception.ApplicationException;
 import com.rehab.model.Employee;
 import com.rehab.repository.EmployeeCrudRepository;
 import com.rehab.util.SecurityUtil;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class EmployeeService {
@@ -28,7 +31,8 @@ public class EmployeeService {
     }
 
     public EmployeeDto getById(int id) {
-        return toDto(employeeCrudRepository.findById(id).get());
+        return toDto(employeeCrudRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Employee with id " + id + " not found.")));
     }
 
     public EmployeeDto getAuth() {
@@ -36,15 +40,21 @@ public class EmployeeService {
     }
 
     public EmployeeDto save(UserDto userDto) {
+        var userDtoEmail = userDto.getEmail();
+        if (employeeCrudRepository.findByEmailIgnoreCase(userDtoEmail).isPresent()) {
+            throw new ApplicationException("Employee with " + userDtoEmail + " already exists.");
+        }
         var employeeFromUserDto = toEntity(userDto);
         employeeFromUserDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return toDto(employeeCrudRepository.save(employeeFromUserDto));
     }
 
     public EmployeeDto changePassword(UserDto userDto) {
-        var employee = employeeCrudRepository.findById(userDto.getId()).get();
-        if (!employee.getId().equals(userDto.getId())) {
-            throw new IllegalArgumentException();
+        var userDtoId = userDto.getId();
+        var employee = employeeCrudRepository.findById(userDtoId).orElseThrow(() ->
+                new NoSuchElementException("Employee with id " + userDtoId + " not found."));
+        if (!employee.getId().equals(userDtoId)) {
+            throw new IllegalArgumentException("Employees' id are not equal.");
         }
         employee.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return toDto(employeeCrudRepository.save(employee));
