@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class PatientService {
 
@@ -34,7 +36,7 @@ public class PatientService {
 
     public PatientDto getByInsuranceNumber(int insuranceNumber) {
         return toDto(patientCrudRepository.findByInsuranceNumber(insuranceNumber).orElseThrow(() ->
-                new IllegalArgumentException("Patient with Insurance Number " + insuranceNumber + " not found.")));
+                new NoSuchElementException("Patient with Insurance Number " + insuranceNumber + " not found.")));
     }
 
     public PatientDto save(PatientDto patientDto) {
@@ -67,14 +69,17 @@ public class PatientService {
 
     @Transactional
     public PatientDto discharge(int id) {
+        var dischargingPatient = getPatientById(id);
+        if (dischargingPatient.getPatientState() == PatientState.DISCHARGED) {
+            throw new ApplicationException("Patient is already discharged.");
+        }
         long openTreatmentsCount = treatmentCrudRepository.findAllByPatientId(id)
                 .stream()
                 .filter(t -> !t.isClosed())
                 .count();
         if (openTreatmentsCount > 0) {
-            throw new ApplicationException("Patient has active treatments.");
+            throw new ApplicationException("Cannot discharge patient which has active treatments.");
         }
-        var dischargingPatient = getPatientById(id);
         dischargingPatient.setPatientState(PatientState.DISCHARGED);
         return toDto(patientCrudRepository.save(dischargingPatient));
     }
@@ -88,7 +93,7 @@ public class PatientService {
 
     private Patient getPatientById(int id) {
         return patientCrudRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("Patient with id " + id + " not found."));
+                new NoSuchElementException("Patient with id " + id + " not found."));
     }
 
     private PatientDto toDto(Patient patient) {
