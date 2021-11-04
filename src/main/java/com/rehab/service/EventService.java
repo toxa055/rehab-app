@@ -31,10 +31,18 @@ public class EventService {
         this.modelMapper = modelMapper;
     }
 
+    public EventDto getById(int eventId) {
+        return toDto(getEventById(eventId));
+    }
+
+    public Page<EventDto> getByPrescriptionId(int prescriptionId, Pageable pageable) {
+        return eventCrudRepository.findAllByPrescriptionId(prescriptionId, pageable).map(this::toDto);
+    }
+
     @Transactional
     public EventDto setNurse(int eventId) {
         var authNurse = SecurityUtil.getAuthEmployee();
-        var eventForSettingNurse = getEvent(eventId);
+        var eventForSettingNurse = getEventById(eventId);
         if (eventForSettingNurse.getNurse() != null) {
             throw new ApplicationException("Event already has a nurse.");
         }
@@ -46,7 +54,7 @@ public class EventService {
     @Transactional
     public EventDto unSetNurse(int eventId) {
         var authNurse = SecurityUtil.getAuthEmployee();
-        var eventForUnsettingNurse = getEvent(eventId);
+        var eventForUnsettingNurse = getEventById(eventId);
         checkEventHasNotNurse(eventForUnsettingNurse);
         checkEventHasDifferentNurse(authNurse, eventForUnsettingNurse.getNurse());
         checkEventHasNotPlannedState(eventForUnsettingNurse.getEventState(), "discard");
@@ -57,7 +65,7 @@ public class EventService {
     @Transactional
     public EventDto changeState(int eventId, String eventState, String comment) {
         var authNurse = SecurityUtil.getAuthEmployee();
-        var eventForChangingState = getEvent(eventId);
+        var eventForChangingState = getEventById(eventId);
         checkEventHasNotNurse(eventForChangingState);
         checkEventHasDifferentNurse(authNurse, eventForChangingState.getNurse());
         var currentEventState = eventForChangingState.getEventState();
@@ -70,14 +78,6 @@ public class EventService {
         eventForChangingState.setEndTime(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
         eventForChangingState.setComment(comment);
         return toDto(eventCrudRepository.save(eventForChangingState));
-    }
-
-    public EventDto getById(int eventId) {
-        return toDto(getEvent(eventId));
-    }
-
-    public Page<EventDto> getByPrescriptionId(int prescriptionId, Pageable pageable) {
-        return eventCrudRepository.findAllByPrescriptionId(prescriptionId, pageable).map(this::toDto);
     }
 
     public Page<EventDto> filter(LocalDate plannedDate, Integer insuranceNumber, boolean authNurse,
@@ -106,7 +106,7 @@ public class EventService {
         }
     }
 
-    private Event getEvent(int id) {
+    private Event getEventById(int id) {
         return eventCrudRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Event with id " + id + " not found."));
     }

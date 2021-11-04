@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -74,12 +76,14 @@ public class PrescriptionController {
     }
 
     @GetMapping("/new/{treatmentId}")
+    @Secured("ROLE_DOCTOR")
     public String create(@PathVariable int treatmentId, Model model) {
         model.addAttribute("treatment", treatmentService.getById(treatmentId));
         return NEW_PRESCRIPTION_URL;
     }
 
     @PostMapping("/new")
+    @Secured("ROLE_DOCTOR")
     public String createPrescription(@Valid PrescriptionDto prescriptionDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
@@ -92,14 +96,17 @@ public class PrescriptionController {
     }
 
     @GetMapping("/cancel/{id}")
+    @Secured("ROLE_DOCTOR")
     public String cancel(@PathVariable int id, Model model) {
         model.addAttribute("p", prescriptionService.cancel(id));
         return REDIRECT + id;
     }
 
     @GetMapping("/update/{id}")
-    public String update(@PathVariable int id, @RequestParam int treatmentId, Model model) {
-        prescriptionService.cancel(id);
-        return "redirect:../new/" + treatmentId;
+    @Secured("ROLE_DOCTOR")
+    public RedirectView update(@PathVariable int id, @RequestParam int treatmentId, RedirectAttributes attributes) {
+        var cancelledPrescriptionDto = prescriptionService.cancel(id);
+        attributes.addFlashAttribute("p", cancelledPrescriptionDto);
+        return new RedirectView("/prescriptions/new/" + treatmentId);
     }
 }
