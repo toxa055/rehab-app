@@ -42,7 +42,7 @@
             <td style="display: none">${p.patientId}</td>
             <td>${p.patientInsuranceNumber}</td>
             <td>${p.patientName}</td>
-            <td id = "doctorId"  style="display: none">${p.doctorId}</td>
+            <td id="doctorId" style="display: none">${p.doctorId}</td>
             <td>${p.doctorName}</td>
             <td>${p.date}</td>
             <td style="display: none">${p.cureId}</td>
@@ -67,6 +67,11 @@
             </sec:authorize>
         </tr>
     </table>
+    <div>
+        <a class="btn btn-outline-dark" role="button" target="_blank" href="/events/prescription/${p.id}">
+            Current Events</a>
+    </div>
+    <br>
     <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 <div class="modal fade" id="prescriptionCancelModal" tabindex="-1" aria-labelledby="prescriptionCancelModal"

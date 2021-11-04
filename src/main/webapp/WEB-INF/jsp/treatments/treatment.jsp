@@ -51,6 +51,11 @@
             </sec:authorize>
         </tr>
     </table>
+    <div>
+        <a class="btn btn-outline-dark" role="button" target="_blank" href="/prescriptions/treatment/${treatment.id}">
+            Current Prescriptions</a>
+    </div>
+    <br>
     <a class="btn btn-outline-secondary" href="/treatments/today" role="button">Back</a>
 </div>
 <script>

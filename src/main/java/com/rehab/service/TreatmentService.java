@@ -1,6 +1,7 @@
 package com.rehab.service;
 
 import com.rehab.dto.TreatmentDto;
+import com.rehab.exception.ApplicationException;
 import com.rehab.model.Prescription;
 import com.rehab.model.Treatment;
 import com.rehab.model.type.PatientState;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.NoSuchElementException;
 
 @Service
 public class TreatmentService {
@@ -35,9 +37,15 @@ public class TreatmentService {
         typeMap = modelMapper.createTypeMap(TreatmentDto.class, Treatment.class);
     }
 
+    public TreatmentDto getById(int id) {
+        return toDto(getTreatmentById(id));
+    }
+
     @Transactional
     public TreatmentDto save(TreatmentDto treatmentDto) {
-        var patient = patientCrudRepository.findById(treatmentDto.getPatientId()).get();
+        var patientId = treatmentDto.getPatientId();
+        var patient = patientCrudRepository.findById(patientId).orElseThrow(() ->
+                new NoSuchElementException("Patient with id " + patientId + " not found."));
         if (patient.getPatientState() == PatientState.DISCHARGED) {
             patient.setPatientState(PatientState.TREATING);
             patientCrudRepository.save(patient);
@@ -45,26 +53,26 @@ public class TreatmentService {
         return toDto(treatmentCrudRepository.save(toEntity(treatmentDto)));
     }
 
-    public Treatment close(int id) {
+    @Transactional
+    public TreatmentDto close(int id) {
+        var treatmentForClosing = getTreatmentById(id);
+        if (treatmentForClosing.isClosed()) {
+            throw new ApplicationException("Treatment is already closed.");
+        }
         var authDoctor = SecurityUtil.getAuthEmployee();
-        var treatmentForClosing = treatmentCrudRepository.findById(id).get();
         if (!treatmentForClosing.getDoctor().getId().equals(authDoctor.getId())) {
-            throw new IllegalArgumentException();
+            throw new ApplicationException("Cannot close treatment which was created by a different doctor.");
         }
         long activePrescriptionsCount = prescriptionCrudRepository.findAllByTreatmentId(id)
                 .stream()
                 .filter(Prescription::isActive)
                 .count();
         if (activePrescriptionsCount > 0) {
-            throw new IllegalArgumentException();
+            throw new ApplicationException("Cannot close treatment which has active prescriptions.");
         }
         treatmentForClosing.setClosed(true);
         treatmentForClosing.setCloseDate(LocalDate.now());
-        return treatmentCrudRepository.save(treatmentForClosing);
-    }
-
-    public TreatmentDto getById(int id) {
-        return toDto(treatmentCrudRepository.findById(id).get());
+        return toDto(treatmentCrudRepository.save(treatmentForClosing));
     }
 
     public Page<TreatmentDto> filter(LocalDate date, Integer insuranceNumber, boolean authDoctor, boolean onlyOpen,
@@ -73,6 +81,11 @@ public class TreatmentService {
                 authDoctor ? SecurityUtil.getAuthEmployee().getId() : null,
                 onlyOpen ? false : null,
                 pageable).map(this::toDto);
+    }
+
+    private Treatment getTreatmentById(int id) {
+        return treatmentCrudRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Treatment with id " + id + " not found."));
     }
 
     private TreatmentDto toDto(Treatment treatment) {

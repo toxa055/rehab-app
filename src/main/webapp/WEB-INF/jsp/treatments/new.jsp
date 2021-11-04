@@ -16,8 +16,9 @@
             <div class="row" style="display: none">
                 <label for="patientId" class="col-sm-2 col-form-label">Patient id</label>
                 <div class="form-group col-lg-4 col-form-label">
-                    <input type="number" class="form-control" name="patientId" id="patientId" value="${patient.id}"
-                           readonly>
+                    <input type="number" class="form-control" name="patientId" id="patientId"
+                           value="${patient.id != null ? patient.id :
+                           (t.patientId != null ? t.patientId : '')}" readonly>
                 </div>
             </div>
             <div class="row">

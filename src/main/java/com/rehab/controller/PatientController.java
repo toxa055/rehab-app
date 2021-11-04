@@ -6,6 +6,7 @@ import com.rehab.util.ControllerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
 public class PatientController {
 
-    private static final String NEW_PATIENT_URL = "patients/new";
+    private static final String CREATE_OR_UPDATE_PATIENT_URL = "patients/create_or_update";
     private static final String PATIENT_URL = "patients/patient";
     private static final String PATIENT = "patient";
     private final PatientService patientService;
@@ -42,32 +43,53 @@ public class PatientController {
     }
 
     @GetMapping("/discharge/{id}")
-    public String discharge(@PathVariable int id, Model model) {
+    @Secured("ROLE_DOCTOR")
+    public String discharge(@PathVariable int id) {
         patientService.discharge(id);
         return "redirect:/patients/" + id;
     }
 
     @GetMapping
-    public String patients(@PageableDefault(15) Pageable pageable, Model model) {
-        model.addAttribute("page", patientService.getAll(pageable));
+    public String patients() {
+        return "redirect:/patients/filter";
+    }
+
+    @GetMapping("/filter")
+    public String filter(@RequestParam @Nullable Integer insuranceNumber,
+                         @RequestParam @Nullable String nameLike,
+                         @RequestParam @Nullable boolean onlyTreating,
+                         @PageableDefault(value = 15, sort = "name") Pageable pageable,
+                         Model model) {
+        model.addAttribute("page", patientService.filter(insuranceNumber, nameLike, onlyTreating, pageable));
         return "patients/list";
     }
 
     @GetMapping("/new")
-    @Secured("ROLE_DOCTOR")
+    @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
     public String create() {
-        return NEW_PATIENT_URL;
+        return CREATE_OR_UPDATE_PATIENT_URL;
+    }
+
+    @GetMapping("/edit/{id}")
+    @Secured({"ROLE_ADMIN"})
+    public String edit(@PathVariable Integer id, Model model) {
+        model.addAttribute(PATIENT, patientService.getById(id));
+        return CREATE_OR_UPDATE_PATIENT_URL;
     }
 
     @PostMapping("/new")
-    @Secured("ROLE_DOCTOR")
-    public String createPatient(@Valid PatientDto patientDto, BindingResult bindingResult, Model model) {
+    @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
+    public String createOrUpdate(@Valid PatientDto patientDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
-            model.addAttribute("p", patientDto);
-            return NEW_PATIENT_URL;
+            model.addAttribute(PATIENT, patientDto);
+            return CREATE_OR_UPDATE_PATIENT_URL;
         }
-        patientService.save(patientDto);
+        if (patientDto.getId() == null) {
+            patientService.save(patientDto);
+        } else {
+            patientService.update(patientDto);
+        }
         return "redirect:";
     }
 }

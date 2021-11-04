@@ -35,7 +35,7 @@ public class TreatmentController {
         this.patientService = patientService;
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
         model.addAttribute("treatment", treatmentService.getById(id));
         model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
@@ -48,32 +48,33 @@ public class TreatmentController {
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authDoctor,
                          @RequestParam @Nullable boolean onlyOpen,
-                         Model model, @PageableDefault(15) Pageable pageable) {
+                         @PageableDefault(value = 15, sort = "date") Pageable pageable,
+                         Model model) {
         model.addAttribute("page", treatmentService.filter(tDate, insuranceNumber, authDoctor,
                 onlyOpen, pageable));
         return "/treatments/list";
     }
 
     @GetMapping
-    public String treatments(Model model) {
+    public String treatments() {
         return "redirect:/treatments/filter?tDate=&insuranceNumber=";
     }
 
     @GetMapping("/today")
-    public String todayTreatments(Model model) {
-        return "redirect:/treatments/filter?tDate=" + LocalDate.now() + "&insuranceNumber=";
+    public String todayTreatments() {
+        return "redirect:/treatments/filter?tDate=" + LocalDate.now() + "&insuranceNumber=&authDoctor=on";
     }
 
     @GetMapping("/close/{id}")
     @Secured("ROLE_DOCTOR")
-    public String close(@PathVariable int id, Model model) {
+    public String close(@PathVariable int id) {
         treatmentService.close(id);
         return REDIRECT + id;
     }
 
     @GetMapping("/new")
     @Secured("ROLE_DOCTOR")
-    public String create(Model model) {
+    public String create() {
         return NEW_TREATMENT_URL;
     }
 

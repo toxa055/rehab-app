@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class EmployeeDetailsService implements UserDetailsService {
 
@@ -20,6 +22,7 @@ public class EmployeeDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new EmployeeDetails(employeeCrudRepository.findByEmailIgnoreCase(username));
+        return new EmployeeDetails(employeeCrudRepository.findByEmailIgnoreCase(username).orElseThrow(() ->
+                new NoSuchElementException("Employee with " + username + " not found.")));
     }
 }

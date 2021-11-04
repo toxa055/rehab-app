@@ -1,6 +1,7 @@
 package com.rehab.service;
 
 import com.rehab.dto.CureDto;
+import com.rehab.exception.ApplicationException;
 import com.rehab.model.Cure;
 import com.rehab.repository.CureCrudRepository;
 import org.modelmapper.ModelMapper;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class CureService {
@@ -22,14 +25,20 @@ public class CureService {
     }
 
     public CureDto getById(int id) {
-        return toDto(cureCrudRepository.findById(id).get());
+        return toDto(cureCrudRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Cure with id " + id + " not found.")));
     }
 
     public CureDto getByName(String name) {
-        return toDto(cureCrudRepository.getByNameIgnoreCase(name));
+        return toDto(cureCrudRepository.findByNameIgnoreCase(name).orElseThrow(() ->
+                new NoSuchElementException("Cure with name " + name + " not found.")));
     }
 
     public CureDto save(CureDto cureDto) {
+        var name = cureDto.getName();
+        if (cureCrudRepository.findByNameIgnoreCase(name).isPresent()) {
+            throw new ApplicationException("Cure with name " + name + " already exists.");
+        }
         return toDto(cureCrudRepository.save(toEntity(cureDto)));
     }
 

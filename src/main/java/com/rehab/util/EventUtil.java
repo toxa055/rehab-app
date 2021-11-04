@@ -10,6 +10,7 @@ import com.rehab.model.type.TimeUnit;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,12 +34,12 @@ public class EventUtil {
                 switch (period.getUnit()) {
                     case DAY -> addEventsForPartsOfDay(prescription, pattern, date.plusDays(i + 1), events);
                     case WEEK -> {
-                        for (int j = 1; j < 8; j++) {
+                        for (int j = 1; j <= DAYS_IN_WEEK; j++) {
                             addEventsForPartsOfDay(prescription, pattern, date.plusDays(i * DAYS_IN_WEEK + j), events);
                         }
                     }
                     case MONTH -> {
-                        for (int j = 1; j < 31; j++) {
+                        for (int j = 1; j <= DAYS_IN_MONTH; j++) {
                             addEventsForPartsOfDay(prescription, pattern, date.plusDays(i * DAYS_IN_MONTH + j), events);
                         }
                     }
@@ -51,12 +52,12 @@ public class EventUtil {
                 switch (period.getUnit()) {
                     case DAY -> addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i + 1), events);
                     case WEEK -> {
-                        for (int j = 1; j < 8; j++) {
+                        for (int j = 1; j <= DAYS_IN_WEEK; j++) {
                             addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i * DAYS_IN_WEEK + j), events);
                         }
                     }
                     case MONTH -> {
-                        for (int j = 1; j < 31; j++) {
+                        for (int j = 1; j <= DAYS_IN_MONTH; j++) {
                             addEventsForDaysOfWeek(prescription, pattern, date.plusDays(i * DAYS_IN_MONTH + j), events);
                         }
                     }
@@ -74,7 +75,7 @@ public class EventUtil {
                 .peek(e -> {
                     e.setEventState(EventState.CANCELLED);
                     e.setEndDate(LocalDate.now());
-                    e.setEndTime(LocalTime.now());
+                    e.setEndTime(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
                     e.setComment("Cancelled by " + doctorName);
                 })
                 .collect(Collectors.toList());
@@ -101,7 +102,7 @@ public class EventUtil {
 
     private static void addEventsForDaysOfWeek(Prescription prescription, Pattern pattern, LocalDate plannedDate,
                                                List<Event> events) {
-        DayOfWeek plannedDayOfWeek = plannedDate.getDayOfWeek();
+        var plannedDayOfWeek = plannedDate.getDayOfWeek();
         pattern.getPatternUnits().forEach(unit -> {
                     var event = new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
                             LocalTime.of(9, 0));

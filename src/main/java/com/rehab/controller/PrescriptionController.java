@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -25,7 +27,9 @@ import java.time.LocalDate;
 public class PrescriptionController {
 
     private static final String NEW_PRESCRIPTION_URL = "/prescriptions/new";
+    private static final String PRESCRIPTIONS_URL = "/prescriptions/list";
     private static final String REDIRECT = "redirect:../";
+    private static final String PAGE = "page";
     private final PrescriptionService prescriptionService;
     private final TreatmentService treatmentService;
 
@@ -42,35 +46,44 @@ public class PrescriptionController {
         return "prescriptions/prescription";
     }
 
+    @GetMapping("/treatment/{treatmentId}")
+    public String getByTreatmentId(@PathVariable int treatmentId,
+                                   @PageableDefault(value = 15, sort = "date") Pageable pageable, Model model) {
+        model.addAttribute(PAGE, prescriptionService.getByTreatmentId(treatmentId, pageable));
+        return PRESCRIPTIONS_URL;
+    }
+
     @GetMapping("/filter")
     public String filter(@RequestParam @Nullable
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate pDate,
                          @RequestParam @Nullable Integer insuranceNumber,
                          @RequestParam @Nullable boolean authDoctor,
                          @RequestParam @Nullable boolean onlyActive,
-                         Model model, @PageableDefault(15) Pageable pageable) {
-        model.addAttribute("page", prescriptionService.filter(pDate, insuranceNumber, authDoctor,
-                onlyActive, pageable));
-        return "/prescriptions/list";
+                         @PageableDefault(value = 15, sort = "date") Pageable pageable,
+                         Model model) {
+        model.addAttribute(PAGE, prescriptionService.filter(pDate, insuranceNumber, authDoctor, onlyActive, pageable));
+        return PRESCRIPTIONS_URL;
     }
 
     @GetMapping("/today")
-    public String today(Model model) {
-        return "redirect:/prescriptions/filter?pDate=" + LocalDate.now() + "&insuranceNumber=";
+    public String today() {
+        return "redirect:/prescriptions/filter?pDate=" + LocalDate.now() + "&insuranceNumber=&authDoctor=on";
     }
 
     @GetMapping
-    public String prescriptions(Model model) {
+    public String prescriptions() {
         return "redirect:/prescriptions/filter?pDate=&insuranceNumber=";
     }
 
     @GetMapping("/new/{treatmentId}")
+    @Secured("ROLE_DOCTOR")
     public String create(@PathVariable int treatmentId, Model model) {
         model.addAttribute("treatment", treatmentService.getById(treatmentId));
         return NEW_PRESCRIPTION_URL;
     }
 
     @PostMapping("/new")
+    @Secured("ROLE_DOCTOR")
     public String createPrescription(@Valid PrescriptionDto prescriptionDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
@@ -83,14 +96,17 @@ public class PrescriptionController {
     }
 
     @GetMapping("/cancel/{id}")
+    @Secured("ROLE_DOCTOR")
     public String cancel(@PathVariable int id, Model model) {
         model.addAttribute("p", prescriptionService.cancel(id));
         return REDIRECT + id;
     }
 
     @GetMapping("/update/{id}")
-    public String update(@PathVariable int id, @RequestParam int treatmentId, Model model) {
-        prescriptionService.cancel(id);
-        return "redirect:../new/" + treatmentId;
+    @Secured("ROLE_DOCTOR")
+    public RedirectView update(@PathVariable int id, @RequestParam int treatmentId, RedirectAttributes attributes) {
+        var cancelledPrescriptionDto = prescriptionService.cancel(id);
+        attributes.addFlashAttribute("p", cancelledPrescriptionDto);
+        return new RedirectView("/prescriptions/new/" + treatmentId);
     }
 }

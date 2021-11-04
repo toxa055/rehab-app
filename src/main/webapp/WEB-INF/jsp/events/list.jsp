@@ -14,27 +14,27 @@
     <h2>Events</h2>
     <div>
         <form action="/events/filter" method="get">
-            <div class="row">
+            <div class="row" id="filterDiv">
                 <div class="col-lg-4">
                     <div class="row mb-3">
                         <label for="plannedDate" class="col-sm-5 col-form-label">Date</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-6">
                             <input type="date" class="form-control" name="plannedDate" id="plannedDate"
                                    value="${param.get("plannedDate")}">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="insuranceNumber" class="col-sm-5 col-form-label">Insurance number</label>
-                        <div class="col-lg-7">
+                        <div class="col-lg-6">
                             <input type="number" class="form-control " name="insuranceNumber" id="insuranceNumber"
                                    min="1" value="${param.get("insuranceNumber")}">
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <sec:authorize access="hasRole('NURSE')">
                         <div class="row mb-3">
-                            <label for="authNurse" class="col-sm-5 col-form-label">Only my events</label>
+                            <label for="authNurse" class="col-sm-8 col-form-label">Only my events</label>
                             <div class="form-group col-lg-2 col-form-label">
                                 <div class="form-check form-check-inline">
                                     <input type="checkbox" class="form-check-input" name="authNurse" id="authNurse"
@@ -44,7 +44,7 @@
                         </div>
                     </sec:authorize>
                     <div class="row mb-3">
-                        <label for="onlyPlanned" class="col-sm-5 col-form-label">Only planned events</label>
+                        <label for="onlyPlanned" class="col-sm-8 col-form-label">Only planned events</label>
                         <div class="form-group col-lg-2 col-form-label">
                             <div class="form-check form-check-inline">
                                 <input type="checkbox" class="form-check-input" name="onlyPlanned" id="onlyPlanned"
@@ -53,13 +53,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-4">
+                    <div class="row mb-3">
+                        <div class="form-group col-lg-2">
+                            <button type="submit" class="btn btn-outline-dark">Filter</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-outline-dark">Filter</button>
         </form>
-        <div>
-            <a class="btn btn-outline-dark" href="/events" role="button">All Events</a>
-            <a class="btn btn-outline-dark" href="/events/today" role="button">Today Events</a>
-        </div>
     </div>
     <table class="table table-hover">
         <thead>
@@ -123,6 +125,9 @@
     </div>
 </div>
 <script>
+    if (window.location.href.toString().includes('prescription')) {
+        $('#filterDiv').hide();
+    }
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {
         $('#pageNav').hide();
@@ -136,6 +141,13 @@
                 $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
             } else {
                 $('#pageHref' + i).attr('href', urlOfPage + '&page=' + i);
+            }
+            if (urlOfPage.includes('prescription')) {
+                if (urlOfPage.includes('?')) {
+                    $('#pageHref' + i).attr('href', urlOfPage + 'page=' + i);
+                } else {
+                    $('#pageHref' + i).attr('href', urlOfPage + '?page=' + i);
+                }
             }
         }
     }

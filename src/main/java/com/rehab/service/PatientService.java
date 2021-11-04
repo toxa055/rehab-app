@@ -1,7 +1,7 @@
 package com.rehab.service;
 
-
 import com.rehab.dto.PatientDto;
+import com.rehab.exception.ApplicationException;
 import com.rehab.model.Patient;
 import com.rehab.model.type.PatientState;
 import com.rehab.repository.PatientCrudRepository;
@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class PatientService {
@@ -28,32 +31,69 @@ public class PatientService {
     }
 
     public PatientDto getById(int id) {
-        return toDto(patientCrudRepository.findById(id).get());
+        return toDto(getPatientById(id));
     }
 
     public PatientDto getByInsuranceNumber(int insuranceNumber) {
-        return toDto(patientCrudRepository.getByInsuranceNumber(insuranceNumber));
+        return toDto(patientCrudRepository.findByInsuranceNumber(insuranceNumber).orElseThrow(() ->
+                new NoSuchElementException("Patient with Insurance Number " + insuranceNumber + " not found.")));
     }
 
-    public Patient save(PatientDto patientDto) {
-        return patientCrudRepository.save(toEntity(patientDto));
+    public PatientDto save(PatientDto patientDto) {
+        var insuranceNumber = patientDto.getInsuranceNumber();
+        if (patientCrudRepository.findByInsuranceNumber(insuranceNumber).isPresent()) {
+            throw new ApplicationException("Patient with Insurance Number " + insuranceNumber + " already exists.");
+        }
+        return toDto(patientCrudRepository.save(toEntity(patientDto)));
     }
 
-    public Patient discharge(int id) {
+    @Transactional
+    public PatientDto update(PatientDto patientDto) {
+        var patientForUpdateById = getPatientById(patientDto.getId());
+        if (patientForUpdateById != null) {
+            var patientForUpdateByInsNumber = patientCrudRepository
+                    .findByInsuranceNumber(patientDto.getInsuranceNumber()).orElse(null);
+            if (patientForUpdateByInsNumber != null) {
+                if (!patientForUpdateById.getId().equals(patientForUpdateByInsNumber.getId())) {
+                    throw new ApplicationException("Patient with Insurance Number "
+                            + patientForUpdateByInsNumber.getInsuranceNumber() + " already exists.");
+                } else {
+                    return toDto(patientCrudRepository.save(toEntity(patientDto)));
+                }
+            } else {
+                return toDto(patientCrudRepository.save(toEntity(patientDto)));
+            }
+        }
+        return toDto(patientCrudRepository.save(toEntity(patientDto)));
+    }
+
+    @Transactional
+    public PatientDto discharge(int id) {
+        var dischargingPatient = getPatientById(id);
+        if (dischargingPatient.getPatientState() == PatientState.DISCHARGED) {
+            throw new ApplicationException("Patient is already discharged.");
+        }
         long openTreatmentsCount = treatmentCrudRepository.findAllByPatientId(id)
                 .stream()
                 .filter(t -> !t.isClosed())
                 .count();
         if (openTreatmentsCount > 0) {
-            throw new IllegalStateException();
+            throw new ApplicationException("Cannot discharge patient which has active treatments.");
         }
-        var dischargingPatient = patientCrudRepository.findById(id).get();
         dischargingPatient.setPatientState(PatientState.DISCHARGED);
-        return patientCrudRepository.save(dischargingPatient);
+        return toDto(patientCrudRepository.save(dischargingPatient));
     }
 
-    public Page<PatientDto> getAll(Pageable pageable) {
-        return patientCrudRepository.findAll(pageable).map(this::toDto);
+    public Page<PatientDto> filter(Integer insuranceNumber, String nameLike, boolean onlyTreating, Pageable pageable) {
+        return patientCrudRepository.filter(insuranceNumber,
+                nameLike == null ? null : nameLike.strip().toLowerCase(),
+                onlyTreating ? PatientState.TREATING : null,
+                pageable).map(this::toDto);
+    }
+
+    private Patient getPatientById(int id) {
+        return patientCrudRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Patient with id " + id + " not found."));
     }
 
     private PatientDto toDto(Patient patient) {

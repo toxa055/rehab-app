@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.*;
 
 public class PatientDto {
-    private int id;
+    private Integer id;
     @NotNull(message = "Insurance number cannot be empty")
     @Range(min = 1_000, max = 99_999_999, message = "Insurance number must contain from 4 to 8 digits")
     private Integer insuranceNumber;
@@ -18,10 +18,7 @@ public class PatientDto {
     private String address;
     private PatientState patientState = PatientState.TREATING;
 
-    public PatientDto() {
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -41,7 +38,7 @@ public class PatientDto {
         return patientState;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
