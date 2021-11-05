@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
@@ -49,13 +50,11 @@ public class EmployeeService {
         return toDto(employeeCrudRepository.save(employeeFromUserDto));
     }
 
+    @Transactional
     public EmployeeDto changePassword(UserDto userDto) {
         var userDtoId = userDto.getId();
         var employee = employeeCrudRepository.findById(userDtoId).orElseThrow(() ->
                 new NoSuchElementException("Employee with id " + userDtoId + " not found."));
-        if (!employee.getId().equals(userDtoId)) {
-            throw new IllegalArgumentException("Employees' id are not equal.");
-        }
         employee.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return toDto(employeeCrudRepository.save(employee));
     }

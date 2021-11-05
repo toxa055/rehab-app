@@ -28,7 +28,17 @@
             <td>${employee.position}</td>
             <td>${employee.email}</td>
             <td>
-                <a class="btn btn-outline-dark" href="/employees/edit" role="button">Change Password</a>
+                <c:choose>
+                    <c:when test="${employee.id == authId}">
+                        <a class="btn btn-outline-dark" href="/employees/profile/edit" role="button">
+                            Change Password</a>
+                    </c:when>
+                    <c:otherwise>
+                        <a class="btn btn-outline-dark" href="/employees/${employee.id}/edit" role="button">
+                            Change Password</a>
+                    </c:otherwise>
+                </c:choose>
+
             </td>
         </tr>
     </table>

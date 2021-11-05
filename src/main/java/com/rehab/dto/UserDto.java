@@ -6,7 +6,7 @@ import javax.validation.constraints.*;
 import java.util.Set;
 
 public class UserDto {
-    private int id;
+    private Integer id;
     @NotBlank(message = "Name cannot be empty")
     @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String name;
@@ -25,7 +25,7 @@ public class UserDto {
     @NotEmpty(message = "No one role has been selected")
     private Set<Role> roles;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -53,7 +53,7 @@ public class UserDto {
         return roles;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

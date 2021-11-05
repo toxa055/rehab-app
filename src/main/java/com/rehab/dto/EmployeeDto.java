@@ -1,12 +1,12 @@
 package com.rehab.dto;
 
 public class EmployeeDto {
-    private int id;
+    private Integer id;
     private String name;
     private String position;
     private String email;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -22,7 +22,7 @@ public class EmployeeDto {
         return email;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
