@@ -19,18 +19,29 @@ newCureButton.click(function () {
             dataType: "json",
             data: cure
         }).done(function (cureDto) {
-            $('#cureName').attr('readonly', true).val(cureDto.name)
-            $('#cureId').val(cureDto.id)
-            $('#cureType').val(cureDto.cureType);
-            changeButton.attr('disabled', false);
-            searchButton.attr('disabled', true);
-            if ($('#cureType').val() === 'PROCEDURE') {
-                $('#dose').attr('readonly', true).val('According to instruction.');
+            if ((cureDto == null) || (cureDto.id == null)) {
+                cureAlreadyExists(cureName);
             } else {
-                $('#dose').attr('readonly', false).val('');
+                $('#cureName').attr('readonly', true).val(cureDto.name)
+                $('#cureId').val(cureDto.id)
+                $('#cureType').val(cureDto.cureType);
+                changeButton.attr('disabled', false);
+                searchButton.attr('disabled', true);
+                if ($('#cureType').val() === 'PROCEDURE') {
+                    $('#dose').attr('readonly', true).val('According to instruction.');
+                } else {
+                    $('#dose').attr('readonly', false).val('');
+                }
+                $('#newCureModal').modal('hide');
+                $('#name').val('');
             }
-            $('#newCureModal').modal('hide');
-            $('#name').val('');
+        }).fail(function () {
+            cureAlreadyExists(cureName)
         })
     }
 });
+
+function cureAlreadyExists(cureName) {
+    cureName.attr('class', 'form-control is-invalid')
+    $('#invalidCureNameModal').text('Cure with name ' + cureName.val() + ' already exists.');
+}

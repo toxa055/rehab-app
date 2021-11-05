@@ -20,29 +20,35 @@ searchButton.click(function () {
     if (cureName.val() === '') {
         cureName.attr('class', 'form-control is-invalid');
         $('#invalidCureName').text('Cure name cannot be empty');
+    } else if ((cureName.val().length < 3) || (cureName.val().length > 30)) {
+        cureName.attr('class', 'form-control is-invalid');
+        $('#invalidCureName').text('Length must be from 3 to 30 symbols');
     } else {
         $.ajax({
             url: "http://localhost:8080/rest/cures/" + $('#cureName').val()
         }).done(function (cureDto) {
-            cureName.attr('readonly', true).attr('class', 'form-control is-valid').val(cureDto.name);
-            $('#cureId').val(cureDto.id);
-            cureType.attr('class', 'form-control is-valid').val(cureDto.cureType);
-            changeButton.attr('disabled', false);
-            searchButton.attr('disabled', true);
-            sendFormButton.attr('disabled', false);
-            if (cureType.val() === 'PROCEDURE') {
-                $('#dose').attr('readonly', true).val('According to instruction.');
+            if ((cureDto == null) || (cureDto.id == null)) {
+                cureNotFound(cureName);
             } else {
-                $('#dose').attr('readonly', false);
-            }
-            if (patternCount.val() == $("input:checkbox:checked").length) {
+                cureName.attr('readonly', true).attr('class', 'form-control is-valid').val(cureDto.name);
+                $('#cureId').val(cureDto.id);
+                cureType.attr('class', 'form-control is-valid').val(cureDto.cureType);
+                changeButton.attr('disabled', false);
+                searchButton.attr('disabled', true);
                 sendFormButton.attr('disabled', false);
-            } else {
-                sendFormButton.attr('disabled', true);
+                if (cureType.val() === 'PROCEDURE') {
+                    $('#dose').attr('readonly', true).val('According to instruction.');
+                } else {
+                    $('#dose').attr('readonly', false);
+                }
+                if (patternCount.val() == $("input:checkbox:checked").length) {
+                    sendFormButton.attr('disabled', false);
+                } else {
+                    sendFormButton.attr('disabled', true);
+                }
             }
         }).fail(function () {
-            cureName.attr('class', 'form-control is-invalid');
-            $('#invalidCureName').text('Cure is not found');
+            cureNotFound(cureName);
         })
     }
 })
@@ -111,4 +117,9 @@ function chooseCheckbox() {
             sendFormButton.attr('disabled', true);
         }
     });
+}
+
+function cureNotFound(cureName) {
+    cureName.attr('class', 'form-control is-invalid');
+    $('#invalidCureName').text('Cure is not found');
 }
