@@ -22,9 +22,9 @@ newCureButton.click(function () {
             if ((cureDto == null) || (cureDto.id == null)) {
                 cureAlreadyExists(cureName);
             } else {
-                $('#cureName').attr('readonly', true).val(cureDto.name)
+                $('#cureName').attr('readonly', true).attr('class', 'form-control is-valid').val(cureDto.name)
                 $('#cureId').val(cureDto.id)
-                $('#cureType').val(cureDto.cureType);
+                $('#cureType').attr('class', 'form-control is-valid').val(cureDto.cureType);
                 changeButton.attr('disabled', false);
                 searchButton.attr('disabled', true);
                 if ($('#cureType').val() === 'PROCEDURE') {
@@ -34,6 +34,7 @@ newCureButton.click(function () {
                 }
                 $('#newCureModal').modal('hide');
                 $('#name').val('');
+                $('#cureTypeModal').val('MEDICINE');
             }
         }).fail(function () {
             cureAlreadyExists(cureName)
@@ -45,3 +46,8 @@ function cureAlreadyExists(cureName) {
     cureName.attr('class', 'form-control is-invalid')
     $('#invalidCureNameModal').text('Cure with name ' + cureName.val() + ' already exists.');
 }
+
+$('#newCureModal').on('hidden.bs.modal', function () {
+    $('#name').attr('class', 'form-control').val('');
+    $('#cureTypeModal').val('MEDICINE');
+})
