@@ -38,9 +38,6 @@ public class PrescriptionDto {
     private String dose;
     private boolean active = true;
 
-    public PrescriptionDto() {
-    }
-
     public Integer getId() {
         return id;
     }

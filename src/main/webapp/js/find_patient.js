@@ -19,21 +19,27 @@ searchButton.click(function () {
     if (insNum.val() === '') {
         insNum.attr('class', 'form-control is-invalid');
         $('#invalidInsNum').text('Insurance number cannot be empty');
+    } else if ((insNum.val() <= 999) || (insNum.val() >= 99_999_999)) {
+        insNum.attr('class', 'form-control is-invalid');
+        $('#invalidInsNum').text('Insurance number must contain from 4 to 8 digits');
     } else {
         $.ajax({
             url: "http://localhost:8080/rest/patients/" + insNum.val()
         }).done(function (patientDto) {
-            $('#patientInsuranceNumber').attr('readonly', true);
-            $('#patientId').val(patientDto.id);
-            $('#patientName').val(patientDto.name).attr('class', 'form-control is-valid');
-            $('#address').val(patientDto.address);
-            changeButton.attr('disabled', false);
-            searchButton.attr('disabled', true);
-            saveButton.attr('disabled', false);
-            insNum.attr('class', 'form-control is-valid');
+            if ((patientDto == null) || (patientDto.id == null)) {
+                incorrectInsNum(insNum);
+            } else {
+                $('#patientInsuranceNumber').attr('readonly', true);
+                $('#patientId').val(patientDto.id);
+                $('#patientName').val(patientDto.name).attr('class', 'form-control is-valid');
+                $('#address').val(patientDto.address);
+                changeButton.attr('disabled', false);
+                searchButton.attr('disabled', true);
+                saveButton.attr('disabled', false);
+                insNum.attr('class', 'form-control is-valid');
+            }
         }).fail(function () {
-            insNum.attr('class', 'form-control is-invalid');
-            $('#invalidInsNum').text('Incorrect Insurance number');
+            incorrectInsNum(insNum);
         })
     }
 })
@@ -47,3 +53,8 @@ changeButton.click(function () {
     searchButton.attr('disabled', false);
     saveButton.attr('disabled', true);
 })
+
+function incorrectInsNum(insNum) {
+    insNum.attr('class', 'form-control is-invalid');
+    $('#invalidInsNum').text('Incorrect Insurance number');
+}

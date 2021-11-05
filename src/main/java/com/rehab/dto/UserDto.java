@@ -25,9 +25,6 @@ public class UserDto {
     @NotEmpty(message = "No one role has been selected")
     private Set<Role> roles;
 
-    public UserDto() {
-    }
-
     public int getId() {
         return id;
     }

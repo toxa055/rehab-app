@@ -6,9 +6,6 @@ public class EmployeeDto {
     private String position;
     private String email;
 
-    public EmployeeDto() {
-    }
-
     public int getId() {
         return id;
     }
