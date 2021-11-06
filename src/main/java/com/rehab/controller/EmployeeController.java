@@ -1,6 +1,7 @@
 package com.rehab.controller;
 
 import com.rehab.dto.UserDto;
+import com.rehab.model.type.Role;
 import com.rehab.service.EmployeeService;
 import com.rehab.util.ControllerUtil;
 import com.rehab.util.SecurityUtil;
@@ -96,7 +97,12 @@ public class EmployeeController {
             model.addAttribute("confirmPasswordError", DIFF_PASSWORDS);
         }
         if (bindingResult.hasErrors()) {
-            model.mergeAttributes(ControllerUtil.getErrorsMap(bindingResult));
+            var errorsMap = ControllerUtil.getErrorsMap(bindingResult);
+            var roles = userDto.getRoles();
+            if ((roles != null) && roles.contains(Role.DOCTOR) && roles.contains(Role.NURSE)) {
+                errorsMap.put("rolesError", "Cannot choose roles DOCTOR and NURSE together");
+            }
+            model.mergeAttributes(errorsMap);
         }
         if (isDifferentPasswords || bindingResult.hasErrors()) {
             return NEW_EMPLOYEE_URL;

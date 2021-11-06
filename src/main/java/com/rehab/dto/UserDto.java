@@ -11,7 +11,7 @@ public class UserDto {
     @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String name;
     @NotBlank(message = "Position cannot be empty")
-    @Size(min = 6, max = 30, message = "Length must be from 6 to 30 symbols")
+    @Size(min = 3, max = 30, message = "Length must be from 3 to 30 symbols")
     private String position;
     @NotBlank(message = "Email cannot be empty")
     @Email(message = "Incorrect email")
