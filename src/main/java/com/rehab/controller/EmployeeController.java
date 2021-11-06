@@ -64,15 +64,16 @@ public class EmployeeController {
 
     @PostMapping("/edit")
     @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
-    public String edit(UserDto userDto, Model model) {
+    public String edit(@Valid UserDto userDto, BindingResult bindingResult, Model model) {
         model.addAttribute(EMPLOYEE, userDto);
-        var password = userDto.getPassword();
-        if ((password == null) || password.isBlank() || (password.length() < 6) || (password.length() > 12)) {
-            model.addAttribute(PASSWORD_ERROR, "Password cannot be empty<br>" +
-                    "Length must be from 6 to 12 symbols");
-            return EDIT_EMPLOYEE_URL;
+        if (bindingResult.hasErrors()) {
+            var errorsMap = ControllerUtil.getErrorsMap(bindingResult);
+            if (errorsMap.containsKey(PASSWORD_ERROR)) {
+                model.addAllAttributes(errorsMap);
+                return EDIT_EMPLOYEE_URL;
+            }
         }
-        if (!password.equals(userDto.getConfirmPassword())) {
+        if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
             model.addAttribute(PASSWORD_ERROR, DIFF_PASSWORDS);
             return EDIT_EMPLOYEE_URL;
         }
@@ -96,9 +97,8 @@ public class EmployeeController {
         }
         if (bindingResult.hasErrors()) {
             model.mergeAttributes(ControllerUtil.getErrorsMap(bindingResult));
-            return NEW_EMPLOYEE_URL;
         }
-        if (isDifferentPasswords) {
+        if (isDifferentPasswords || bindingResult.hasErrors()) {
             return NEW_EMPLOYEE_URL;
         }
         employeeService.save(userDto);
