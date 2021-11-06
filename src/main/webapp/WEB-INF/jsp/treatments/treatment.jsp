@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Treatment</title>
 </head>
 <body>
@@ -45,8 +46,9 @@
                 <td>
                     <a class="btn btn-outline-success" href="/prescriptions/new/${treatment.id}"
                        id="newPrescriptionButtonLink" role="button">New Prescription</a>
-                    <a class="btn btn-outline-danger" href="/treatments/close/${treatment.id}"
-                       id="closeTreatmentButtonLink" role="button">Close</a>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                            data-bs-target="#closeTreatmentModal" id="closeTreatmentButton">Close
+                    </button>
                 </td>
             </sec:authorize>
         </tr>
@@ -58,17 +60,33 @@
     <br>
     <a class="btn btn-outline-secondary" href="/treatments/today" role="button">Back</a>
 </div>
+<div class="modal fade" id="closeTreatmentModal" tabindex="-1" aria-labelledby="closeTreatmentModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="closeCancelModalLabel">Do you really want to
+                    close treatment for ${treatment.patientName}?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a class="btn btn-outline-primary" href="/treatments/close/${treatment.id}" role="button">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     if ($('#doctorId').text() != ${authDoctorId}) {
         $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success disabled');
-        $('#closeTreatmentButtonLink').attr('class', 'btn btn-outline-danger disabled');
+        $('#closeTreatmentButton').attr('class', 'btn btn-outline-danger disabled');
     } else {
         $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success');
-        $('#closeTreatmentButtonLink').attr('class', 'btn btn-outline-danger');
+        $('#closeTreatmentButton').attr('class', 'btn btn-outline-danger');
     }
     if (${treatment.closed}) {
         $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success disabled');
-        $('#closeTreatmentButtonLink').attr('class', 'btn btn-outline-danger disabled');
+        $('#closeTreatmentButton').attr('class', 'btn btn-outline-danger disabled');
     }
 </script>
 </body>

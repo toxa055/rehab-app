@@ -1,8 +1,10 @@
 package com.rehab.controller;
 
 import com.rehab.dto.UserDto;
+import com.rehab.model.type.Role;
 import com.rehab.service.EmployeeService;
 import com.rehab.util.ControllerUtil;
+import com.rehab.util.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -35,39 +37,49 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
         model.addAttribute(EMPLOYEE, employeeService.getById(id));
+        model.addAttribute("authId", employeeService.getAuth().getId());
         return EMPLOYEE_URL;
     }
 
     @GetMapping("/profile")
     @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
     public String getAuth(Model model) {
-        model.addAttribute(EMPLOYEE, employeeService.getAuth());
+        var authEmployee = employeeService.getAuth();
+        model.addAttribute(EMPLOYEE, authEmployee);
+        model.addAttribute("authId", authEmployee.getId());
         return EMPLOYEE_URL;
     }
 
-    @GetMapping("/edit")
+    @GetMapping("/{id}/edit")
+    public String editById(@PathVariable int id, Model model) {
+        model.addAttribute(EMPLOYEE, employeeService.getById(id));
+        return EDIT_EMPLOYEE_URL;
+    }
+
+    @GetMapping("/profile/edit")
     @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
-    public String edit(Model model) {
+    public String editAuth(Model model) {
         model.addAttribute(EMPLOYEE, employeeService.getAuth());
         return EDIT_EMPLOYEE_URL;
     }
 
     @PostMapping("/edit")
     @Secured({"ROLE_ADMIN", "ROLE_DOCTOR", "ROLE_NURSE"})
-    public String edit(UserDto userDto, Model model) {
+    public String edit(@Valid UserDto userDto, BindingResult bindingResult, Model model) {
         model.addAttribute(EMPLOYEE, userDto);
-        var password = userDto.getPassword();
-        if (password != null) {
-            if (!password.equals(userDto.getConfirmPassword())) {
-                model.addAttribute(PASSWORD_ERROR, DIFF_PASSWORDS);
+        if (bindingResult.hasErrors()) {
+            var errorsMap = ControllerUtil.getErrorsMap(bindingResult);
+            if (errorsMap.containsKey(PASSWORD_ERROR)) {
+                model.addAllAttributes(errorsMap);
+                return EDIT_EMPLOYEE_URL;
             }
-            if (((password.length() < 6) || (password.length() > 12))) {
-                model.addAttribute(PASSWORD_ERROR, "Length must be from 6 to 12 symbols");
-            }
+        }
+        if (!userDto.getPassword().equals(userDto.getConfirmPassword())) {
+            model.addAttribute(PASSWORD_ERROR, DIFF_PASSWORDS);
             return EDIT_EMPLOYEE_URL;
         }
         employeeService.changePassword(userDto);
-        return "redirect:../employees/profile";
+        return SecurityUtil.getAuthEmployee().getId().equals(userDto.getId()) ? "redirect:profile" : "redirect:";
     }
 
     @GetMapping("/new")
@@ -85,10 +97,14 @@ public class EmployeeController {
             model.addAttribute("confirmPasswordError", DIFF_PASSWORDS);
         }
         if (bindingResult.hasErrors()) {
-            model.mergeAttributes(ControllerUtil.getErrorsMap(bindingResult));
-            return NEW_EMPLOYEE_URL;
+            var errorsMap = ControllerUtil.getErrorsMap(bindingResult);
+            var roles = userDto.getRoles();
+            if ((roles != null) && roles.contains(Role.DOCTOR) && roles.contains(Role.NURSE)) {
+                errorsMap.put("rolesError", "Cannot choose roles DOCTOR and NURSE together");
+            }
+            model.mergeAttributes(errorsMap);
         }
-        if (isDifferentPasswords) {
+        if (isDifferentPasswords || bindingResult.hasErrors()) {
             return NEW_EMPLOYEE_URL;
         }
         employeeService.save(userDto);

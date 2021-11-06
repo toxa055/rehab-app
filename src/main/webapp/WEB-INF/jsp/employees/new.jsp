@@ -95,5 +95,21 @@
         </form>
     </div>
 </div>
+<script>
+    $("input:checkbox").click(function () {
+        if ($('#NURSE').is(':checked')) {
+            $('#DOCTOR').attr("disabled", true);
+        }
+        if (!$('#NURSE').is(':checked')) {
+            $('#DOCTOR').attr("disabled", false);
+        }
+        if ($('#DOCTOR').is(':checked')) {
+            $('#NURSE').attr("disabled", true);
+        }
+        if (!$('#DOCTOR').is(':checked')) {
+            $('#NURSE').attr("disabled", false);
+        }
+    });
+</script>
 </body>
 </html>

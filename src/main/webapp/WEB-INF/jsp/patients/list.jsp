@@ -62,7 +62,7 @@
             <th scope="col">Name</th>
             <th scope="col">Address</th>
             <th scope="col">State</th>
-            <sec:authorize access="hasRole('DOCTOR')">
+            <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
                 <th scope="col">Actions</th>
             </sec:authorize>
         </tr>
@@ -74,7 +74,7 @@
                 <td>${p.name}</td>
                 <td>${p.address}</td>
                 <td>${p.patientState}</td>
-                <sec:authorize access="hasRole('DOCTOR')">
+                <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
                     <td>
                         <a class="btn btn-outline-dark" href="/patients/${p.id}" role="button">Details</a>
                     </td>
@@ -93,7 +93,7 @@
             </ul>
         </nav>
     </div>
-    <sec:authorize access="hasRole('DOCTOR')">
+    <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
         <a class="btn btn-outline-success" href="/patients/new" role="button">New Patient</a>
     </sec:authorize>
 </div>

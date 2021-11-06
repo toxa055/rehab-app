@@ -130,6 +130,10 @@
         performEventButton.attr('class', 'btn btn-outline-success disabled');
         cancelEventButton.attr('class', 'btn btn-outline-danger disabled');
     }
+
+    $('#cancelEventModal').on('hidden.bs.modal', function () {
+        $('#commentModal').attr('class', 'form-control').val('');
+    })
 </script>
 </body>
 </html>

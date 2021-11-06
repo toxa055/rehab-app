@@ -12,12 +12,18 @@
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Change your password</h3><br>
+        <h3>Change password</h3><br>
         <form action="/employees/edit" method='POST'>
             <div class="row" style="display: none">
                 <label class="col-sm-2 col-form-label">id</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="number" name="id" class="form-control" value="${employee.id}" readonly/>
+                </div>
+            </div>
+            <div class="row">
+                <label for="name" class="col-sm-2 col-form-label">Employee</label>
+                <div class="form-group col-lg-4 col-form-label">
+                    <input type="text" name="name" class="form-control" id="name" value="${employee.name}" readonly/>
                 </div>
             </div>
             <div class="row">

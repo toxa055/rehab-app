@@ -17,7 +17,7 @@ public class TreatmentDto {
     private int doctorId;
     private String doctorName;
     private LocalDate date = LocalDate.now();
-    @NotBlank(message = "Name cannot be empty")
+    @NotBlank(message = "Diagnosis cannot be empty")
     @Size(min = 3, max = 50, message = "Length must be from 3 to 50 symbols")
     private String diagnosis;
     private LocalDate closeDate;

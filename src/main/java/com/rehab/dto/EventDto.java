@@ -25,9 +25,6 @@ public class EventDto {
     private LocalTime endTime;
     private String comment;
 
-    public EventDto() {
-    }
-
     public int getId() {
         return id;
     }
