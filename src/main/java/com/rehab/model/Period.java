@@ -5,7 +5,8 @@ import com.rehab.model.type.TimeUnit;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "periods")
+@Table(name = "periods", uniqueConstraints = {@UniqueConstraint(name = "count_unique_unit_idx",
+        columnNames = {"count", "unit"})})
 public class Period extends AbstractIdEntity {
 
     @Column(name = "count", nullable = false)

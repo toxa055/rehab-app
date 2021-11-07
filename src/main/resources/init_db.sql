@@ -56,7 +56,8 @@ CREATE TABLE periods
 (
     id    INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
     count INTEGER NOT NULL,
-    unit  VARCHAR NOT NULL
+    unit  VARCHAR NOT NULL,
+    CONSTRAINT count_unique_unit_idx UNIQUE (count, unit)
 );
 
 CREATE TABLE patterns

@@ -51,8 +51,14 @@ public class PrescriptionService {
     @Transactional
     public PrescriptionDto save(PrescriptionDto prescriptionDto) {
         var prescriptionFromDto = toEntity(prescriptionDto);
+        var periodFromDto = prescriptionFromDto.getPeriod();
+        var period = periodCrudRepository.findByCountAndUnit(periodFromDto.getCount(), periodFromDto.getUnit());
+        if (period.isEmpty()) {
+            prescriptionFromDto.setPeriod(periodCrudRepository.save(prescriptionFromDto.getPeriod()));
+        } else {
+            prescriptionFromDto.setPeriod(period.get());
+        }
         prescriptionFromDto.setPattern(patternCrudRepository.save(prescriptionFromDto.getPattern()));
-        prescriptionFromDto.setPeriod(periodCrudRepository.save(prescriptionFromDto.getPeriod()));
         var savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
         var plannedEvents = EventUtil.createEvents(savedPrescription);
         plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
