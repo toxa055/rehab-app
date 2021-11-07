@@ -47,6 +47,10 @@ function cureAlreadyExists(cureName) {
     $('#invalidCureNameModal').text('Cure with name ' + cureName.val() + ' already exists.');
 }
 
+if ($('#cureType').val() === 'PROCEDURE') {
+    $('#dose').attr('readonly', true);
+}
+
 $('#newCureModal').on('hidden.bs.modal', function () {
     $('#name').attr('class', 'form-control').val('');
     $('#cureTypeModal').val('MEDICINE');
