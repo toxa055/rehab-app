@@ -4,7 +4,6 @@ import com.rehab.dto.PrescriptionDto;
 import com.rehab.exception.ApplicationException;
 import com.rehab.model.Pattern;
 import com.rehab.model.Prescription;
-import com.rehab.model.type.PatternUnit;
 import com.rehab.repository.*;
 import com.rehab.util.EventUtil;
 import org.modelmapper.ModelMapper;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -102,8 +100,7 @@ public class PrescriptionService {
     }
 
     private PrescriptionDto toDto(Prescription prescription) {
-        var units = Arrays.stream(prescription.getPattern().getPatternUnits()
-                .split(", ")).map(PatternUnit::valueOf).collect(Collectors.toList());
+        var units = EventUtil.patternUnitsAsList(prescription.getPattern());
         typeMapToDto.addMappings(m -> m.map(src -> units, PrescriptionDto::setPatternUnits));
         return modelMapper.map(prescription, PrescriptionDto.class);
     }
