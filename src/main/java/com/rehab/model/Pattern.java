@@ -1,13 +1,12 @@
 package com.rehab.model;
 
-import com.rehab.model.type.PatternUnit;
 import com.rehab.model.type.TimeUnit;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-@Table(name = "patterns")
+@Table(name = "patterns", uniqueConstraints = {@UniqueConstraint(name = "count_unit_unique_units_idx",
+        columnNames = {"count", "unit", "pattern_units"})})
 public class Pattern extends AbstractIdEntity {
 
     @Column(name = "count", nullable = false)
@@ -17,17 +16,13 @@ public class Pattern extends AbstractIdEntity {
     @Enumerated(EnumType.STRING)
     private TimeUnit unit;
 
-    @Column(name = "unit")
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "pattern_units", joinColumns = @JoinColumn(name = "pattern_id"))
-    @JoinColumn(name = "pattern_id")
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<PatternUnit> patternUnits;
+    @Column(name = "pattern_units", nullable = false)
+    private String patternUnits;
 
     public Pattern() {
     }
 
-    public Pattern(Integer id, int count, TimeUnit unit, List<PatternUnit> patternUnits) {
+    public Pattern(Integer id, int count, TimeUnit unit, String patternUnits) {
         super(id);
         this.count = count;
         this.unit = unit;
@@ -42,7 +37,7 @@ public class Pattern extends AbstractIdEntity {
         return unit;
     }
 
-    public List<PatternUnit> getPatternUnits() {
+    public String getPatternUnits() {
         return patternUnits;
     }
 
@@ -54,7 +49,7 @@ public class Pattern extends AbstractIdEntity {
         this.unit = unit;
     }
 
-    public void setPatternUnits(List<PatternUnit> patternUnits) {
+    public void setPatternUnits(String patternUnits) {
         this.patternUnits = patternUnits;
     }
 }

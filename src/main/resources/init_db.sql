@@ -62,17 +62,11 @@ CREATE TABLE periods
 
 CREATE TABLE patterns
 (
-    id    INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
-    count INTEGER NOT NULL,
-    unit  VARCHAR NOT NULL
-);
-
-CREATE TABLE pattern_units
-(
-    pattern_id INTEGER NOT NULL,
-    unit       VARCHAR NOT NULL,
-    CONSTRAINT pattern_units_idx UNIQUE (pattern_id, unit),
-    FOREIGN KEY (pattern_id) REFERENCES patterns (id) ON DELETE CASCADE
+    id            INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
+    count         INTEGER NOT NULL,
+    unit          VARCHAR NOT NULL,
+    pattern_units VARCHAR NOT NULL,
+    CONSTRAINT count_unit_unique_units_idx UNIQUE (count, unit, pattern_units)
 );
 
 CREATE TABLE treatments

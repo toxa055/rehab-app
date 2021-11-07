@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,7 +84,8 @@ public class EventUtil {
 
     private static void addEventsForPartsOfDay(Prescription prescription, Pattern pattern, LocalDate plannedDate,
                                                List<Event> events) {
-        pattern.getPatternUnits().forEach(unit -> {
+        Arrays.stream(pattern.getPatternUnits().split(", "))
+                .map(PatternUnit::valueOf).collect(Collectors.toList()).forEach(unit -> {
                     var event = new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
                             plannedDate);
                     event.setPlannedTime(LocalTime.of(
@@ -103,7 +105,8 @@ public class EventUtil {
     private static void addEventsForDaysOfWeek(Prescription prescription, Pattern pattern, LocalDate plannedDate,
                                                List<Event> events) {
         var plannedDayOfWeek = plannedDate.getDayOfWeek();
-        pattern.getPatternUnits().forEach(unit -> {
+        Arrays.stream(pattern.getPatternUnits().split(", "))
+                .map(PatternUnit::valueOf).collect(Collectors.toList()).forEach(unit -> {
                     var event = new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
                             LocalTime.of(9, 0));
                     var daysToNextPlannedDay = switch (unit) {
