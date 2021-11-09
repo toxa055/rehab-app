@@ -2,10 +2,10 @@ package com.rehab.service;
 
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.exception.ApplicationException;
+import com.rehab.model.Pattern;
 import com.rehab.model.Prescription;
 import com.rehab.repository.*;
 import com.rehab.util.EventUtil;
-import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
+import static com.rehab.util.SecurityUtil.getAuthEmployee;
 
 @Service
 public class PrescriptionService {
@@ -26,7 +28,8 @@ public class PrescriptionService {
     private final PeriodCrudRepository periodCrudRepository;
     private final EventCrudRepository eventCrudRepository;
     private final ModelMapper modelMapper;
-    private final TypeMap<PrescriptionDto, Prescription> typeMap;
+    private final TypeMap<PrescriptionDto, Prescription> typeMapToEntity;
+    private final TypeMap<Prescription, PrescriptionDto> typeMapToDto;
 
     @Autowired
     public PrescriptionService(PrescriptionCrudRepository prescriptionCrudRepository,
@@ -37,7 +40,8 @@ public class PrescriptionService {
         this.periodCrudRepository = periodCrudRepository;
         this.eventCrudRepository = eventCrudRepository;
         this.modelMapper = modelMapper;
-        typeMap = modelMapper.createTypeMap(PrescriptionDto.class, Prescription.class);
+        typeMapToEntity = modelMapper.createTypeMap(PrescriptionDto.class, Prescription.class);
+        typeMapToDto = modelMapper.createTypeMap(Prescription.class, PrescriptionDto.class);
     }
 
     public PrescriptionDto getById(int id) {
@@ -50,57 +54,79 @@ public class PrescriptionService {
 
     @Transactional
     public PrescriptionDto save(PrescriptionDto prescriptionDto) {
-        var prescriptionFromDto = toEntity(prescriptionDto);
-        prescriptionFromDto.setPattern(patternCrudRepository.save(prescriptionFromDto.getPattern()));
-        prescriptionFromDto.setPeriod(periodCrudRepository.save(prescriptionFromDto.getPeriod()));
-        var savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
-        var plannedEvents = EventUtil.createEvents(savedPrescription);
-        plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
-        eventCrudRepository.saveAll(plannedEvents);
-        return toDto(savedPrescription);
+        return toDto(savePrescription(prescriptionDto));
+    }
+
+    @Transactional
+    public PrescriptionDto update(PrescriptionDto prescriptionDto) {
+        var cancellingPrescriptionId = prescriptionDto.getId();
+        prescriptionDto.setId(null);
+        var newPrescription = savePrescription(prescriptionDto);
+        cancelPrescription(cancellingPrescriptionId);
+        return toDto(newPrescription);
     }
 
     @Transactional
     public PrescriptionDto cancel(int id) {
-        var authDoctor = SecurityUtil.getAuthEmployee();
-        var cancellingPrescription = getPrescriptionById(id);
-        if (!cancellingPrescription.isActive()) {
-            throw new ApplicationException("Prescription is already cancelled.");
-        }
-        if (!authDoctor.getId().equals(cancellingPrescription.getDoctor().getId())) {
-            throw new ApplicationException("Cannot cancel prescription which was created by a different doctor.");
-        }
-        var eventsByPrescriptionId = eventCrudRepository.findAllByPrescriptionId(id);
-        var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId,
-                authDoctor.getName());
-        eventCrudRepository.saveAll(eventsForCancelling);
-        cancellingPrescription.setActive(false);
-        return toDto(prescriptionCrudRepository.save(cancellingPrescription));
+        return toDto(cancelPrescription(id));
     }
 
     public Page<PrescriptionDto> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
                                         boolean onlyActive, Pageable pageable) {
         return prescriptionCrudRepository.filter(pDate, insuranceNumber,
-                authDoctor ? SecurityUtil.getAuthEmployee().getId() : null,
+                authDoctor ? getAuthEmployee().getId() : null,
                 onlyActive ? true : null,
                 pageable).map(this::toDto);
     }
 
     private Prescription getPrescriptionById(int id) {
-        var prescriptions = prescriptionCrudRepository.findAllById(List.of(id));
-        if (prescriptions.isEmpty()) {
-            throw new NoSuchElementException("Prescription with id " + id + " not found.");
+        return prescriptionCrudRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Prescription with id " + id + " not found."));
+    }
+
+    private Prescription savePrescription(PrescriptionDto dto) {
+        var prescriptionFromDto = toEntity(dto);
+        var periodFromDto = prescriptionFromDto.getPeriod();
+        var period = periodCrudRepository.findByCountAndUnit(periodFromDto.getCount(), periodFromDto.getUnit());
+        prescriptionFromDto.setPeriod(periodCrudRepository.save(period.isEmpty() ? periodFromDto : period.get()));
+        var patternFromDto = prescriptionFromDto.getPattern();
+        var pattern = patternCrudRepository.findByCountAndUnitAndPatternUnits(
+                patternFromDto.getCount(), patternFromDto.getUnit(), patternFromDto.getPatternUnits());
+        prescriptionFromDto.setPattern(patternCrudRepository.save(pattern.isEmpty() ? patternFromDto : pattern.get()));
+        var savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
+        var plannedEvents = EventUtil.createEvents(savedPrescription);
+        plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
+        eventCrudRepository.saveAll(plannedEvents);
+        return savedPrescription;
+    }
+
+    private Prescription cancelPrescription(int id) {
+        var cancellingPrescription = getPrescriptionById(id);
+        if (!cancellingPrescription.isActive()) {
+            throw new ApplicationException("Prescription is already cancelled.");
         }
-        return prescriptions.get(0);
+        var authDoctor = getAuthEmployee();
+        if (!authDoctor.getId().equals(cancellingPrescription.getDoctor().getId())) {
+            throw new ApplicationException("Cannot cancel prescription which was created by a different doctor.");
+        }
+        var eventsByPrescriptionId = eventCrudRepository.findAllByPrescriptionId(id);
+        var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId, authDoctor.getName());
+        eventCrudRepository.saveAll(eventsForCancelling);
+        cancellingPrescription.setActive(false);
+        return prescriptionCrudRepository.save(cancellingPrescription);
     }
 
     private PrescriptionDto toDto(Prescription prescription) {
+        var units = EventUtil.patternUnitsAsList(prescription.getPattern());
+        typeMapToDto.addMappings(m -> m.map(src -> units, PrescriptionDto::setPatternUnits));
         return modelMapper.map(prescription, PrescriptionDto.class);
     }
 
-    private Prescription toEntity(PrescriptionDto prescriptionDto) {
-        var authDoctor = SecurityUtil.getAuthEmployee();
-        typeMap.addMappings(modelMapper -> modelMapper.map(src -> authDoctor, Prescription::setDoctor));
-        return modelMapper.map(prescriptionDto, Prescription.class);
+    private Prescription toEntity(PrescriptionDto dto) {
+        typeMapToEntity.addMappings(m -> m.map(src -> getAuthEmployee(), Prescription::setDoctor));
+        var mappedPrescription = modelMapper.map(dto, Prescription.class);
+        mappedPrescription.setPattern(new Pattern(dto.getPatternId(), dto.getPatternCount(), dto.getPatternUnit(),
+                dto.getPatternUnits().stream().map(Enum::name).collect(Collectors.joining(", "))));
+        return mappedPrescription;
     }
 }

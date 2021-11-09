@@ -33,8 +33,8 @@ public class PrescriptionDto {
     @Range(min = 1, max = 90, message = "Period count must be from 1 to 90")
     private Integer periodCount;
     private TimeUnit periodUnit;
-    @NotBlank(message = "Diagnosis cannot be empty")
-    @Size(min = 3, max = 20, message = "Length must be from 3 to 20 symbols")
+    @NotBlank(message = "Dose cannot be empty")
+    @Size(min = 3, max = 30, message = "Length must be from 3 to 30 symbols")
     private String dose;
     private boolean active = true;
 
