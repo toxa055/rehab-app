@@ -5,17 +5,23 @@
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-    <title>New prescription</title>
+    <title>${p.id == null ? 'New' : 'Update'} prescription</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h3>Create new prescription for ${treatment.patientName}</h3><br>
-        <form action="/prescriptions/new/" method="post">
+        <h3>${p.id == null ? 'Create new' : 'Update'} prescription for ${treatment.patientName}</h3><br>
+        <form action="/prescriptions/new" method="post" id="f">
             <div class="row">
                 <div class="form-group col-lg-6">
+                    <div class="row" style="display: none">
+                        <label for="id" class="col-sm-4 col-form-label">Prescription id</label>
+                        <div class="form-group col-lg-7 col-form-label">
+                            <input type="number" name="id" id="id" value="${p.id}" class="form-control" readonly>
+                        </div>
+                    </div>
                     <div class="row" style="display: none">
                         <label for="treatmentId" class="col-sm-4 col-form-label">Treatment id</label>
                         <div class="form-group col-lg-7 col-form-label">
@@ -224,7 +230,7 @@
                 <div class="form-group col-lg-4">
                     <a class="btn btn-outline-secondary" href="/treatments/${treatment.id}" role="button">Cancel</a>
                     <button type="submit" name="submit" id="sendFormButton" class="btn btn-outline-primary" disabled>
-                        Create
+                        ${p.id == null ? 'Create' : 'Update'}
                     </button>
                 </div>
             </div>
@@ -264,6 +270,11 @@
         </div>
     </div>
 </div>
+<script>
+    if (${p.id != null}) {
+        $('#f').attr('action', '/prescriptions/edit');
+    }
+</script>
 <script src="${pageContext.request.contextPath}/js/new_cure.js"></script>
 <script src="${pageContext.request.contextPath}/js/find_cure.js"></script>
 </body>

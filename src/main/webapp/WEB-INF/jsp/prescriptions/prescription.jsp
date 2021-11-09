@@ -114,7 +114,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <a class="btn btn-outline-primary" href="/prescriptions/update/${p.id}?treatmentId=${p.treatmentId}"
+                <a class="btn btn-outline-primary" href="/prescriptions/edit/${p.treatmentId}/${p.id}"
                    role="button">Confirm</a>
             </div>
         </div>

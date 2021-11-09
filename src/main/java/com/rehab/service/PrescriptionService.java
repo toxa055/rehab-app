@@ -54,36 +54,21 @@ public class PrescriptionService {
 
     @Transactional
     public PrescriptionDto save(PrescriptionDto prescriptionDto) {
-        var prescriptionFromDto = toEntity(prescriptionDto);
-        var periodFromDto = prescriptionFromDto.getPeriod();
-        var period = periodCrudRepository.findByCountAndUnit(periodFromDto.getCount(), periodFromDto.getUnit());
-        prescriptionFromDto.setPeriod(periodCrudRepository.save(period.isEmpty() ? periodFromDto : period.get()));
-        var patternFromDto = prescriptionFromDto.getPattern();
-        var pattern = patternCrudRepository.findByCountAndUnitAndPatternUnits(
-                patternFromDto.getCount(), patternFromDto.getUnit(), patternFromDto.getPatternUnits());
-        prescriptionFromDto.setPattern(patternCrudRepository.save(pattern.isEmpty() ? patternFromDto : pattern.get()));
-        var savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
-        var plannedEvents = EventUtil.createEvents(savedPrescription);
-        plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
-        eventCrudRepository.saveAll(plannedEvents);
-        return toDto(savedPrescription);
+        return toDto(savePrescription(prescriptionDto));
+    }
+
+    @Transactional
+    public PrescriptionDto update(PrescriptionDto prescriptionDto) {
+        var cancellingPrescriptionId = prescriptionDto.getId();
+        prescriptionDto.setId(null);
+        var newPrescription = savePrescription(prescriptionDto);
+        cancelPrescription(cancellingPrescriptionId);
+        return toDto(newPrescription);
     }
 
     @Transactional
     public PrescriptionDto cancel(int id) {
-        var cancellingPrescription = getPrescriptionById(id);
-        if (!cancellingPrescription.isActive()) {
-            throw new ApplicationException("Prescription is already cancelled.");
-        }
-        var authDoctor = getAuthEmployee();
-        if (!authDoctor.getId().equals(cancellingPrescription.getDoctor().getId())) {
-            throw new ApplicationException("Cannot cancel prescription which was created by a different doctor.");
-        }
-        var eventsByPrescriptionId = eventCrudRepository.findAllByPrescriptionId(id);
-        var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId, authDoctor.getName());
-        eventCrudRepository.saveAll(eventsForCancelling);
-        cancellingPrescription.setActive(false);
-        return toDto(prescriptionCrudRepository.save(cancellingPrescription));
+        return toDto(cancelPrescription(id));
     }
 
     public Page<PrescriptionDto> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
@@ -97,6 +82,38 @@ public class PrescriptionService {
     private Prescription getPrescriptionById(int id) {
         return prescriptionCrudRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Prescription with id " + id + " not found."));
+    }
+
+    private Prescription savePrescription(PrescriptionDto dto) {
+        var prescriptionFromDto = toEntity(dto);
+        var periodFromDto = prescriptionFromDto.getPeriod();
+        var period = periodCrudRepository.findByCountAndUnit(periodFromDto.getCount(), periodFromDto.getUnit());
+        prescriptionFromDto.setPeriod(periodCrudRepository.save(period.isEmpty() ? periodFromDto : period.get()));
+        var patternFromDto = prescriptionFromDto.getPattern();
+        var pattern = patternCrudRepository.findByCountAndUnitAndPatternUnits(
+                patternFromDto.getCount(), patternFromDto.getUnit(), patternFromDto.getPatternUnits());
+        prescriptionFromDto.setPattern(patternCrudRepository.save(pattern.isEmpty() ? patternFromDto : pattern.get()));
+        var savedPrescription = prescriptionCrudRepository.save(prescriptionFromDto);
+        var plannedEvents = EventUtil.createEvents(savedPrescription);
+        plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
+        eventCrudRepository.saveAll(plannedEvents);
+        return savedPrescription;
+    }
+
+    private Prescription cancelPrescription(int id) {
+        var cancellingPrescription = getPrescriptionById(id);
+        if (!cancellingPrescription.isActive()) {
+            throw new ApplicationException("Prescription is already cancelled.");
+        }
+        var authDoctor = getAuthEmployee();
+        if (!authDoctor.getId().equals(cancellingPrescription.getDoctor().getId())) {
+            throw new ApplicationException("Cannot cancel prescription which was created by a different doctor.");
+        }
+        var eventsByPrescriptionId = eventCrudRepository.findAllByPrescriptionId(id);
+        var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId, authDoctor.getName());
+        eventCrudRepository.saveAll(eventsForCancelling);
+        cancellingPrescription.setActive(false);
+        return prescriptionCrudRepository.save(cancellingPrescription);
     }
 
     private PrescriptionDto toDto(Prescription prescription) {
