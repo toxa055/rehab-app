@@ -1,6 +1,7 @@
 package com.rehab.service;
 
 import com.rehab.dto.EventDto;
+import com.rehab.dto.EventMessage;
 import com.rehab.exception.ApplicationException;
 import com.rehab.model.Employee;
 import com.rehab.model.Event;
@@ -8,6 +9,7 @@ import com.rehab.model.type.EventState;
 import com.rehab.repository.EventCrudRepository;
 import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,18 +19,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
 
     private final EventCrudRepository eventCrudRepository;
     private final ModelMapper modelMapper;
+    private final RabbitTemplate template;
 
     @Autowired
-    public EventService(EventCrudRepository eventCrudRepository, ModelMapper modelMapper) {
+    public EventService(EventCrudRepository eventCrudRepository, RabbitTemplate template, ModelMapper modelMapper) {
         this.eventCrudRepository = eventCrudRepository;
         this.modelMapper = modelMapper;
+        this.template = template;
     }
 
     public EventDto getById(int eventId) {
@@ -111,7 +117,18 @@ public class EventService {
                 new NoSuchElementException("Event with id " + id + " not found."));
     }
 
+    private List<EventMessage> getTodayEvents() {
+        return eventCrudRepository.findAllByPlannedDate(LocalDate.now())
+                .stream()
+                .map(this::toMessage)
+                .collect(Collectors.toList());
+    }
+
     private EventDto toDto(Event event) {
         return modelMapper.map(event, EventDto.class);
+    }
+
+    private EventMessage toMessage(Event event) {
+        return modelMapper.map(event, EventMessage.class);
     }
 }

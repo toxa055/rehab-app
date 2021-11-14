@@ -14,7 +14,7 @@ newCureButton.click(function () {
             cureType: $('#cureTypeModal').val()
         }
         $.ajax({
-            url: "http://localhost:8080/rest/cures",
+            url: "http://localhost:8060/rest/cures",
             method: "POST",
             dataType: "json",
             data: cure

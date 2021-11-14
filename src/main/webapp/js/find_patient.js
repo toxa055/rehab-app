@@ -24,7 +24,7 @@ searchButton.click(function () {
         $('#invalidInsNum').text('Insurance number must contain from 4 to 8 digits');
     } else {
         $.ajax({
-            url: "http://localhost:8080/rest/patients/" + insNum.val()
+            url: "http://localhost:8060/rest/patients/" + insNum.val()
         }).done(function (patientDto) {
             if ((patientDto == null) || (patientDto.id == null)) {
                 incorrectInsNum(insNum);

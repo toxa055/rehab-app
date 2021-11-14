@@ -25,7 +25,7 @@ searchButton.click(function () {
         $('#invalidCureName').text('Length must be from 3 to 30 symbols');
     } else {
         $.ajax({
-            url: "http://localhost:8080/rest/cures/" + $('#cureName').val()
+            url: "http://localhost:8060/rest/cures/" + $('#cureName').val()
         }).done(function (cureDto) {
             if ((cureDto == null) || (cureDto.id == null)) {
                 cureNotFound(cureName);
