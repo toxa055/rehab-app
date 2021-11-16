@@ -54,7 +54,9 @@ public class EventService {
         }
         checkEventHasNotPlannedState(eventForSettingNurse.getEventState(), "choose");
         eventForSettingNurse.setNurse(authNurse);
-        return toDto(eventCrudRepository.save(eventForSettingNurse));
+        var savedEvent = eventCrudRepository.save(eventForSettingNurse);
+        sendMessage(savedEvent);
+        return toDto(savedEvent);
     }
 
     @Transactional
@@ -65,7 +67,9 @@ public class EventService {
         checkEventHasDifferentNurse(authNurse, eventForUnsettingNurse.getNurse());
         checkEventHasNotPlannedState(eventForUnsettingNurse.getEventState(), "discard");
         eventForUnsettingNurse.setNurse(null);
-        return toDto(eventCrudRepository.save(eventForUnsettingNurse));
+        var savedEvent = eventCrudRepository.save(eventForUnsettingNurse);
+        sendMessage(savedEvent);
+        return toDto(savedEvent);
     }
 
     @Transactional
@@ -83,7 +87,9 @@ public class EventService {
         eventForChangingState.setEndDate(LocalDate.now());
         eventForChangingState.setEndTime(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
         eventForChangingState.setComment(comment);
-        return toDto(eventCrudRepository.save(eventForChangingState));
+        var savedEvent = eventCrudRepository.save(eventForChangingState);
+        sendMessage(savedEvent);
+        return toDto(savedEvent);
     }
 
     public Page<EventDto> filter(LocalDate plannedDate, Integer insuranceNumber, boolean authNurse,
@@ -117,8 +123,14 @@ public class EventService {
                 new NoSuchElementException("Event with id " + id + " not found."));
     }
 
-    private List<EventMessage> getTodayEvents() {
-        return eventCrudRepository.findAllByPlannedDate(LocalDate.now())
+    private void sendMessage(Event changedEvent) {
+        if (changedEvent.getPlannedDate().equals(LocalDate.now())) {
+            template.convertAndSend("events_queue", getTodayEventMessages());
+        }
+    }
+
+    private List<EventMessage> getTodayEventMessages() {
+        return eventCrudRepository.findAllByPlannedDateOrderByPlannedTime(LocalDate.now())
                 .stream()
                 .map(this::toMessage)
                 .collect(Collectors.toList());
