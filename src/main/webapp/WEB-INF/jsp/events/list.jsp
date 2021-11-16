@@ -77,7 +77,7 @@
             <th scope="col">State</th>
             <th scope="col" style="display: none">Cure id</th>
             <th scope="col">Cure</th>
-            <th scope="col">Cure type</th>
+            <th scope="col">Type</th>
             <th scope="col">Dose</th>
             <th scope="col">End Date/Time</th>
             <th scope="col">Comment</th>

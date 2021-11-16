@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -34,6 +35,11 @@ public class EventService {
         this.eventCrudRepository = eventCrudRepository;
         this.modelMapper = modelMapper;
         this.template = template;
+    }
+
+    @PostConstruct
+    public void init() {
+        sendMessage();
     }
 
     public EventDto getById(int eventId) {
@@ -123,14 +129,17 @@ public class EventService {
     }
 
     private void sendMessage(Event changedEvent) {
-        var today = LocalDate.now();
-        if (changedEvent.getPlannedDate().equals(today)) {
-            var todayEventsMessage = eventCrudRepository.findAllByPlannedDateOrderByPlannedTime(today)
-                    .stream()
-                    .map(this::toMessage)
-                    .collect(Collectors.toList());
-            template.convertAndSend("events_queue", todayEventsMessage);
+        if (changedEvent.getPlannedDate().equals(LocalDate.now())) {
+            sendMessage();
         }
+    }
+
+    private void sendMessage() {
+        var todayEventsMessage = eventCrudRepository.findAllByPlannedDateOrderByPlannedTime(LocalDate.now())
+                .stream()
+                .map(this::toMessage)
+                .collect(Collectors.toList());
+        template.convertAndSend("events_queue", todayEventsMessage);
     }
 
     private EventDto toDto(Event event) {
