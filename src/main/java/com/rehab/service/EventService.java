@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -124,16 +123,14 @@ public class EventService {
     }
 
     private void sendMessage(Event changedEvent) {
-        if (changedEvent.getPlannedDate().equals(LocalDate.now())) {
-            template.convertAndSend("events_queue", getTodayEventMessages());
+        var today = LocalDate.now();
+        if (changedEvent.getPlannedDate().equals(today)) {
+            var todayEventsMessage = eventCrudRepository.findAllByPlannedDateOrderByPlannedTime(today)
+                    .stream()
+                    .map(this::toMessage)
+                    .collect(Collectors.toList());
+            template.convertAndSend("events_queue", todayEventsMessage);
         }
-    }
-
-    private List<EventMessage> getTodayEventMessages() {
-        return eventCrudRepository.findAllByPlannedDateOrderByPlannedTime(LocalDate.now())
-                .stream()
-                .map(this::toMessage)
-                .collect(Collectors.toList());
     }
 
     private EventDto toDto(Event event) {
