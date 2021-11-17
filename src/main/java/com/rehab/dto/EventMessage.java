@@ -1,6 +1,5 @@
 package com.rehab.dto;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class EventMessage {
@@ -8,13 +7,9 @@ public class EventMessage {
     private String patientName;
     private String nurseName;
     private LocalTime plannedTime;
-    private String eventState;
     private String cureName;
     private String cureType;
     private String dose;
-    private LocalDate endDate;
-    private LocalTime endTime;
-    private String comment;
 
     public Integer getPatientInsuranceNumber() {
         return patientInsuranceNumber;
@@ -32,10 +27,6 @@ public class EventMessage {
         return plannedTime;
     }
 
-    public String getEventState() {
-        return eventState;
-    }
-
     public String getCureName() {
         return cureName;
     }
@@ -46,18 +37,6 @@ public class EventMessage {
 
     public String getDose() {
         return dose;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public String getComment() {
-        return comment;
     }
 
     public void setPatientInsuranceNumber(Integer patientInsuranceNumber) {
@@ -76,10 +55,6 @@ public class EventMessage {
         this.plannedTime = plannedTime;
     }
 
-    public void setEventState(String eventState) {
-        this.eventState = eventState;
-    }
-
     public void setCureName(String cureName) {
         this.cureName = cureName;
     }
@@ -90,17 +65,5 @@ public class EventMessage {
 
     public void setDose(String dose) {
         this.dose = dose;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 }
