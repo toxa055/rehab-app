@@ -58,8 +58,9 @@
                id="chooseEventButton">Choose</a>
             <a class="btn btn-outline-dark" href="/events/discard/${event.id}" role="button"
                id="discardEventButton">Discard</a>
-            <a class="btn btn-outline-success" href="/events/change/${event.id}?state=performed"
-               role="button" id="performEventButton">Perform</a>
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#performEventModal" id="performEventModalButton">Perform
+            </button>
             <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
                     data-bs-target="#cancelEventModal" id="cancelEventModalButton">Cancel
             </button>
@@ -67,6 +68,24 @@
     </div>
     <br>
     <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
+</div>
+
+<div class="modal fade" id="performEventModal" tabindex="-1" aria-labelledby="performEventModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="performEventModalLabel">Do you really want to perform event for
+                    ${event.patientName}?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a class="btn btn-outline-primary" href="/events/change/${event.id}?state=performed" role="button">
+                    Confirm</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="cancelEventModal" tabindex="-1" aria-labelledby="cancelEventModalLabel" aria-hidden="true">
@@ -93,12 +112,13 @@
         </div>
     </div>
 </div>
+
 <script>
     $('#cancelEventButton').click(function () {
         let comm = $('#commentModal').val();
-        if ((comm.length < 8) || (comm.length > 30)) {
+        if ((comm.length < 8) || (comm.length > 60)) {
             $('#commentModal').attr('class', 'form-control is-invalid');
-            $('#errorCommentModal').text('Length must be from 8 to 30 symbols');
+            $('#errorCommentModal').text('Length must be from 8 to 60 symbols');
         } else {
             $('#cancelEventModal').modal('hide');
             window.location = '/events/change/${event.id}?state=cancelled&comment=' + comm;
@@ -107,7 +127,7 @@
 
     let chooseEventButton = $('#chooseEventButton');
     let discardEventButton = $('#discardEventButton');
-    let performEventButton = $('#performEventButton');
+    let performEventButton = $('#performEventModalButton');
     let cancelEventButton = $('#cancelEventModalButton');
 
     if (${event.nurseId == authNurseId}) {
