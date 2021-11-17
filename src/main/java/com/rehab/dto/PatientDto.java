@@ -2,8 +2,10 @@ package com.rehab.dto;
 
 import com.rehab.model.type.PatientState;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 public class PatientDto {
     private Integer id;
@@ -13,6 +15,10 @@ public class PatientDto {
     @NotBlank(message = "Name cannot be empty")
     @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String name;
+    @Past(message = "Birth date must be a past date")
+    @NotNull(message = "Birth date cannot be empty")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthDate;
     @NotBlank(message = "Address cannot be empty")
     @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String address;
@@ -28,6 +34,10 @@ public class PatientDto {
 
     public String getName() {
         return name;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
     public String getAddress() {
@@ -48,6 +58,10 @@ public class PatientDto {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public void setAddress(String address) {

@@ -19,6 +19,7 @@
             <th scope="col" style="display: none">id</th>
             <th scope="col">Insurance №</th>
             <th scope="col">Name</th>
+            <th scope="col">Birth Date</th>
             <th scope="col">Address</th>
             <th scope="col">State</th>
             <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
@@ -30,6 +31,7 @@
             <td style="display: none">${patient.id}</td>
             <td>${patient.insuranceNumber}</td>
             <td>${patient.name}</td>
+            <td>${patient.birthDate}</td>
             <td>${patient.address}</td>
             <td id="patientState">${patient.patientState}</td>
             <td>

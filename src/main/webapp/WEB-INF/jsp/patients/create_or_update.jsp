@@ -30,6 +30,16 @@
                 </div>
             </div>
             <div class="row">
+                <label for="birthDate" class="col-sm-2 col-form-label">Birth Date</label>
+                <div class="form-group col-lg-4 col-form-label">
+                    <input type="date" name="birthDate" id="birthDate" value="${patient.birthDate}"
+                           class="form-control ${birthDateError != null ? 'is-invalid' : ''}"/>
+                    <div class="invalid-feedback">
+                        ${birthDateError}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <label for="insuranceNumber" class="col-sm-2 col-form-label">Insurance number</label>
                 <div class="form-group col-lg-4 col-form-label">
                     <input type="number" name="insuranceNumber" id="insuranceNumber" placeholder="insuranceNumber"

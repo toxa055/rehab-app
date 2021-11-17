@@ -46,6 +46,7 @@ CREATE TABLE patients
     id               INTEGER PRIMARY KEY DEFAULT nextval('general_seq'),
     insurance_number INTEGER NOT NULL,
     name             VARCHAR NOT NULL,
+    birth_date       DATE    NOT NULL,
     address          VARCHAR NOT NULL,
     patient_state    VARCHAR NOT NULL    DEFAULT 'TREATING'
 );

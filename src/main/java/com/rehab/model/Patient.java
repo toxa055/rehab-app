@@ -3,6 +3,7 @@ package com.rehab.model;
 import com.rehab.model.type.PatientState;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,9 @@ public class Patient extends AbstractIdEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "birth_date", nullable = false)
+    private LocalDate birthDate;
 
     @Column(name = "address", nullable = false)
     private String address;
@@ -44,6 +48,10 @@ public class Patient extends AbstractIdEntity {
         return name;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -62,6 +70,10 @@ public class Patient extends AbstractIdEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public void setAddress(String address) {

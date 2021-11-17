@@ -18,11 +18,11 @@ VALUES (1, 'DOCTOR'),
        (4, 'NURSE'),
        (5, 'ADMIN');
 
-INSERT INTO patients (insurance_number, name, address)
-VALUES (1001, 'Andreeva Irina Anatolyevna', 'Saint-Petersburg, Nevsky, 13-28'),
-       (1002, 'Saharov Dmitry Markovich', 'Saint-Petersburg, Frunze, 62/3-11'),
-       (1003, 'Alekseev Ivan Ivanovich', 'Saint-Petersburg, Korablestroiteley, 102-210'),
-       (1004, 'Ignatyev Pavel Alekseevich', 'Saint-Petersburg, Optikov, 12a-51');
+INSERT INTO patients (insurance_number, name, birth_date, address)
+VALUES (1001, 'Andreeva Irina Anatolyevna', '1980-03-12', 'Saint-Petersburg, Nevsky, 13-28'),
+       (1002, 'Saharov Dmitry Markovich', '1968-12-07', 'Saint-Petersburg, Frunze, 62/3-11'),
+       (1003, 'Alekseev Ivan Ivanovich', '1975-11-27', 'Saint-Petersburg, Korablestroiteley, 102-210'),
+       (1004, 'Ignatyev Pavel Alekseevich', '1990-01-10', 'Saint-Petersburg, Optikov, 12a-51');
 
 INSERT INTO cures (name, cure_type)
 VALUES ('Aspirin', 'MEDICINE'),

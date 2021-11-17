@@ -60,6 +60,7 @@
             <th scope="col" style="display: none">id</th>
             <th scope="col">Insurance №</th>
             <th scope="col">Name</th>
+            <th scope="col">Birth Date</th>
             <th scope="col">Address</th>
             <th scope="col">State</th>
             <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
@@ -72,6 +73,7 @@
                 <td style="display: none">${p.id}</td>
                 <td>${p.insuranceNumber}</td>
                 <td>${p.name}</td>
+                <td>${p.birthDate}</td>
                 <td>${p.address}</td>
                 <td>${p.patientState}</td>
                 <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
