@@ -21,6 +21,7 @@ import javax.validation.Valid;
 public class PatientController {
 
     private static final String CREATE_OR_UPDATE_PATIENT_URL = "patients/create_or_update";
+    private static final String REDIRECT_PATIENTS_URL = "redirect:/patients/";
     private static final String PATIENT_URL = "patients/patient";
     private static final String PATIENT = "patient";
     private final PatientService patientService;
@@ -46,7 +47,7 @@ public class PatientController {
     @Secured("ROLE_DOCTOR")
     public String discharge(@PathVariable int id) {
         patientService.discharge(id);
-        return "redirect:/patients/" + id;
+        return REDIRECT_PATIENTS_URL + id;
     }
 
     @GetMapping
@@ -85,11 +86,9 @@ public class PatientController {
             model.addAttribute(PATIENT, patientDto);
             return CREATE_OR_UPDATE_PATIENT_URL;
         }
-        if (patientDto.getId() == null) {
-            patientService.save(patientDto);
-        } else {
-            patientService.update(patientDto);
-        }
-        return "redirect:";
+        var patient = patientDto.getId() == null
+                ? patientService.save(patientDto)
+                : patientService.update(patientDto);
+        return REDIRECT_PATIENTS_URL + patient.getId();
     }
 }

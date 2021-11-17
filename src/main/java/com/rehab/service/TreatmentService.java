@@ -63,11 +63,10 @@ public class TreatmentService {
         if (!treatmentForClosing.getDoctor().getId().equals(authDoctor.getId())) {
             throw new ApplicationException("Cannot close treatment which was created by a different doctor.");
         }
-        long activePrescriptionsCount = prescriptionCrudRepository.findAllByTreatmentId(id)
+        var hasActivePrescriptions = prescriptionCrudRepository.findAllByTreatmentId(id)
                 .stream()
-                .filter(Prescription::isActive)
-                .count();
-        if (activePrescriptionsCount > 0) {
+                .anyMatch(Prescription::isActive);
+        if (hasActivePrescriptions) {
             throw new ApplicationException("Cannot close treatment which has active prescriptions.");
         }
         treatmentForClosing.setClosed(true);

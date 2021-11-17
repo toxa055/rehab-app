@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-    <title>Patient</title>
+    <title>Patient ${patient.name}</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
