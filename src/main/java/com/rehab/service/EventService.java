@@ -21,7 +21,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -135,11 +134,7 @@ public class EventService {
     }
 
     private void sendMessage() {
-        var todayEventsMessage = eventCrudRepository.findAllByPlannedDateOrderByPlannedTime(LocalDate.now())
-                .stream()
-                .map(this::toMessage)
-                .collect(Collectors.toList());
-        template.convertAndSend("events_queue", todayEventsMessage);
+        template.convertAndSend("events_queue", "updated");
     }
 
     private EventDto toDto(Event event) {

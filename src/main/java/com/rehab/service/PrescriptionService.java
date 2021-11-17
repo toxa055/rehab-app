@@ -132,11 +132,7 @@ public class PrescriptionService {
                 .stream()
                 .anyMatch(e -> e.getPlannedDate().equals(today));
         if (hasTodayEvents) {
-            var todayEventsMessage = eventCrudRepository.findAllByPlannedDateOrderByPlannedTime(today)
-                    .stream()
-                    .map(this::eventToMessage)
-                    .collect(Collectors.toList());
-            template.convertAndSend("events_queue", todayEventsMessage);
+            template.convertAndSend("events_queue", "updated");
         }
     }
 
