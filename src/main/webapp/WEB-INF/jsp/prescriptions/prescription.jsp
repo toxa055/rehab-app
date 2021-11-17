@@ -25,7 +25,7 @@
             <th scope="col">Date</th>
             <th scope="col" style="display: none">Cure id</th>
             <th scope="col">Cure</th>
-            <th scope="col" style="display: none">Cure type</th>
+            <th scope="col" style="display: none">Type</th>
             <th scope="col" style="display: none">Pattern id</th>
             <th scope="col">Pattern</th>
             <th scope="col" style="display: none">Period id</th>

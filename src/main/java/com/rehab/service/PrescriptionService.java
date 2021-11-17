@@ -2,12 +2,14 @@ package com.rehab.service;
 
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.exception.ApplicationException;
+import com.rehab.model.Event;
 import com.rehab.model.Pattern;
 import com.rehab.model.Prescription;
 import com.rehab.repository.*;
 import com.rehab.util.EventUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -30,16 +33,19 @@ public class PrescriptionService {
     private final ModelMapper modelMapper;
     private final TypeMap<PrescriptionDto, Prescription> typeMapToEntity;
     private final TypeMap<Prescription, PrescriptionDto> typeMapToDto;
+    private final RabbitTemplate template;
 
     @Autowired
     public PrescriptionService(PrescriptionCrudRepository prescriptionCrudRepository,
                                PatternCrudRepository patternCrudRepository, PeriodCrudRepository periodCrudRepository,
-                               EventCrudRepository eventCrudRepository, ModelMapper modelMapper) {
+                               EventCrudRepository eventCrudRepository, ModelMapper modelMapper,
+                               RabbitTemplate template) {
         this.prescriptionCrudRepository = prescriptionCrudRepository;
         this.patternCrudRepository = patternCrudRepository;
         this.periodCrudRepository = periodCrudRepository;
         this.eventCrudRepository = eventCrudRepository;
         this.modelMapper = modelMapper;
+        this.template = template;
         typeMapToEntity = modelMapper.createTypeMap(PrescriptionDto.class, Prescription.class);
         typeMapToDto = modelMapper.createTypeMap(Prescription.class, PrescriptionDto.class);
     }
@@ -97,6 +103,7 @@ public class PrescriptionService {
         var plannedEvents = EventUtil.createEvents(savedPrescription);
         plannedEvents.forEach(e -> e.setPrescription(savedPrescription));
         eventCrudRepository.saveAll(plannedEvents);
+        sendMessage(plannedEvents);
         return savedPrescription;
     }
 
@@ -113,7 +120,19 @@ public class PrescriptionService {
         var eventsForCancelling = EventUtil.getEventsForCancelling(eventsByPrescriptionId, authDoctor.getName());
         eventCrudRepository.saveAll(eventsForCancelling);
         cancellingPrescription.setActive(false);
-        return prescriptionCrudRepository.save(cancellingPrescription);
+        var savedPrescription = prescriptionCrudRepository.save(cancellingPrescription);
+        sendMessage(eventsForCancelling);
+        return savedPrescription;
+    }
+
+    private void sendMessage(List<Event> changedEvents) {
+        var today = LocalDate.now();
+        var hasTodayEvents = changedEvents
+                .stream()
+                .anyMatch(e -> e.getPlannedDate().equals(today));
+        if (hasTodayEvents) {
+            template.convertAndSend("events_queue", "updated");
+        }
     }
 
     private PrescriptionDto toDto(Prescription prescription) {

@@ -1,6 +1,7 @@
 package com.rehab.service;
 
 import com.rehab.dto.EventDto;
+import com.rehab.dto.EventMessage;
 import com.rehab.exception.ApplicationException;
 import com.rehab.model.Employee;
 import com.rehab.model.Event;
@@ -8,27 +9,38 @@ import com.rehab.model.type.EventState;
 import com.rehab.repository.EventCrudRepository;
 import com.rehab.util.SecurityUtil;
 import org.modelmapper.ModelMapper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
 
     private final EventCrudRepository eventCrudRepository;
     private final ModelMapper modelMapper;
+    private final RabbitTemplate template;
 
     @Autowired
-    public EventService(EventCrudRepository eventCrudRepository, ModelMapper modelMapper) {
+    public EventService(EventCrudRepository eventCrudRepository, RabbitTemplate template, ModelMapper modelMapper) {
         this.eventCrudRepository = eventCrudRepository;
         this.modelMapper = modelMapper;
+        this.template = template;
+    }
+
+    @PostConstruct
+    public void init() {
+        sendMessage();
     }
 
     public EventDto getById(int eventId) {
@@ -48,7 +60,9 @@ public class EventService {
         }
         checkEventHasNotPlannedState(eventForSettingNurse.getEventState(), "choose");
         eventForSettingNurse.setNurse(authNurse);
-        return toDto(eventCrudRepository.save(eventForSettingNurse));
+        var savedEvent = eventCrudRepository.save(eventForSettingNurse);
+        sendMessage(savedEvent);
+        return toDto(savedEvent);
     }
 
     @Transactional
@@ -59,7 +73,9 @@ public class EventService {
         checkEventHasDifferentNurse(authNurse, eventForUnsettingNurse.getNurse());
         checkEventHasNotPlannedState(eventForUnsettingNurse.getEventState(), "discard");
         eventForUnsettingNurse.setNurse(null);
-        return toDto(eventCrudRepository.save(eventForUnsettingNurse));
+        var savedEvent = eventCrudRepository.save(eventForUnsettingNurse);
+        sendMessage(savedEvent);
+        return toDto(savedEvent);
     }
 
     @Transactional
@@ -77,7 +93,9 @@ public class EventService {
         eventForChangingState.setEndDate(LocalDate.now());
         eventForChangingState.setEndTime(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
         eventForChangingState.setComment(comment);
-        return toDto(eventCrudRepository.save(eventForChangingState));
+        var savedEvent = eventCrudRepository.save(eventForChangingState);
+        sendMessage(savedEvent);
+        return toDto(savedEvent);
     }
 
     public Page<EventDto> filter(LocalDate plannedDate, Integer insuranceNumber, boolean authNurse,
@@ -86,6 +104,13 @@ public class EventService {
                 authNurse ? SecurityUtil.getAuthEmployee().getId() : null,
                 onlyPlanned ? EventState.PLANNED : null,
                 pageable).map(this::toDto);
+    }
+
+    public List<EventMessage> getTodayPlannedEventsMessage() {
+        return eventCrudRepository.findAllTodayPlanned(LocalDate.now())
+                .stream()
+                .map(this::toMessage)
+                .collect(Collectors.toList());
     }
 
     private void checkEventHasNotNurse(Event event) {
@@ -111,7 +136,21 @@ public class EventService {
                 new NoSuchElementException("Event with id " + id + " not found."));
     }
 
+    private void sendMessage(Event changedEvent) {
+        if (changedEvent.getPlannedDate().equals(LocalDate.now())) {
+            sendMessage();
+        }
+    }
+
+    private void sendMessage() {
+        template.convertAndSend("events_queue", "updated");
+    }
+
     private EventDto toDto(Event event) {
         return modelMapper.map(event, EventDto.class);
+    }
+
+    private EventMessage toMessage(Event event) {
+        return modelMapper.map(event, EventMessage.class);
     }
 }
