@@ -28,5 +28,10 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
 
     List<Event> findAllByPrescriptionId(int prescriptionId);
 
-    List<Event> findAllByPlannedDateOrderByPlannedTime(LocalDate plannedDate);
+    @Query("""
+            SELECT e FROM Event e
+            WHERE (e.plannedDate=:plannedDate) AND (e.eventState='PLANNED')
+            ORDER BY plannedTime
+            """)
+    List<Event> findAllTodayPlanned(LocalDate plannedDate);
 }

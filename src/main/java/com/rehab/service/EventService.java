@@ -20,7 +20,9 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -102,6 +104,13 @@ public class EventService {
                 authNurse ? SecurityUtil.getAuthEmployee().getId() : null,
                 onlyPlanned ? EventState.PLANNED : null,
                 pageable).map(this::toDto);
+    }
+
+    public List<EventMessage> getTodayPlannedEventsMessage() {
+        return eventCrudRepository.findAllTodayPlanned(LocalDate.now())
+                .stream()
+                .map(this::toMessage)
+                .collect(Collectors.toList());
     }
 
     private void checkEventHasNotNurse(Event event) {

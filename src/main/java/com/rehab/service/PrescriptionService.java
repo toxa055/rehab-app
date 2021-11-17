@@ -1,6 +1,5 @@
 package com.rehab.service;
 
-import com.rehab.dto.EventMessage;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.exception.ApplicationException;
 import com.rehab.model.Event;
@@ -148,9 +147,5 @@ public class PrescriptionService {
         mappedPrescription.setPattern(new Pattern(dto.getPatternId(), dto.getPatternCount(), dto.getPatternUnit(),
                 dto.getPatternUnits().stream().map(Enum::name).collect(Collectors.joining(", "))));
         return mappedPrescription;
-    }
-
-    private EventMessage eventToMessage(Event event) {
-        return modelMapper.map(event, EventMessage.class);
     }
 }

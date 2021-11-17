@@ -1,9 +1,5 @@
 package com.rehab.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -11,15 +7,12 @@ public class EventMessage {
     private Integer patientInsuranceNumber;
     private String patientName;
     private String nurseName;
-    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime plannedTime;
     private String eventState;
     private String cureName;
     private String cureType;
     private String dose;
-    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate endDate;
-    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime endTime;
     private String comment;
 
