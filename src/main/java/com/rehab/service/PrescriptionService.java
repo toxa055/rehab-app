@@ -1,6 +1,7 @@
 package com.rehab.service;
 
 import com.rehab.dto.PrescriptionDto;
+import com.rehab.dto.PrescriptionDtoOut;
 import com.rehab.exception.ApplicationException;
 import com.rehab.model.Event;
 import com.rehab.model.Pattern;
@@ -54,35 +55,39 @@ public class PrescriptionService {
         return toDto(getPrescriptionById(id));
     }
 
-    public Page<PrescriptionDto> getByTreatmentId(int treatmentId, Pageable pageable) {
-        return prescriptionCrudRepository.findAllByTreatmentId(treatmentId, pageable).map(this::toDto);
+    public PrescriptionDtoOut getPrescriptionDtoOutById(int id) {
+        return toDtoOut(getPrescriptionById(id));
+    }
+
+    public Page<PrescriptionDtoOut> getByTreatmentId(int treatmentId, Pageable pageable) {
+        return prescriptionCrudRepository.findAllByTreatmentId(treatmentId, pageable).map(this::toDtoOut);
     }
 
     @Transactional
-    public PrescriptionDto save(PrescriptionDto prescriptionDto) {
-        return toDto(savePrescription(prescriptionDto));
+    public PrescriptionDtoOut save(PrescriptionDto prescriptionDto) {
+        return toDtoOut(savePrescription(prescriptionDto));
     }
 
     @Transactional
-    public PrescriptionDto update(PrescriptionDto prescriptionDto) {
+    public PrescriptionDtoOut update(PrescriptionDto prescriptionDto) {
         var cancellingPrescriptionId = prescriptionDto.getId();
         prescriptionDto.setId(null);
         var newPrescription = savePrescription(prescriptionDto);
         cancelPrescription(cancellingPrescriptionId);
-        return toDto(newPrescription);
+        return toDtoOut(newPrescription);
     }
 
     @Transactional
-    public PrescriptionDto cancel(int id) {
-        return toDto(cancelPrescription(id));
+    public PrescriptionDtoOut cancel(int id) {
+        return toDtoOut(cancelPrescription(id));
     }
 
-    public Page<PrescriptionDto> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
+    public Page<PrescriptionDtoOut> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
                                         boolean onlyActive, Pageable pageable) {
         return prescriptionCrudRepository.filter(pDate, insuranceNumber,
                 authDoctor ? getAuthEmployee().getId() : null,
                 onlyActive ? true : null,
-                pageable).map(this::toDto);
+                pageable).map(this::toDtoOut);
     }
 
     private Prescription getPrescriptionById(int id) {
@@ -139,6 +144,10 @@ public class PrescriptionService {
         var units = EventUtil.patternUnitsAsList(prescription.getPattern());
         typeMapToDto.addMappings(m -> m.map(src -> units, PrescriptionDto::setPatternUnits));
         return modelMapper.map(prescription, PrescriptionDto.class);
+    }
+
+    private PrescriptionDtoOut toDtoOut(Prescription prescription) {
+        return modelMapper.map(prescription, PrescriptionDtoOut.class);
     }
 
     private Prescription toEntity(PrescriptionDto dto) {

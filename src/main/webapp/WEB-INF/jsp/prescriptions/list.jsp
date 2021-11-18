@@ -100,9 +100,7 @@
                 <td>${p.cureName}</td>
                 <td style="display: none">${p.cureType}</td>
                 <td style="display: none">${p.patternId}</td>
-                <td class="items">${p.patternCount} times a ${p.patternUnit}
-                    (<c:forEach items="${p.patternUnits}" var="unit">${unit}, </c:forEach>)
-                </td>
+                <td>${p.patternCount} times a ${p.patternUnit} (${p.patternUnits})</td>
                 <td>${p.periodCount} ${p.periodUnit}</td>
                 <td>${p.dose}</td>
                 <td>${p.active}</td>
@@ -127,10 +125,6 @@
     </div>
 </div>
 <script>
-    $('.items').each(function () {
-        let pattern = $(this).text();
-        $(this).text(pattern.replace(', )', ')'));
-    });
     if (window.location.href.toString().includes('treatment')) {
         $('#filterDiv').hide();
     }
