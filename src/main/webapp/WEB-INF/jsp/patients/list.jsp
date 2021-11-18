@@ -28,8 +28,8 @@
                     <div class="row mb-3">
                         <label for="nameLike" class="col-sm-3 col-form-label">Name</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control " name="nameLike" id="nameLike"
-                                   placeholder="Name like..." value="${param.get("nameLike")}">
+                            <input type="text" class="form-control " name="nameLike" id="nameLike" minlength="3"
+                                   maxlength="18" placeholder="Name like..." value="${param.get("nameLike")}">
                         </div>
                     </div>
                 </div>

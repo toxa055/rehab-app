@@ -5,7 +5,6 @@ import com.rehab.model.Pattern;
 import com.rehab.model.Prescription;
 import com.rehab.model.type.EventState;
 import com.rehab.model.type.PatternUnit;
-import com.rehab.model.type.TimeUnit;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -18,8 +17,7 @@ import java.util.stream.Collectors;
 
 public class EventUtil {
 
-    private static final long DAYS_IN_WEEK = 7L;
-    private static final long DAYS_IN_MONTH = 30L;
+    private static final String ILLEGAL_PATTERN_UNIT_VALUE = "Illegal PatternUnit value.";
     private static final LocalTime morning = LocalTime.of(9, 0);
     private static final LocalTime afternoon = LocalTime.of(13, 0);
     private static final LocalTime evening = LocalTime.of(17, 0);
@@ -29,55 +27,36 @@ public class EventUtil {
     }
 
     public static List<Event> createEvents(Prescription prescription) {
-        var events = new ArrayList<Event>();
-        var patternUnit = prescription.getPattern().getUnit();
         var period = prescription.getPeriod();
+        var periodCount = period.getCount();
+        var daysCount = switch (period.getUnit()) {
+            case DAY -> periodCount;
+            case WEEK -> periodCount * 7L;
+            case MONTH -> periodCount * 30L;
+        };
+
+        var events = new ArrayList<Event>();
         var date = prescription.getDate();
-
-        if (patternUnit == TimeUnit.DAY) {
-            var todayEvents = todayEvents(prescription);
-            int count = period.getCount();
-            if (!todayEvents.isEmpty()) {
-                events.addAll(todayEvents);
-                if ((period.getUnit() == TimeUnit.DAY)
-                        && (todayEvents.size() > (prescription.getPattern().getCount() / 2))) {
-                    count--;
-                }
-            }
-
-            for (int i = 0; i < count; i++) {
-                switch (period.getUnit()) {
-                    case DAY -> addEventsForPartsOfDay(prescription, date.plusDays(i + 1), events);
-                    case WEEK -> {
-                        for (int j = 1; j <= DAYS_IN_WEEK; j++) {
-                            addEventsForPartsOfDay(prescription, date.plusDays(i * DAYS_IN_WEEK + j), events);
-                        }
-                    }
-                    case MONTH -> {
-                        for (int j = 1; j <= DAYS_IN_MONTH; j++) {
-                            addEventsForPartsOfDay(prescription, date.plusDays(i * DAYS_IN_MONTH + j), events);
-                        }
+        var pattern = prescription.getPattern();
+        switch (pattern.getUnit()) {
+            case DAY -> {
+                var todayEvents = todayEvents(prescription);
+                if (!todayEvents.isEmpty()) {
+                    events.addAll(todayEvents);
+                    if (todayEvents.size() > (pattern.getCount() / 2)) {
+                        daysCount--;
                     }
                 }
-            }
-        }
-
-        if (patternUnit == TimeUnit.WEEK) {
-            for (int i = 0; i < period.getCount(); i++) {
-                switch (period.getUnit()) {
-                    case DAY -> addEventsForDaysOfWeek(prescription, date.plusDays(i + 1), events);
-                    case WEEK -> {
-                        for (int j = 1; j <= DAYS_IN_WEEK; j++) {
-                            addEventsForDaysOfWeek(prescription, date.plusDays(i * DAYS_IN_WEEK + j), events);
-                        }
-                    }
-                    case MONTH -> {
-                        for (int j = 1; j <= DAYS_IN_MONTH; j++) {
-                            addEventsForDaysOfWeek(prescription, date.plusDays(i * DAYS_IN_MONTH + j), events);
-                        }
-                    }
+                for (int i = 0; i < daysCount; i++) {
+                    addEventsForPartsOfDay(prescription, date.plusDays(i + 1), events);
                 }
             }
+            case WEEK -> {
+                for (int i = 0; i < daysCount; i++) {
+                    addEventsForDaysOfWeek(prescription, date.plusDays(i + 1), events);
+                }
+            }
+            default -> throw new IllegalArgumentException("Illegal TimeUnit value.");
         }
 
         return events;
@@ -111,7 +90,7 @@ public class EventUtil {
                 case AFTERNOON -> addEventIfUnitIsBeforeCurrentTime(afternoon, event, events);
                 case EVENING -> addEventIfUnitIsBeforeCurrentTime(evening, event, events);
                 case NIGHT -> addEventIfUnitIsBeforeCurrentTime(night, event, events);
-                default -> throw new IllegalArgumentException();
+                default -> throw new IllegalArgumentException(ILLEGAL_PATTERN_UNIT_VALUE);
             }
         });
         return events;
@@ -134,7 +113,7 @@ public class EventUtil {
                                 case AFTERNOON -> afternoon;
                                 case EVENING -> evening;
                                 case NIGHT -> night;
-                                default -> throw new IllegalArgumentException();
+                                default -> throw new IllegalArgumentException(ILLEGAL_PATTERN_UNIT_VALUE);
                             }
                     );
                     events.add(event);
