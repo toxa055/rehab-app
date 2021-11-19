@@ -1,6 +1,5 @@
 package com.rehab.dto;
 
-import com.rehab.model.type.PatternUnit;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
@@ -11,14 +10,14 @@ public class PrescriptionDto extends AbstractPrescriptionDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date = LocalDate.now();
     @NotEmpty(message = "Times of day must be chosen")
-    private List<PatternUnit> patternUnits;
+    private List<String> patternUnits;
     private boolean active = true;
 
     public LocalDate getDate() {
         return date;
     }
 
-    public List<PatternUnit> getPatternUnits() {
+    public List<String> getPatternUnits() {
         return patternUnits;
     }
 
@@ -30,7 +29,7 @@ public class PrescriptionDto extends AbstractPrescriptionDto {
         this.date = date;
     }
 
-    public void setPatternUnits(List<PatternUnit> patternUnits) {
+    public void setPatternUnits(List<String> patternUnits) {
         this.patternUnits = patternUnits;
     }
 

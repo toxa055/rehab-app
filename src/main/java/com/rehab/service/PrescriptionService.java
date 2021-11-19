@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -83,7 +84,7 @@ public class PrescriptionService {
     }
 
     public Page<PrescriptionDtoOut> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
-                                        boolean onlyActive, Pageable pageable) {
+                                           boolean onlyActive, Pageable pageable) {
         return prescriptionCrudRepository.filter(pDate, insuranceNumber,
                 authDoctor ? getAuthEmployee().getId() : null,
                 onlyActive ? true : null,
@@ -141,7 +142,8 @@ public class PrescriptionService {
     }
 
     private PrescriptionDto toDto(Prescription prescription) {
-        var units = EventUtil.patternUnitsAsList(prescription.getPattern());
+        var units = Arrays.stream(prescription.getPattern().getPatternUnits().split(", "))
+                .collect(Collectors.toList());
         typeMapToDto.addMappings(m -> m.map(src -> units, PrescriptionDto::setPatternUnits));
         return modelMapper.map(prescription, PrescriptionDto.class);
     }
@@ -154,7 +156,7 @@ public class PrescriptionService {
         typeMapToEntity.addMappings(m -> m.map(src -> getAuthEmployee(), Prescription::setDoctor));
         var mappedPrescription = modelMapper.map(dto, Prescription.class);
         mappedPrescription.setPattern(new Pattern(dto.getPatternId(), dto.getPatternCount(), dto.getPatternUnit(),
-                dto.getPatternUnits().stream().map(Enum::name).collect(Collectors.joining(", "))));
+                String.join(", ", dto.getPatternUnits())));
         return mappedPrescription;
     }
 }

@@ -33,5 +33,5 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
             WHERE (e.plannedDate=:plannedDate) AND (e.eventState='PLANNED')
             ORDER BY plannedTime
             """)
-    List<Event> findAllTodayPlanned(LocalDate plannedDate);
+    List<Event> findPlannedByPlannedDate(LocalDate plannedDate);
 }
