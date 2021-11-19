@@ -49,9 +49,7 @@
             <td>${p.cureName}</td>
             <td style="display: none">${p.cureType}</td>
             <td style="display: none">${p.patternId}</td>
-            <td id="pattern">${p.patternCount} times a ${p.patternUnit}
-                (<c:forEach items="${p.patternUnits}" var="unit">${unit}, </c:forEach>)
-            </td>
+            <td>${p.patternCount} times a ${p.patternUnit} (${p.patternUnits})</td>
             <td>${p.periodCount} ${p.periodUnit}</td>
             <td>${p.dose}</td>
             <td id="isActive">${p.active}</td>
@@ -132,8 +130,6 @@
         $('#prescriptionCancelButton').attr('disabled', 'true');
         $('#prescriptionUpdateButton').attr('disabled', 'true');
     }
-    let pattern = $('#pattern').text();
-    $('#pattern').text(pattern.replace(', )', ')'));
 </script>
 </body>
 </html>

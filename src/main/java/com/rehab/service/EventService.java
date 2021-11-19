@@ -40,6 +40,10 @@ public class EventService {
 
     @PostConstruct
     public void init() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+        }
         sendMessage();
     }
 
@@ -107,7 +111,7 @@ public class EventService {
     }
 
     public List<EventMessage> getTodayPlannedEventsMessage() {
-        return eventCrudRepository.findAllTodayPlanned(LocalDate.now())
+        return eventCrudRepository.findPlannedByPlannedDate(LocalDate.now())
                 .stream()
                 .map(this::toMessage)
                 .collect(Collectors.toList());

@@ -27,7 +27,7 @@
                         <label for="insuranceNumber" class="col-sm-5 col-form-label">Insurance number</label>
                         <div class="col-lg-6">
                             <input type="number" class="form-control " name="insuranceNumber" id="insuranceNumber"
-                                   min="1" value="${param.get("insuranceNumber")}">
+                                   min="1000" max="99999999" value="${param.get("insuranceNumber")}">
                         </div>
                     </div>
                 </div>

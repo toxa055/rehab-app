@@ -41,7 +41,7 @@ public class PrescriptionController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
-        model.addAttribute(PRESCRIPTION, prescriptionService.getById(id));
+        model.addAttribute(PRESCRIPTION, prescriptionService.getPrescriptionDtoOutById(id));
         model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
         return "prescriptions/prescription";
     }

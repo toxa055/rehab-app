@@ -1,6 +1,7 @@
 package com.rehab.service;
 
 import com.rehab.dto.PrescriptionDto;
+import com.rehab.dto.PrescriptionDtoOut;
 import com.rehab.exception.ApplicationException;
 import com.rehab.model.Event;
 import com.rehab.model.Pattern;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -54,35 +56,39 @@ public class PrescriptionService {
         return toDto(getPrescriptionById(id));
     }
 
-    public Page<PrescriptionDto> getByTreatmentId(int treatmentId, Pageable pageable) {
-        return prescriptionCrudRepository.findAllByTreatmentId(treatmentId, pageable).map(this::toDto);
+    public PrescriptionDtoOut getPrescriptionDtoOutById(int id) {
+        return toDtoOut(getPrescriptionById(id));
+    }
+
+    public Page<PrescriptionDtoOut> getByTreatmentId(int treatmentId, Pageable pageable) {
+        return prescriptionCrudRepository.findAllByTreatmentId(treatmentId, pageable).map(this::toDtoOut);
     }
 
     @Transactional
-    public PrescriptionDto save(PrescriptionDto prescriptionDto) {
-        return toDto(savePrescription(prescriptionDto));
+    public PrescriptionDtoOut save(PrescriptionDto prescriptionDto) {
+        return toDtoOut(savePrescription(prescriptionDto));
     }
 
     @Transactional
-    public PrescriptionDto update(PrescriptionDto prescriptionDto) {
+    public PrescriptionDtoOut update(PrescriptionDto prescriptionDto) {
         var cancellingPrescriptionId = prescriptionDto.getId();
         prescriptionDto.setId(null);
         var newPrescription = savePrescription(prescriptionDto);
         cancelPrescription(cancellingPrescriptionId);
-        return toDto(newPrescription);
+        return toDtoOut(newPrescription);
     }
 
     @Transactional
-    public PrescriptionDto cancel(int id) {
-        return toDto(cancelPrescription(id));
+    public PrescriptionDtoOut cancel(int id) {
+        return toDtoOut(cancelPrescription(id));
     }
 
-    public Page<PrescriptionDto> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
-                                        boolean onlyActive, Pageable pageable) {
+    public Page<PrescriptionDtoOut> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
+                                           boolean onlyActive, Pageable pageable) {
         return prescriptionCrudRepository.filter(pDate, insuranceNumber,
                 authDoctor ? getAuthEmployee().getId() : null,
                 onlyActive ? true : null,
-                pageable).map(this::toDto);
+                pageable).map(this::toDtoOut);
     }
 
     private Prescription getPrescriptionById(int id) {
@@ -136,16 +142,21 @@ public class PrescriptionService {
     }
 
     private PrescriptionDto toDto(Prescription prescription) {
-        var units = EventUtil.patternUnitsAsList(prescription.getPattern());
+        var units = Arrays.stream(prescription.getPattern().getPatternUnits().split(", "))
+                .collect(Collectors.toList());
         typeMapToDto.addMappings(m -> m.map(src -> units, PrescriptionDto::setPatternUnits));
         return modelMapper.map(prescription, PrescriptionDto.class);
+    }
+
+    private PrescriptionDtoOut toDtoOut(Prescription prescription) {
+        return modelMapper.map(prescription, PrescriptionDtoOut.class);
     }
 
     private Prescription toEntity(PrescriptionDto dto) {
         typeMapToEntity.addMappings(m -> m.map(src -> getAuthEmployee(), Prescription::setDoctor));
         var mappedPrescription = modelMapper.map(dto, Prescription.class);
         mappedPrescription.setPattern(new Pattern(dto.getPatternId(), dto.getPatternCount(), dto.getPatternUnit(),
-                dto.getPatternUnits().stream().map(Enum::name).collect(Collectors.joining(", "))));
+                String.join(", ", dto.getPatternUnits())));
         return mappedPrescription;
     }
 }

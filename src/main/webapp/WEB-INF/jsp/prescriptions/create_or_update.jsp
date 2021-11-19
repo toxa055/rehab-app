@@ -118,10 +118,13 @@
                         <label for="patternCount" class="col-sm-4 col-form-label">Count</label>
                         <div class="form-group col-lg-7 col-form-label">
                             <select class="form-select" aria-label="Count" name="patternCount" id="patternCount">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
+                                <option value="1" ${p.patternCount == 1 ? 'selected' : ''}>1</option>
+                                <option value="2" ${p.patternCount == 2 ? 'selected' : ''}>2</option>
+                                <option value="3" ${p.patternCount == 3 ? 'selected' : ''}>3</option>
+                                <option value="4" ${p.patternCount == 4 ? 'selected' : ''}>4</option>
+                                <option value="5" ${p.patternCount == 5 ? 'selected' : ''}>5</option>
+                                <option value="6" ${p.patternCount == 6 ? 'selected' : ''}>6</option>
+                                <option value="7" ${p.patternCount == 7 ? 'selected' : ''}>7</option>
                             </select>
                         </div>
                     </div>
@@ -129,8 +132,8 @@
                         <label for="patternUnit" class="col-sm-4 col-form-label"></label>
                         <div class="form-group col-lg-7 col-form-label">
                             <select class="form-select" aria-label="Unit" name="patternUnit" id="patternUnit">
-                                <option>DAY</option>
-                                <option>WEEK</option>
+                                <option ${p.patternUnit == 'DAY' ? 'selected' : ''}>DAY</option>
+                                <option ${p.patternUnit == 'WEEK' ? 'selected' : ''}>WEEK</option>
                             </select>
                         </div>
                     </div>
@@ -139,22 +142,22 @@
                         <div class="form-group col-lg-4 col-form-label">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="MORNING"
-                                       id="MORNING">
+                                       id="MORNING" ${p.patternUnits.contains("MORNING") ? 'checked' : ''}>
                                 <label class="form-check-label" for="MORNING">MORNING</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="AFTERNOON"
-                                       id="AFTERNOON">
+                                       id="AFTERNOON" ${p.patternUnits.contains("AFTERNOON") ? 'checked' : ''}>
                                 <label class="form-check-label" for="AFTERNOON">AFTERNOON</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="EVENING"
-                                       id="EVENING">
+                                       id="EVENING" ${p.patternUnits.contains("EVENING") ? 'checked' : ''}>
                                 <label class="form-check-label" for="EVENING">EVENING</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="NIGHT"
-                                       id="NIGHT">
+                                       id="NIGHT" ${p.patternUnits.contains("NIGHT") ? 'checked' : ''}>
                                 <label class="form-check-label" for="NIGHT">NIGHT</label>
                             </div>
                             <input class="form-control is-invalid" hidden>
@@ -168,37 +171,37 @@
                         <div class="form-group col-lg-4 col-form-label">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="MONDAY"
-                                       id="MONDAY">
+                                       id="MONDAY" ${p.patternUnits.contains("MONDAY") ? 'checked' : ''}>
                                 <label class="form-check-label" for="MONDAY">MONDAY</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="TUESDAY"
-                                       id="TUESDAY">
+                                       id="TUESDAY" ${p.patternUnits.contains("TUESDAY") ? 'checked' : ''}>
                                 <label class="form-check-label" for="TUESDAY">TUESDAY</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="WEDNESDAY"
-                                       id="WEDNESDAY">
+                                       id="WEDNESDAY" ${p.patternUnits.contains("WEDNESDAY") ? 'checked' : ''}>
                                 <label class="form-check-label" for="WEDNESDAY">WEDNESDAY</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="THURSDAY"
-                                       id="THURSDAY">
+                                       id="THURSDAY" ${p.patternUnits.contains("THURSDAY") ? 'checked' : ''}>
                                 <label class="form-check-label" for="THURSDAY">THURSDAY</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="FRIDAY"
-                                       id="FRIDAY">
+                                       id="FRIDAY" ${p.patternUnits.contains("FRIDAY") ? 'checked' : ''}>
                                 <label class="form-check-label" for="FRIDAY">FRIDAY</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="SATURDAY"
-                                       id="SATURDAY">
+                                       id="SATURDAY" ${p.patternUnits.contains("SATURDAY") ? 'checked' : ''}>
                                 <label class="form-check-label" for="SATURDAY">SATURDAY</label>
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="checkbox" name="patternUnits" value="SUNDAY"
-                                       id="SUNDAY">
+                                       id="SUNDAY" ${p.patternUnits.contains("SUNDAY") ? 'checked' : ''}>
                                 <label class="form-check-label" for="SUNDAY">SUNDAY</label>
                             </div>
                         </div>
@@ -217,7 +220,7 @@
                         <label for="periodUnit" class="col-sm-4 col-form-label"></label>
                         <div class="form-group col-lg-7 col-form-label">
                             <select class="form-select" aria-label="Unit" name="periodUnit" id="periodUnit">
-                                <option value="DAY">DAY</option>
+                                <option value="DAY" ${p.periodUnit == 'DAY' ? 'selected' : ''}>DAY</option>
                                 <option value="WEEK" ${p.periodUnit == 'WEEK' ? 'selected' : ''}>WEEK</option>
                                 <option value="MONTH" ${p.periodUnit == 'MONTH' ? 'selected' : ''}>MONTH</option>
                             </select>
@@ -228,7 +231,8 @@
             <br>
             <div class="row">
                 <div class="form-group col-lg-4">
-                    <a class="btn btn-outline-secondary" href="/treatments/${treatment.id}" role="button">Cancel</a>
+                    <a class="btn btn-outline-secondary" href="/treatments/${treatment.id}" role="button"
+                       id="cancelButton">Cancel</a>
                     <button type="submit" name="submit" id="sendFormButton" class="btn btn-outline-primary" disabled>
                         ${p.id == null ? 'Create' : 'Update'}
                     </button>
@@ -237,6 +241,7 @@
         </form>
     </div>
 </div>
+
 <div class="modal fade" id="newCureModal" tabindex="-1" aria-labelledby="newCureModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -270,9 +275,11 @@
         </div>
     </div>
 </div>
+
 <script>
     if (${p.id != null}) {
         $('#f').attr('action', '/prescriptions/edit');
+        $('#cancelButton').attr('href', '/prescriptions/' + ${p.id});
     }
 </script>
 <script src="${pageContext.request.contextPath}/js/new_cure.js"></script>

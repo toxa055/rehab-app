@@ -20,7 +20,7 @@
                         <label for="insuranceNumber" class="col-sm-5 col-form-label">Insurance number</label>
                         <div class="col-lg-6">
                             <input type="number" class="form-control " name="insuranceNumber" id="insuranceNumber"
-                                   min="1000" value="${param.get("insuranceNumber")}">
+                                   min="1000" max="99999999" value="${param.get("insuranceNumber")}">
                         </div>
                     </div>
                 </div>
@@ -28,8 +28,8 @@
                     <div class="row mb-3">
                         <label for="nameLike" class="col-sm-3 col-form-label">Name</label>
                         <div class="col-lg-9">
-                            <input type="text" class="form-control " name="nameLike" id="nameLike"
-                                   placeholder="Name like..." value="${param.get("nameLike")}">
+                            <input type="text" class="form-control " name="nameLike" id="nameLike" minlength="3"
+                                   maxlength="18" placeholder="Name like..." value="${param.get("nameLike")}">
                         </div>
                     </div>
                 </div>
@@ -60,6 +60,7 @@
             <th scope="col" style="display: none">id</th>
             <th scope="col">Insurance №</th>
             <th scope="col">Name</th>
+            <th scope="col">Birth Date</th>
             <th scope="col">Address</th>
             <th scope="col">State</th>
             <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">
@@ -72,6 +73,7 @@
                 <td style="display: none">${p.id}</td>
                 <td>${p.insuranceNumber}</td>
                 <td>${p.name}</td>
+                <td>${p.birthDate}</td>
                 <td>${p.address}</td>
                 <td>${p.patientState}</td>
                 <sec:authorize access="hasAnyRole('ADMIN', 'DOCTOR')">

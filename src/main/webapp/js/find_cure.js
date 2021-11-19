@@ -4,8 +4,11 @@ let sendFormButton = $('#sendFormButton');
 
 let patternUnit = $('#patternUnit');
 let patternCount = $('#patternCount');
-let limit = 1;
+let limit = patternCount.val();
+
 chooseCheckbox();
+checkCheckboxes();
+checkPatternUnit()
 
 if ($('#cureType').val() !== '') {
     $('#cureName').attr('readonly', true);
@@ -71,9 +74,7 @@ patternUnit.change(function () {
     limit = patternCount.val();
     let selectedValue = $('#patternUnit option:selected').text();
     if (selectedValue === "DAY") {
-        $('#patternCount option[value="5"]').remove();
-        $('#patternCount option[value="6"]').remove();
-        $('#patternCount option[value="7"]').remove();
+        removeOptions();
         if (limit > 4) {
             limit = 1;
         }
@@ -107,8 +108,7 @@ function uncheckAndEnableAllCheckbox() {
 
 function chooseCheckbox() {
     $("input:checkbox").click(function () {
-        let bol = $("input:checkbox:checked").length >= limit;
-        $("input:checkbox").not(":checked").attr("disabled", bol);
+        checkCheckboxes();
         if (patternCount.val() == $("input:checkbox:checked").length) {
             if ($('#cureType').val() !== '') {
                 sendFormButton.attr('disabled', false);
@@ -117,6 +117,28 @@ function chooseCheckbox() {
             sendFormButton.attr('disabled', true);
         }
     });
+}
+
+function checkCheckboxes() {
+    let bol = $("input:checkbox:checked").length >= limit;
+    $("input:checkbox").not(":checked").attr("disabled", bol);
+}
+
+function checkPatternUnit() {
+    if (patternUnit.val() === 'DAY') {
+        $('#parts-of-day').show();
+        $('#days-of-week').attr('hidden', true);
+        removeOptions();
+    } else {
+        $('#parts-of-day').hide();
+        $('#days-of-week').attr('hidden', false);
+    }
+}
+
+function removeOptions() {
+    $('#patternCount option[value="5"]').remove();
+    $('#patternCount option[value="6"]').remove();
+    $('#patternCount option[value="7"]').remove();
 }
 
 function cureNotFound(cureName) {
