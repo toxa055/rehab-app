@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS employee_roles;
 DROP TABLE IF EXISTS employees CASCADE;
+DROP TABLE IF EXISTS patients CASCADE;
 DROP TABLE IF EXISTS cures CASCADE;
 
 DROP SEQUENCE IF EXISTS general_seq;
@@ -33,3 +34,15 @@ CREATE TABLE cures
 );
 
 CREATE UNIQUE INDEX cures_unique_name_idx ON cures (name);
+
+CREATE TABLE patients
+(
+    id               INTEGER DEFAULT general_seq.nextval PRIMARY KEY,
+    insurance_number INTEGER NOT NULL,
+    name             VARCHAR NOT NULL,
+    birth_date       DATE    NOT NULL,
+    address          VARCHAR NOT NULL,
+    patient_state    VARCHAR NOT NULL DEFAULT 'TREATING'
+);
+
+CREATE UNIQUE INDEX patients_unique_insurance_number_idx ON patients (insurance_number);

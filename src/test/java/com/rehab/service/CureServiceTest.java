@@ -25,7 +25,7 @@ class CureServiceTest {
 
     private static final CureDto expected1 = new CureDto();
     private static final CureDto expected2 = new CureDto();
-    private static final CureDto newCure = new CureDto();
+    private static CureDto newCure;
 
     @BeforeEach
     public void before() {
@@ -37,6 +37,7 @@ class CureServiceTest {
         expected2.setName("test-cure2");
         expected2.setCureType(CureType.PROCEDURE);
 
+        newCure = new CureDto();
         newCure.setName("test-cure3");
         newCure.setCureType(CureType.MEDICINE);
     }

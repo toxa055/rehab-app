@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class PatientDto {
     private Integer id;
@@ -70,5 +71,23 @@ public class PatientDto {
 
     public void setPatientState(PatientState patientState) {
         this.patientState = patientState;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PatientDto that = (PatientDto) o;
+        return id.equals(that.id)
+                && insuranceNumber.equals(that.insuranceNumber)
+                && name.equals(that.name)
+                && birthDate.equals(that.birthDate)
+                && address.equals(that.address)
+                && patientState == that.patientState;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, insuranceNumber, name, birthDate, address, patientState);
     }
 }

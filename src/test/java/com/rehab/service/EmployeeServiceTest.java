@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -23,8 +24,8 @@ class EmployeeServiceTest {
 
     private static final EmployeeDto expected1 = new EmployeeDto();
     private static final EmployeeDto expected2 = new EmployeeDto();
-    private static final UserDto newUser = new UserDto();
-    private static final EmployeeDto newEmployee = new EmployeeDto();
+    private static EmployeeDto newEmployee;
+    private static UserDto newUser;
 
     @Autowired
     private EmployeeService employeeService;
@@ -41,6 +42,7 @@ class EmployeeServiceTest {
         expected2.setPosition("nurse position");
         expected2.setEmail("nurse1@nurse.ru");
 
+        newUser = new UserDto();
         newUser.setName("new name");
         newUser.setPosition("new position");
         newUser.setEmail("new@user.ru");
@@ -48,6 +50,7 @@ class EmployeeServiceTest {
         newUser.setConfirmPassword("new password");
         newUser.setRoles(Set.of(Role.DOCTOR));
 
+        newEmployee = new EmployeeDto();
         newEmployee.setName(newUser.getName());
         newEmployee.setPosition(newUser.getPosition());
         newEmployee.setEmail(newUser.getEmail());
@@ -90,5 +93,12 @@ class EmployeeServiceTest {
         var updated = employeeService.changePassword(forUpdate);
         var afterUpdate = employeeService.getById(updated.getId());
         assertEquals(afterUpdate, updated);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void getAuth() {
+        var auth = employeeService.getAuth();
+        assertEquals(expected1, auth);
     }
 }

@@ -50,19 +50,15 @@ public class PatientService {
     @Transactional
     public PatientDto update(PatientDto patientDto) {
         var patientForUpdateById = getPatientById(patientDto.getId());
-        if (patientForUpdateById != null) {
-            var patientForUpdateByInsNumber = patientCrudRepository
-                    .findByInsuranceNumber(patientDto.getInsuranceNumber()).orElse(null);
-            if (patientForUpdateByInsNumber != null) {
-                if (!patientForUpdateById.getId().equals(patientForUpdateByInsNumber.getId())) {
-                    throw new ApplicationException("Patient with Insurance Number "
-                            + patientForUpdateByInsNumber.getInsuranceNumber() + " already exists.");
-                } else {
-                    return toDto(patientCrudRepository.save(toEntity(patientDto)));
-                }
-            } else {
-                return toDto(patientCrudRepository.save(toEntity(patientDto)));
+        var patientForUpdateByInsNumber = patientCrudRepository
+                .findByInsuranceNumber(patientDto.getInsuranceNumber())
+                .orElse(null);
+        if (patientForUpdateByInsNumber != null) {
+            if (!patientForUpdateById.getId().equals(patientForUpdateByInsNumber.getId())) {
+                throw new ApplicationException("Patient with Insurance Number "
+                        + patientForUpdateByInsNumber.getInsuranceNumber() + " already exists.");
             }
+            return toDto(patientCrudRepository.save(toEntity(patientDto)));
         }
         return toDto(patientCrudRepository.save(toEntity(patientDto)));
     }
