@@ -25,7 +25,7 @@ class CureServiceTest {
 
     private static final CureDto expected1 = new CureDto();
     private static final CureDto expected2 = new CureDto();
-    private static CureDto newCure;
+    private static final CureDto newCure = new CureDto();
 
     @BeforeEach
     public void before() {
@@ -37,7 +37,8 @@ class CureServiceTest {
         expected2.setName("test-cure2");
         expected2.setCureType(CureType.PROCEDURE);
 
-        newCure = new CureDto();
+        newCure.setName("test-cure3");
+        newCure.setCureType(CureType.MEDICINE);
     }
 
     @Test
@@ -64,8 +65,6 @@ class CureServiceTest {
 
     @Test
     public void save() {
-        newCure.setName("test-cure3");
-        newCure.setCureType(CureType.MEDICINE);
         var savedCure = cureService.save(newCure);
         newCure.setId(savedCure.getId());
         assertEquals(newCure, savedCure);
@@ -74,7 +73,6 @@ class CureServiceTest {
     @Test
     public void saveWithExistingName() {
         newCure.setName(expected2.getName());
-        newCure.setCureType(expected2.getCureType());
         assertThrows(ApplicationException.class, () -> cureService.save(newCure));
     }
 }

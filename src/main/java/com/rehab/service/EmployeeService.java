@@ -32,8 +32,7 @@ public class EmployeeService {
     }
 
     public EmployeeDto getById(int id) {
-        return toDto(employeeCrudRepository.findById(id).orElseThrow(() ->
-                new NoSuchElementException("Employee with id " + id + " not found.")));
+        return toDto(getEmployeeById(id));
     }
 
     public EmployeeDto getAuth() {
@@ -53,14 +52,18 @@ public class EmployeeService {
     @Transactional
     public EmployeeDto changePassword(UserDto userDto) {
         var userDtoId = userDto.getId();
-        var employee = employeeCrudRepository.findById(userDtoId).orElseThrow(() ->
-                new NoSuchElementException("Employee with id " + userDtoId + " not found."));
+        var employee = getEmployeeById(userDtoId);
         employee.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return toDto(employeeCrudRepository.save(employee));
     }
 
     public Page<EmployeeDto> getAll(Pageable pageable) {
         return employeeCrudRepository.findAll(pageable).map(this::toDto);
+    }
+
+    private Employee getEmployeeById(int id) {
+        return employeeCrudRepository.findById(id).orElseThrow(() ->
+                new NoSuchElementException("Employee with id " + id + " not found."));
     }
 
     private EmployeeDto toDto(Employee employee) {
