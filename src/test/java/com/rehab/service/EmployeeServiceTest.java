@@ -24,6 +24,7 @@ class EmployeeServiceTest {
 
     private static final EmployeeDto expected1 = new EmployeeDto();
     private static final EmployeeDto expected2 = new EmployeeDto();
+    private static final EmployeeDto expected3 = new EmployeeDto();
     private static EmployeeDto newEmployee;
     private static UserDto newUser;
 
@@ -33,14 +34,19 @@ class EmployeeServiceTest {
     @BeforeEach
     public void before() {
         expected1.setId(3);
-        expected1.setName("doctor name");
-        expected1.setPosition("doctor position");
+        expected1.setName("doctor1 name");
+        expected1.setPosition("doctor1 position");
         expected1.setEmail("doctor1@doc.ru");
 
         expected2.setId(4);
-        expected2.setName("nurse name");
-        expected2.setPosition("nurse position");
-        expected2.setEmail("nurse1@nurse.ru");
+        expected2.setName("doctor2 name");
+        expected2.setPosition("doctor2 position");
+        expected2.setEmail("doctor1@doc.ru");
+
+        expected3.setId(5);
+        expected3.setName("nurse name");
+        expected3.setPosition("nurse position");
+        expected3.setEmail("nurse1@nurse.ru");
 
         newUser = new UserDto();
         newUser.setName("new name");
@@ -76,7 +82,7 @@ class EmployeeServiceTest {
 
     @Test
     public void saveWithExistingEmail() {
-        newUser.setEmail(expected2.getEmail());
+        newUser.setEmail(expected3.getEmail());
         assertThrows(ApplicationException.class, () -> employeeService.save(newUser));
     }
 

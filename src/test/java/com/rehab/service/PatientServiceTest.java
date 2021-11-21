@@ -29,14 +29,14 @@ class PatientServiceTest {
 
     @BeforeEach
     public void before() {
-        expected1.setId(5);
+        expected1.setId(6);
         expected1.setInsuranceNumber(123400);
         expected1.setName("test patient1");
         expected1.setBirthDate(LocalDate.parse("1980-10-05"));
         expected1.setAddress("test patient1 address");
         expected1.setPatientState(PatientState.TREATING);
 
-        expected2.setId(6);
+        expected2.setId(7);
         expected2.setInsuranceNumber(567800);
         expected2.setName("test patient2");
         expected2.setBirthDate(LocalDate.parse("1995-02-17"));

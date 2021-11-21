@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS treatments CASCADE;
 DROP TABLE IF EXISTS employee_roles;
 DROP TABLE IF EXISTS employees CASCADE;
 DROP TABLE IF EXISTS patients CASCADE;
@@ -37,7 +38,7 @@ CREATE UNIQUE INDEX cures_unique_name_idx ON cures (name);
 
 CREATE TABLE patients
 (
-    id               INTEGER DEFAULT general_seq.nextval PRIMARY KEY,
+    id               INTEGER          DEFAULT general_seq.nextval PRIMARY KEY,
     insurance_number INTEGER NOT NULL,
     name             VARCHAR NOT NULL,
     birth_date       DATE    NOT NULL,
@@ -46,3 +47,16 @@ CREATE TABLE patients
 );
 
 CREATE UNIQUE INDEX patients_unique_insurance_number_idx ON patients (insurance_number);
+
+CREATE TABLE treatments
+(
+    id             INTEGER          DEFAULT general_seq.nextval PRIMARY KEY,
+    patient_id     INTEGER NOT NULL,
+    doctor_id      INTEGER NOT NULL,
+    treatment_date DATE    NOT NULL DEFAULT CURRENT_DATE,
+    diagnosis      VARCHAR NOT NULL,
+    close_date     DATE,
+    closed         BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE
+);
