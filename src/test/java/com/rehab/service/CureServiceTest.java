@@ -1,8 +1,8 @@
 package com.rehab.service;
 
+import com.rehab.data.CureTestData;
 import com.rehab.dto.CureDto;
 import com.rehab.exception.ApplicationException;
-import com.rehab.model.type.CureType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,26 +20,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = {"classpath:test_init_db.sql", "classpath:test_pop_db.sql"})
 class CureServiceTest {
 
+    private static CureDto expected1;
+    private static CureDto expected2;
+    private static CureDto newCure;
+
     @Autowired
     private CureService cureService;
 
-    private static final CureDto expected1 = new CureDto();
-    private static final CureDto expected2 = new CureDto();
-    private static CureDto newCure;
-
     @BeforeEach
     public void before() {
-        expected1.setId(1);
-        expected1.setName("test-cure1");
-        expected1.setCureType(CureType.MEDICINE);
-
-        expected2.setId(2);
-        expected2.setName("test-cure2");
-        expected2.setCureType(CureType.PROCEDURE);
-
-        newCure = new CureDto();
-        newCure.setName("test-cure3");
-        newCure.setCureType(CureType.MEDICINE);
+        expected1 = CureTestData.getCureDto1();
+        expected2 = CureTestData.getCureDto2();
+        newCure = CureTestData.getNewCureDto();
     }
 
     @Test

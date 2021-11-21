@@ -1,8 +1,8 @@
 package com.rehab.service;
 
+import com.rehab.data.PatientTestData;
 import com.rehab.dto.PatientDto;
 import com.rehab.exception.ApplicationException;
-import com.rehab.model.type.PatientState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,40 +20,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = {"classpath:test_init_db.sql", "classpath:test_pop_db.sql"})
 class PatientServiceTest {
 
-    private static final PatientDto expected1 = new PatientDto();
-    private static final PatientDto expected2 = new PatientDto();
-    private static PatientDto newPatient;
+    private static PatientDto expected;
 
     @Autowired
     private PatientService patientService;
 
     @BeforeEach
     public void before() {
-        expected1.setId(6);
-        expected1.setInsuranceNumber(123400);
-        expected1.setName("test patient1");
-        expected1.setBirthDate(LocalDate.parse("1980-10-05"));
-        expected1.setAddress("test patient1 address");
-        expected1.setPatientState(PatientState.TREATING);
-
-        expected2.setId(7);
-        expected2.setInsuranceNumber(567800);
-        expected2.setName("test patient2");
-        expected2.setBirthDate(LocalDate.parse("1995-02-17"));
-        expected2.setAddress("test patient2 address");
-        expected2.setPatientState(PatientState.TREATING);
-
-        newPatient = new PatientDto();
-        newPatient.setInsuranceNumber(9900);
-        newPatient.setName("new patient");
-        newPatient.setBirthDate(LocalDate.parse("1960-05-30"));
-        newPatient.setAddress("test new patient address");
+        expected = PatientTestData.getPatientDto1();
     }
 
     @Test
     public void getById() {
-        var actual = patientService.getById(expected1.getId());
-        assertEquals(expected1, actual);
+        var actual = patientService.getById(expected.getId());
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -63,8 +43,9 @@ class PatientServiceTest {
 
     @Test
     public void getByInsNum() {
-        var actual = patientService.getByInsuranceNumber(expected2.getInsuranceNumber());
-        assertEquals(expected2, actual);
+        var expected = PatientTestData.getPatientDto2();
+        var actual = patientService.getByInsuranceNumber(expected.getInsuranceNumber());
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -74,6 +55,7 @@ class PatientServiceTest {
 
     @Test
     public void save() {
+        var newPatient = PatientTestData.getNewPatientDto();
         var saved = patientService.save(newPatient);
         newPatient.setId(saved.getId());
         assertEquals(newPatient, saved);
@@ -81,25 +63,27 @@ class PatientServiceTest {
 
     @Test
     public void saveWithExistingInsNum() {
-        newPatient.setInsuranceNumber(expected1.getInsuranceNumber());
+        var newPatient = PatientTestData.getNewPatientDto();
+        newPatient.setInsuranceNumber(expected.getInsuranceNumber());
         assertThrows(ApplicationException.class, () -> patientService.save(newPatient));
     }
 
     @Test
     public void update() {
-        expected1.setInsuranceNumber(556600);
-        expected1.setName("updated patient1");
-        expected1.setAddress("updated patient1 address");
-        var updated = patientService.update(expected1);
+        expected.setInsuranceNumber(556600);
+        expected.setName("updated patient1");
+        expected.setAddress("updated patient1 address");
+        var updated = patientService.update(expected);
         var afterUpdate = patientService.getById(updated.getId());
         assertEquals(afterUpdate, updated);
     }
 
     @Test
     public void updateWithExistingInsNum() {
-        expected1.setInsuranceNumber(expected2.getInsuranceNumber());
-        expected1.setName("updated patient1");
-        expected1.setBirthDate(LocalDate.parse("1985-10-05"));
-        assertThrows(ApplicationException.class, () -> patientService.update(expected1));
+        var diff = PatientTestData.getPatientDto2();
+        expected.setInsuranceNumber(diff.getInsuranceNumber());
+        expected.setName("updated patient1");
+        expected.setBirthDate(LocalDate.parse("1985-10-05"));
+        assertThrows(ApplicationException.class, () -> patientService.update(expected));
     }
 }
