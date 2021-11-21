@@ -1,8 +1,8 @@
 package com.rehab.service;
 
+import com.rehab.data.EventTestData;
 import com.rehab.dto.EventDto;
 import com.rehab.exception.ApplicationException;
-import com.rehab.model.type.CureType;
 import com.rehab.model.type.EventState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,9 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,89 +33,19 @@ class EventServiceTest {
     public void before() {
 
 //        VALUES (6, 0, '2021-11-20', '09:00', 'PLANNED', 1, '1 pill');
-        expected1 = new EventDto();
-        expected1.setId(10);
-        expected1.setPatientId(6);
-        expected1.setPatientInsuranceNumber(123400);
-        expected1.setPatientName("test patient1");
-        expected1.setPrescriptionId(0);
-        expected1.setPlannedDate(LocalDate.parse("2021-11-20"));
-        expected1.setPlannedTime(LocalTime.parse("09:00"));
-        expected1.setEventState(EventState.PLANNED);
-        expected1.setCureId(1);
-        expected1.setCureName("test-cure1");
-        expected1.setCureType(CureType.MEDICINE);
-        expected1.setDose("1 pill");
+        expected1 = EventTestData.getEventDto1();
 
 //        VALUES (6, 5, 0, '2021-11-20', '17:00', 'PLANNED', 1, '1 pill');
-        expected2 = new EventDto();
-        expected2.setId(11);
-        expected2.setPatientId(6);
-        expected2.setPatientInsuranceNumber(123400);
-        expected2.setPatientName("test patient1");
-        expected2.setNurseId(5);
-        expected2.setNurseName("nurse1 name");
-        expected2.setPrescriptionId(0);
-        expected2.setPlannedDate(LocalDate.parse("2021-11-20"));
-        expected2.setPlannedTime(LocalTime.parse("17:00"));
-        expected2.setEventState(EventState.PLANNED);
-        expected2.setCureId(1);
-        expected2.setCureName("test-cure1");
-        expected2.setCureType(CureType.MEDICINE);
-        expected2.setDose("1 pill");
+        expected2 = EventTestData.getEventDto2();
 
 //        VALUES (7, 5, 0, '2021-11-21', '17:00', 'PERFORMED', 1, '1 pill', '2021-11-21', '17:30');
-        expected3 = new EventDto();
-        expected3.setId(12);
-        expected3.setPatientId(7);
-        expected3.setPatientInsuranceNumber(567800);
-        expected3.setPatientName("test patient2");
-        expected3.setNurseId(5);
-        expected3.setNurseName("nurse1 name");
-        expected3.setPrescriptionId(0);
-        expected3.setPlannedDate(LocalDate.parse("2021-11-21"));
-        expected3.setPlannedTime(LocalTime.parse("17:00"));
-        expected3.setEventState(EventState.PERFORMED);
-        expected3.setCureId(1);
-        expected3.setCureName("test-cure1");
-        expected3.setCureType(CureType.MEDICINE);
-        expected3.setDose("1 pill");
-        expected3.setEndDate(LocalDate.parse("2021-11-21"));
-        expected3.setEndTime(LocalTime.parse("17:30"));
+        expected3 = EventTestData.getEventDto3();
 
 //        VALUES (7, 0, '2021-11-21', '17:00', 'CANCELLED', 1, '1 pill', '2021-11-21', '15:30', 'cancelled comment');
-        expected4 = new EventDto();
-        expected4.setId(13);
-        expected4.setPatientId(7);
-        expected4.setPatientInsuranceNumber(567800);
-        expected4.setPatientName("test patient2");
-        expected4.setPrescriptionId(0);
-        expected4.setPlannedDate(LocalDate.parse("2021-11-21"));
-        expected4.setPlannedTime(LocalTime.parse("17:00"));
-        expected4.setEventState(EventState.CANCELLED);
-        expected4.setCureId(1);
-        expected4.setCureName("test-cure1");
-        expected4.setCureType(CureType.MEDICINE);
-        expected4.setDose("1 pill");
-        expected4.setEndDate(LocalDate.parse("2021-11-21"));
-        expected4.setEndTime(LocalTime.parse("15:30"));
-        expected4.setComment("cancelled comment");
+        expected4 = EventTestData.getEventDto4();
 
 //        VALUES (6, 14, 0, '2021-11-20', '09:00', 'PLANNED', 2);
-        expected5 = new EventDto();
-        expected5.setId(15);
-        expected5.setPatientId(6);
-        expected5.setPatientInsuranceNumber(123400);
-        expected5.setPatientName("test patient1");
-        expected5.setNurseId(14);
-        expected5.setNurseName("nurse2 name");
-        expected5.setPrescriptionId(0);
-        expected5.setPlannedDate(LocalDate.parse("2021-11-20"));
-        expected5.setPlannedTime(LocalTime.parse("09:00"));
-        expected5.setEventState(EventState.PLANNED);
-        expected5.setCureId(2);
-        expected5.setCureName("test-cure2");
-        expected5.setCureType(CureType.PROCEDURE);
+        expected5 = EventTestData.getEventDto5();
     }
 
     @Test

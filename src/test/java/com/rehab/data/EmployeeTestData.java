@@ -35,6 +35,15 @@ public class EmployeeTestData {
         return employeeDto;
     }
 
+    public static EmployeeDto getEmployeeDto4() {
+        var employeeDto = new EmployeeDto();
+        employeeDto.setId(14);
+        employeeDto.setName("nurse2 name");
+        employeeDto.setPosition("nurse2 position");
+        employeeDto.setEmail("nurse2@nurse.ru");
+        return employeeDto;
+    }
+
     public static EmployeeDto getNewEmployeeDto() {
         var newUser = getNewUserDto();
         var employeeDto = new EmployeeDto();
