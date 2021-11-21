@@ -44,8 +44,8 @@ class EmployeeServiceTest {
         expected2.setEmail("doctor1@doc.ru");
 
         expected3.setId(5);
-        expected3.setName("nurse name");
-        expected3.setPosition("nurse position");
+        expected3.setName("nurse1 name");
+        expected3.setPosition("nurse1 position");
         expected3.setEmail("nurse1@nurse.ru");
 
         newUser = new UserDto();
