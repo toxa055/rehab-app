@@ -69,11 +69,10 @@ public class PatientService {
         if (dischargingPatient.getPatientState() == PatientState.DISCHARGED) {
             throw new ApplicationException("Patient is already discharged.");
         }
-        long openTreatmentsCount = treatmentCrudRepository.findAllByPatientId(id)
+        var hasOpenTreatments = treatmentCrudRepository.findAllByPatientId(id)
                 .stream()
-                .filter(t -> !t.isClosed())
-                .count();
-        if (openTreatmentsCount > 0) {
+                .anyMatch(t -> !t.isClosed());
+        if (hasOpenTreatments) {
             throw new ApplicationException("Cannot discharge patient which has active treatments.");
         }
         dischargingPatient.setPatientState(PatientState.DISCHARGED);

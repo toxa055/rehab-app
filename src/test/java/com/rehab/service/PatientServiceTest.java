@@ -1,13 +1,16 @@
 package com.rehab.service;
 
 import com.rehab.data.PatientTestData;
+import com.rehab.data.TreatmentTestData;
 import com.rehab.dto.PatientDto;
 import com.rehab.exception.ApplicationException;
+import com.rehab.model.type.PatientState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -26,6 +29,9 @@ class PatientServiceTest {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private TreatmentService treatmentService;
 
     @BeforeEach
     public void before() {
@@ -87,6 +93,37 @@ class PatientServiceTest {
         expected.setName("updated patient1");
         expected.setBirthDate(LocalDate.parse("1985-10-05"));
         assertThrows(ApplicationException.class, () -> patientService.update(expected));
+    }
+
+    @Test
+    public void updateWithNotExistingInsNum() {
+        expected.setName("updated patient1");
+        expected.setAddress("updated patient1 address");
+        var updated = patientService.update(expected);
+        var afterUpdate = patientService.getById(updated.getId());
+        assertEquals(afterUpdate, updated);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void discharge() {
+        var saved = treatmentService.save(TreatmentTestData.getNewTreatmentDto2());
+        treatmentService.close(saved.getId());
+        var expected = PatientTestData.getPatientDto3();
+        var discharged = patientService.discharge(expected.getId());
+        expected.setPatientState(PatientState.DISCHARGED);
+        assertEquals(expected, discharged);
+    }
+
+    @Test
+    public void dischargeWhenAlreadyDischarged() {
+        var discharged = PatientTestData.getPatientDto3();
+        assertThrows(ApplicationException.class, () -> patientService.discharge(discharged.getId()));
+    }
+
+    @Test
+    public void dischargeWhenHasOpenTreatments() {
+        assertThrows(ApplicationException.class, () -> patientService.discharge(expected.getId()));
     }
 
     @Test

@@ -12,6 +12,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -52,6 +54,11 @@ class EventServiceTest {
     public void getById() {
         var actual = eventService.getById(expected1.getId());
         assertEquals(expected1, actual);
+    }
+
+    @Test
+    public void getByIdNotFound() {
+        assertThrows(NoSuchElementException.class, () -> eventService.getById(1000));
     }
 
     @Test

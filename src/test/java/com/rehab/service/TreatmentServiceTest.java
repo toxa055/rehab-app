@@ -1,5 +1,6 @@
 package com.rehab.service;
 
+import com.rehab.data.PrescriptionTestData;
 import com.rehab.data.TreatmentTestData;
 import com.rehab.dto.TreatmentDto;
 import com.rehab.exception.ApplicationException;
@@ -29,6 +30,9 @@ class TreatmentServiceTest {
 
     @Autowired
     private TreatmentService treatmentService;
+
+    @Autowired
+    private PrescriptionService prescriptionService;
 
     @BeforeEach
     public void before() {
@@ -79,6 +83,13 @@ class TreatmentServiceTest {
         expected1.setCloseDate(LocalDate.now());
         expected1.setClosed(true);
         assertEquals(expected1, closed);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void closeWhenHasActivePrescription() {
+        var active = prescriptionService.save(PrescriptionTestData.getPrescriptionDto1());
+        assertThrows(ApplicationException.class, () -> treatmentService.close(active.getTreatmentId()));
     }
 
     @Test

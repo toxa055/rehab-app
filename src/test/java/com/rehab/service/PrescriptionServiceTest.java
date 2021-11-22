@@ -67,6 +67,15 @@ class PrescriptionServiceTest {
 
     @Test
     @WithUserDetails("doctor1@doc.ru")
+    public void getByTreatmentId() {
+        var expected = List.of(expected1);
+        var actual = prescriptionService.getByTreatmentId(expected1.getTreatmentId(),
+                PageRequest.of(0, 15)).getContent();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
     public void getAll() {
         var expected = List.of(expected1, expected2);
         var actual = prescriptionService.filter(null, null,
