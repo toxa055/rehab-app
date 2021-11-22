@@ -32,6 +32,17 @@ public class PatientTestData {
         return patientDto;
     }
 
+    public static PatientDto getPatientDto3() {
+        var patientDto = new PatientDto();
+        patientDto.setId(16);
+        patientDto.setInsuranceNumber(9988);
+        patientDto.setName("test patient3");
+        patientDto.setBirthDate(LocalDate.parse("1990-12-31"));
+        patientDto.setAddress("test patient3 address");
+        patientDto.setPatientState(PatientState.DISCHARGED);
+        return patientDto;
+    }
+
     public static PatientDto getNewPatientDto() {
         var patientDto = new PatientDto();
         patientDto.setInsuranceNumber(9900);

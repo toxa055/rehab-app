@@ -7,11 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,7 +34,7 @@ class TreatmentServiceTest {
     public void before() {
         expected1 = TreatmentTestData.getTreatmentDto1();
         expected2 = TreatmentTestData.getTreatmentDto2();
-        newTreatment = TreatmentTestData.getNewTreatmentDto();
+        newTreatment = TreatmentTestData.getNewTreatmentDto1();
     }
 
     @Test
@@ -63,6 +65,15 @@ class TreatmentServiceTest {
 
     @Test
     @WithUserDetails("doctor1@doc.ru")
+    public void saveWithDischargedState() {
+        var newTreatment = TreatmentTestData.getNewTreatmentDto2();
+        var saved = treatmentService.save(newTreatment);
+        newTreatment.setId(saved.getId());
+        assertEquals(newTreatment, saved);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
     public void close() {
         var closed = treatmentService.close(expected1.getId());
         expected1.setCloseDate(LocalDate.now());
@@ -83,5 +94,23 @@ class TreatmentServiceTest {
     @WithUserDetails("doctor2@doc.ru")
     public void closeWithDifferentDoctor() {
         assertThrows(ApplicationException.class, () -> treatmentService.close(expected2.getId()));
+    }
+
+    @Test
+    @WithUserDetails("doctor2@doc.ru")
+    public void getAll() {
+        var expected = List.of(expected1, expected2);
+        var actual = treatmentService.filter(null, null, false,
+                false, PageRequest.of(0, 15)).getContent();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void getWithAllFilters() {
+        var expected = List.of(expected1);
+        var actual = treatmentService.filter(LocalDate.now(), expected1.getPatientInsuranceNumber(),
+                true, true, PageRequest.of(0, 15)).getContent();
+        assertEquals(expected, actual);
     }
 }

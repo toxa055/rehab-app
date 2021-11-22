@@ -7,10 +7,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -85,5 +87,23 @@ class PatientServiceTest {
         expected.setName("updated patient1");
         expected.setBirthDate(LocalDate.parse("1985-10-05"));
         assertThrows(ApplicationException.class, () -> patientService.update(expected));
+    }
+
+    @Test
+    public void getAll() {
+        var expected2 = PatientTestData.getPatientDto2();
+        var expected3 = PatientTestData.getPatientDto3();
+        var expectedList = List.of(expected, expected2, expected3);
+        var actual = patientService.filter(null, null, false,
+                PageRequest.of(0, 15)).getContent();
+        assertEquals(expectedList, actual);
+    }
+
+    @Test
+    public void getWithNameOnlyTreating() {
+        var expectedList = List.of(expected, PatientTestData.getPatientDto2());
+        var actual = patientService.filter(null, "pat", true,
+                PageRequest.of(0, 15)).getContent();
+        assertEquals(expectedList, actual);
     }
 }

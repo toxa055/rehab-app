@@ -47,3 +47,6 @@ VALUES (14, 'NURSE');
 
 INSERT INTO events(patient_id, nurse_id, prescription_id, planned_date, planned_time, event_state, cure_id)
 VALUES (6, 14, 0, '2021-11-20', '09:00', 'PLANNED', 2);
+
+INSERT INTO patients(insurance_number, name, birth_date, address, patient_state)
+VALUES (9988, 'test patient3', '1990-12-31', 'test patient3 address', 'DISCHARGED');

@@ -37,12 +37,24 @@ public class TreatmentTestData {
         return treatmentDto;
     }
 
-    public static TreatmentDto getNewTreatmentDto() {
+    public static TreatmentDto getNewTreatmentDto1() {
         var treatmentDto = new TreatmentDto();
         treatmentDto.setPatientId(patient2.getId());
         treatmentDto.setPatientInsuranceNumber(patient2.getInsuranceNumber());
         treatmentDto.setPatientName(patient2.getName());
         treatmentDto.setDoctorId(doctor1.getId());
+        treatmentDto.setDoctorName(doctor1.getName());
+        treatmentDto.setDiagnosis("new diagnosis");
+        return treatmentDto;
+    }
+
+    public static TreatmentDto getNewTreatmentDto2() {
+        var treatmentDto = new TreatmentDto();
+        var patientDto = PatientTestData.getPatientDto3();
+        treatmentDto.setPatientId(patientDto.getId());
+        treatmentDto.setPatientInsuranceNumber(patientDto.getInsuranceNumber());
+        treatmentDto.setPatientName(patientDto.getName());
+        treatmentDto.setDoctorId(patientDto.getId());
         treatmentDto.setDoctorName(doctor1.getName());
         treatmentDto.setDiagnosis("new diagnosis");
         return treatmentDto;

@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,5 +69,12 @@ class CureServiceTest {
     public void saveWithExistingName() {
         newCure.setName(expected2.getName());
         assertThrows(ApplicationException.class, () -> cureService.save(newCure));
+    }
+
+    @Test
+    public void getAll() {
+        var expected = List.of(expected1, expected2);
+        var actual = cureService.getAll(PageRequest.of(0, 15)).getContent();
+        assertEquals(expected, actual);
     }
 }

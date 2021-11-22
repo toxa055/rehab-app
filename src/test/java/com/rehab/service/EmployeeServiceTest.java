@@ -9,10 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -84,5 +86,14 @@ class EmployeeServiceTest {
     public void getAuth() {
         var auth = employeeService.getAuth();
         assertEquals(expected1, auth);
+    }
+
+    @Test
+    public void getAll() {
+        var expected2 = EmployeeTestData.getEmployeeDto2();
+        var expected4 = EmployeeTestData.getEmployeeDto4();
+        var expected = List.of(expected1, expected2, expected3, expected4);
+        var actual = employeeService.getAll(PageRequest.of(0, 10)).getContent();
+        assertEquals(expected, actual);
     }
 }

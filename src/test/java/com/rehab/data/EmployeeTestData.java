@@ -22,7 +22,7 @@ public class EmployeeTestData {
         employeeDto.setId(4);
         employeeDto.setName("doctor2 name");
         employeeDto.setPosition("doctor2 position");
-        employeeDto.setEmail("doctor1@doc.ru");
+        employeeDto.setEmail("doctor2@doc.ru");
         return employeeDto;
     }
 
