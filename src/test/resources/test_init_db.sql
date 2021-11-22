@@ -1,8 +1,11 @@
 DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS prescriptions CASCADE;
 DROP TABLE IF EXISTS treatments CASCADE;
 DROP TABLE IF EXISTS employee_roles;
 DROP TABLE IF EXISTS employees CASCADE;
 DROP TABLE IF EXISTS patients CASCADE;
+DROP TABLE IF EXISTS patterns CASCADE;
+DROP TABLE IF EXISTS periods CASCADE;
 DROP TABLE IF EXISTS cures CASCADE;
 
 DROP SEQUENCE IF EXISTS general_seq;
@@ -49,6 +52,23 @@ CREATE TABLE patients
 
 CREATE UNIQUE INDEX patients_unique_insurance_number_idx ON patients (insurance_number);
 
+CREATE TABLE periods
+(
+    id    INTEGER DEFAULT general_seq.nextval PRIMARY KEY,
+    count INTEGER NOT NULL,
+    unit  VARCHAR NOT NULL,
+    CONSTRAINT count_unique_unit_idx UNIQUE (count, unit)
+);
+
+CREATE TABLE patterns
+(
+    id            INTEGER DEFAULT general_seq.nextval PRIMARY KEY,
+    count         INTEGER NOT NULL,
+    unit          VARCHAR NOT NULL,
+    pattern_units VARCHAR NOT NULL,
+    CONSTRAINT count_unit_unique_units_idx UNIQUE (count, unit, pattern_units)
+);
+
 CREATE TABLE treatments
 (
     id             INTEGER          DEFAULT general_seq.nextval PRIMARY KEY,
@@ -60,6 +80,26 @@ CREATE TABLE treatments
     closed         BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
     FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE
+);
+
+CREATE TABLE prescriptions
+(
+    id                INTEGER          DEFAULT general_seq.nextval PRIMARY KEY,
+    doctor_id         INTEGER NOT NULL,
+    patient_id        INTEGER NOT NULL,
+    treatment_id      INTEGER NOT NULL,
+    prescription_date DATE    NOT NULL DEFAULT CURRENT_DATE,
+    cure_id           INTEGER NOT NULL,
+    pattern_id        INTEGER NOT NULL,
+    period_id         INTEGER NOT NULL,
+    dose              VARCHAR NOT NULL DEFAULT 'According to instruction.',
+    active            BOOLEAN          DEFAULT TRUE,
+    FOREIGN KEY (doctor_id) REFERENCES employees (id) ON DELETE CASCADE,
+    FOREIGN KEY (patient_id) REFERENCES patients (id) ON DELETE CASCADE,
+    FOREIGN KEY (treatment_id) REFERENCES treatments (id) ON DELETE CASCADE,
+    FOREIGN KEY (cure_id) REFERENCES cures (id) ON DELETE CASCADE,
+    FOREIGN KEY (pattern_id) REFERENCES patterns ON DELETE CASCADE,
+    FOREIGN KEY (period_id) REFERENCES periods (id) ON DELETE CASCADE
 );
 
 CREATE TABLE events

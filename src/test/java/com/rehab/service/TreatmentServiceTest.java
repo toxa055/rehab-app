@@ -99,7 +99,7 @@ class TreatmentServiceTest {
     @Test
     @WithUserDetails("doctor2@doc.ru")
     public void getAll() {
-        var expected = List.of(expected1, expected2);
+        var expected = List.of(expected1, expected2, TreatmentTestData.getTreatmentDto3());
         var actual = treatmentService.filter(null, null, false,
                 false, PageRequest.of(0, 15)).getContent();
         assertEquals(expected, actual);

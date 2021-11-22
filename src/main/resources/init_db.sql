@@ -1,7 +1,6 @@
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS prescriptions;
 DROP TABLE IF EXISTS treatments;
-DROP TABLE IF EXISTS pattern_units;
 DROP TABLE IF EXISTS employee_roles;
 DROP TABLE IF EXISTS employees;
 DROP TABLE IF EXISTS patients;
