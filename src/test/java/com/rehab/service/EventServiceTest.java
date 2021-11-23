@@ -8,10 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,6 +61,21 @@ class EventServiceTest {
     @Test
     public void getByIdNotFound() {
         assertThrows(NoSuchElementException.class, () -> eventService.getById(1000));
+    }
+
+    @Test
+    @WithUserDetails("nurse1@nurse.ru")
+    public void getOnlyAuthNurse() {
+        var expected = List.of(expected2, expected3);
+        var actual = eventService.filter(null, null, true,
+                false, PageRequest.of(0, 25)).getContent();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @WithUserDetails("nurse2@nurse.ru")
+    public void sendMessageWhenTodayChange() {
+        eventService.changeState(22, PERFORMED, null);
     }
 
     @Test

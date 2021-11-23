@@ -3,6 +3,7 @@ package com.rehab.service;
 import com.rehab.data.EventTestData2;
 import com.rehab.data.PrescriptionTestData;
 import com.rehab.dto.EventDto;
+import com.rehab.dto.EventMessage;
 import com.rehab.dto.PrescriptionDtoOut;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +91,7 @@ class EventService2Test {
         expected2.forEach(e -> e.setPrescriptionId(p2.getId()));
         expected1.addAll(expected2);
         var actual = eventService.filter(null, null,
-                false, true, PageRequest.of(0, 25)).getContent();
+                false, false, PageRequest.of(0, 25)).getContent();
         for (int i = 0; i < expected1.size(); i++) {
             expected1.get(i).setId(actual.get(i).getId());
         }
@@ -106,6 +108,21 @@ class EventService2Test {
         for (int i = 0; i < expected.size(); i++) {
             expected.get(i).setId(actual.get(i).getId());
         }
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void getTodayPlannedEventMessages() {
+        var eventMessage = new EventMessage();
+        eventMessage.setPatientInsuranceNumber(p1.getPatientInsuranceNumber());
+        eventMessage.setPatientName(p1.getPatientName());
+        eventMessage.setPlannedTime(LocalTime.parse("21:00"));
+        eventMessage.setCureName(p1.getCureName());
+        eventMessage.setCureType(p1.getCureType().name());
+        eventMessage.setDose(p1.getDose());
+        var expected = List.of(eventMessage);
+        var actual = eventService.getTodayPlannedEventsMessage();
         assertEquals(expected, actual);
     }
 }

@@ -3,6 +3,7 @@ package com.rehab.data;
 import com.rehab.dto.*;
 import com.rehab.model.Pattern;
 import com.rehab.model.Period;
+import com.rehab.model.type.TimeUnit;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,9 +18,11 @@ public class PrescriptionTestData {
 
     private static final Period period1 = PeriodTestData.getPeriod1();
     private static final Period period2 = PeriodTestData.getPeriod2();
+    private static final Period newPeriod = new Period(null, 3, TimeUnit.DAY);
 
     private static final Pattern pattern1 = PatternTestData.getPattern1();
     private static final Pattern pattern2 = PatternTestData.getPattern2();
+    private static final Pattern newPattern = new Pattern(null, 1, TimeUnit.DAY, "MORNING");
 
     private PrescriptionTestData() {
     }
@@ -72,6 +75,28 @@ public class PrescriptionTestData {
         return p;
     }
 
+    public static PrescriptionDtoOut getPrescriptionDtoOut3() {
+        var p = new PrescriptionDtoOut();
+        p.setPatientId(treatment1.getPatientId());
+        p.setPatientInsuranceNumber(treatment1.getPatientInsuranceNumber());
+        p.setPatientName(treatment1.getPatientName());
+        p.setDoctorId(treatment1.getDoctorId());
+        p.setDoctorName(treatment1.getDoctorName());
+        p.setTreatmentId(treatment1.getId());
+        p.setCureId(cure1.getId());
+        p.setCureName(cure1.getName());
+        p.setCureType(cure1.getCureType());
+        p.setPeriodCount(newPeriod.getCount());
+        p.setPeriodUnit(newPeriod.getUnit());
+        p.setPatternCount(newPattern.getCount());
+        p.setPatternUnit(newPattern.getUnit());
+        p.setPatternUnits("MORNING");
+        p.setDose("new dose");
+        p.setDate(LocalDate.now());
+        p.setActive(true);
+        return p;
+    }
+
     public static PrescriptionDto getPrescriptionDto1() {
         var p = new PrescriptionDto();
         p.setPatientId(treatment1.getPatientId());
@@ -113,6 +138,26 @@ public class PrescriptionTestData {
         p.setPatternUnit(pattern2.getUnit());
         p.setPatternUnits(List.of("MONDAY", "WEDNESDAY", "FRIDAY"));
         p.setDose("According to instruction.");
+        return p;
+    }
+
+    public static PrescriptionDto getPrescriptionDto3() {
+        var p = new PrescriptionDto();
+        p.setPatientId(treatment1.getPatientId());
+        p.setPatientInsuranceNumber(treatment1.getPatientInsuranceNumber());
+        p.setPatientName(treatment1.getPatientName());
+        p.setDoctorId(treatment1.getDoctorId());
+        p.setDoctorName(treatment1.getDoctorName());
+        p.setTreatmentId(treatment1.getId());
+        p.setCureId(cure1.getId());
+        p.setCureName(cure1.getName());
+        p.setCureType(cure1.getCureType());
+        p.setPeriodCount(newPeriod.getCount());
+        p.setPeriodUnit(newPeriod.getUnit());
+        p.setPatternCount(newPattern.getCount());
+        p.setPatternUnit(newPattern.getUnit());
+        p.setPatternUnits(List.of("MORNING"));
+        p.setDose("new dose");
         return p;
     }
 }

@@ -2,6 +2,7 @@ package com.rehab.service;
 
 import com.rehab.data.PrescriptionTestData;
 import com.rehab.dto.PrescriptionDtoOut;
+import com.rehab.exception.ApplicationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = {"classpath:test_init_db.sql", "classpath:test_pop_db.sql"})
 class PrescriptionServiceTest {
 
+    private static PrescriptionDtoOut expected1;
+    private static PrescriptionDtoOut expected2;
+
     @Autowired
     private PrescriptionService prescriptionService;
 
-    private PrescriptionDtoOut expected1;
-    private PrescriptionDtoOut expected2;
+    @Autowired
+    private EventService eventService;
 
     @BeforeEach
     public void before1() {
@@ -71,6 +75,40 @@ class PrescriptionServiceTest {
         var expected = List.of(expected1);
         var actual = prescriptionService.getByTreatmentId(expected1.getTreatmentId(),
                 PageRequest.of(0, 15)).getContent();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void cancel() {
+        var cancelled = prescriptionService.cancel(expected2.getId());
+        expected2.setActive(false);
+        assertEquals(expected2, cancelled);
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void cancelWhenAlreadyCancelled() {
+        var cancelled = prescriptionService.cancel(expected2.getId());
+        assertThrows(ApplicationException.class, () -> prescriptionService.cancel(cancelled.getId()));
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void cancelWithDifferentDoctor() {
+        assertThrows(ApplicationException.class, () -> prescriptionService.cancel(expected1.getId()));
+    }
+
+    @Test
+    @WithUserDetails("doctor1@doc.ru")
+    public void update() {
+        var forUpdate = PrescriptionTestData.getPrescriptionDto3();
+        forUpdate.setId(expected1.getId());
+        var actual = prescriptionService.update(forUpdate);
+        var expected = PrescriptionTestData.getPrescriptionDtoOut3();
+        expected.setId(actual.getId());
+        expected.setPeriodId(actual.getPeriodId());
+        expected.setPatternId(actual.getPatternId());
         assertEquals(expected, actual);
     }
 

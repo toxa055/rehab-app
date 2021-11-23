@@ -62,3 +62,6 @@ VALUES (2, 'DAY', 'MORNING, EVENING'),
 INSERT INTO treatments(patient_id, doctor_id, diagnosis)
 VALUES (7, 4, 'test diagnosis3');
 
+INSERT INTO events(patient_id, nurse_id, prescription_id, planned_date, planned_time, event_state, cure_id)
+VALUES (6, 14, 0, '2021-11-23', '09:00', 'PLANNED', 2);
+
