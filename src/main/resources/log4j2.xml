@@ -4,7 +4,7 @@
         <RollingFile
                 name="rollingFile"
                 fileName="logs/rehab-app.log"
-                filePattern="logs/rehab-app.%i.log.gz"
+                filePattern="logs/rehab-app_%d.%i.log.gz"
                 immediateFlush="true"
                 ignoreExceptions="false">
             <PatternLayout>
