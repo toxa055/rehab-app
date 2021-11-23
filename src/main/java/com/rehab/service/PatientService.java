@@ -50,19 +50,15 @@ public class PatientService {
     @Transactional
     public PatientDto update(PatientDto patientDto) {
         var patientForUpdateById = getPatientById(patientDto.getId());
-        if (patientForUpdateById != null) {
-            var patientForUpdateByInsNumber = patientCrudRepository
-                    .findByInsuranceNumber(patientDto.getInsuranceNumber()).orElse(null);
-            if (patientForUpdateByInsNumber != null) {
-                if (!patientForUpdateById.getId().equals(patientForUpdateByInsNumber.getId())) {
-                    throw new ApplicationException("Patient with Insurance Number "
-                            + patientForUpdateByInsNumber.getInsuranceNumber() + " already exists.");
-                } else {
-                    return toDto(patientCrudRepository.save(toEntity(patientDto)));
-                }
-            } else {
-                return toDto(patientCrudRepository.save(toEntity(patientDto)));
+        var patientForUpdateByInsNumber = patientCrudRepository
+                .findByInsuranceNumber(patientDto.getInsuranceNumber())
+                .orElse(null);
+        if (patientForUpdateByInsNumber != null) {
+            if (!patientForUpdateById.getId().equals(patientForUpdateByInsNumber.getId())) {
+                throw new ApplicationException("Patient with Insurance Number "
+                        + patientForUpdateByInsNumber.getInsuranceNumber() + " already exists.");
             }
+            return toDto(patientCrudRepository.save(toEntity(patientDto)));
         }
         return toDto(patientCrudRepository.save(toEntity(patientDto)));
     }
@@ -73,11 +69,10 @@ public class PatientService {
         if (dischargingPatient.getPatientState() == PatientState.DISCHARGED) {
             throw new ApplicationException("Patient is already discharged.");
         }
-        long openTreatmentsCount = treatmentCrudRepository.findAllByPatientId(id)
+        var hasOpenTreatments = treatmentCrudRepository.findAllByPatientId(id)
                 .stream()
-                .filter(t -> !t.isClosed())
-                .count();
-        if (openTreatmentsCount > 0) {
+                .anyMatch(t -> !t.isClosed());
+        if (hasOpenTreatments) {
             throw new ApplicationException("Cannot discharge patient which has active treatments.");
         }
         dischargingPatient.setPatientState(PatientState.DISCHARGED);

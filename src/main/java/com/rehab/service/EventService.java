@@ -39,11 +39,8 @@ public class EventService {
     }
 
     @PostConstruct
-    public void init() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-        }
+    public void init() throws InterruptedException {
+        Thread.sleep(1000);
         sendMessage();
     }
 

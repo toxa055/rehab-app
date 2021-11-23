@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class PrescriptionDto extends AbstractPrescriptionDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -35,5 +36,21 @@ public class PrescriptionDto extends AbstractPrescriptionDto {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        PrescriptionDto that = (PrescriptionDto) o;
+        return active == that.active
+                && date.equals(that.date)
+                && patternUnits.equals(that.patternUnits);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), date, patternUnits, active);
     }
 }

@@ -4,6 +4,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class TreatmentDto {
     private int id;
@@ -101,5 +102,29 @@ public class TreatmentDto {
 
     public void setClosed(boolean closed) {
         isClosed = closed;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TreatmentDto that = (TreatmentDto) o;
+        return id == that.id
+                && patientId == that.patientId
+                && doctorId == that.doctorId
+                && isClosed == that.isClosed
+                && patientInsuranceNumber.equals(that.patientInsuranceNumber)
+                && patientName.equals(that.patientName)
+                && doctorName.equals(that.doctorName)
+                && date.equals(that.date)
+                && diagnosis.equals(that.diagnosis)
+                && Objects.equals(closeDate, that.closeDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, patientId, patientInsuranceNumber, patientName, doctorId, doctorName,
+                date, diagnosis, closeDate, isClosed);
     }
 }

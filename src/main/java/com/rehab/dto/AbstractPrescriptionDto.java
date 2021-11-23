@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Range;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
 public abstract class AbstractPrescriptionDto {
     private Integer id;
@@ -165,5 +166,36 @@ public abstract class AbstractPrescriptionDto {
 
     public void setDose(String dose) {
         this.dose = dose;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractPrescriptionDto that = (AbstractPrescriptionDto) o;
+        return patientId == that.patientId
+                && patientInsuranceNumber == that.patientInsuranceNumber
+                && doctorId == that.doctorId
+                && treatmentId == that.treatmentId
+                && patternId == that.patternId
+                && patternCount == that.patternCount
+                && periodId == that.periodId
+                && id.equals(that.id)
+                && patientName.equals(that.patientName)
+                && doctorName.equals(that.doctorName)
+                && cureId.equals(that.cureId)
+                && cureName.equals(that.cureName)
+                && cureType == that.cureType
+                && patternUnit == that.patternUnit
+                && periodCount.equals(that.periodCount)
+                && periodUnit == that.periodUnit
+                && dose.equals(that.dose);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, patientId, patientInsuranceNumber, patientName, doctorId, doctorName,
+                treatmentId, cureId, cureName, cureType, patternId, patternCount, patternUnit, periodId,
+                periodCount, periodUnit, dose);
     }
 }
