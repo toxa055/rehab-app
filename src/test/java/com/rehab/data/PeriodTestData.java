@@ -9,7 +9,7 @@ public class PeriodTestData {
     }
 
     public static Period getPeriod1() {
-        return new Period(17, 4, TimeUnit.DAY);
+        return new Period(17, 2, TimeUnit.DAY);
     }
 
     public static Period getPeriod2() {

@@ -9,7 +9,7 @@ public class PatternTestData {
     }
 
     public static Pattern getPattern1() {
-        return new Pattern(19, 2, TimeUnit.DAY, "MORNING, EVENING");
+        return new Pattern(19, 2, TimeUnit.DAY, "MORNING, NIGHT");
     }
 
     public static Pattern getPattern2() {

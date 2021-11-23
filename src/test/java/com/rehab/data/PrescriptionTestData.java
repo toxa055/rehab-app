@@ -89,7 +89,7 @@ public class PrescriptionTestData {
         p.setPatternId(pattern1.getId());
         p.setPatternCount(pattern1.getCount());
         p.setPatternUnit(pattern1.getUnit());
-        p.setPatternUnits(List.of("MORNING", "EVENING"));
+        p.setPatternUnits(List.of("MORNING", "NIGHT"));
         p.setDose("dose 1");
         return p;
     }

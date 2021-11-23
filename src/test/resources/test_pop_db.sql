@@ -52,7 +52,7 @@ INSERT INTO patients(insurance_number, name, birth_date, address, patient_state)
 VALUES (9988, 'test patient3', '1990-12-31', 'test patient3 address', 'DISCHARGED');
 
 INSERT INTO periods(count, unit)
-VALUES (4, 'DAY'),
+VALUES (2, 'DAY'),
        (1, 'WEEK');
 
 INSERT INTO patterns(count, unit, pattern_units)
