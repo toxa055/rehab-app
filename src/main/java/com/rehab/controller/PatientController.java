@@ -90,7 +90,7 @@ public class PatientController {
     @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
     public String createOrUpdate(@Valid PatientDto patientDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            logger.warn("Binding result has errors: {}", bindingResult.getAllErrors());
+            logger.warn("Binding result for patient has errors: {}", bindingResult.getAllErrors());
             model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
             model.addAttribute(PATIENT, patientDto);
             return CREATE_OR_UPDATE_PATIENT_URL;
