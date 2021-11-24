@@ -5,6 +5,7 @@ import com.rehab.service.PrescriptionService;
 import com.rehab.service.TreatmentService;
 import com.rehab.util.ControllerUtil;
 import com.rehab.util.SecurityUtil;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -32,15 +33,19 @@ public class PrescriptionController {
     private static final String PAGE = "page";
     private final PrescriptionService prescriptionService;
     private final TreatmentService treatmentService;
+    private final Logger logger;
 
     @Autowired
-    public PrescriptionController(PrescriptionService prescriptionService, TreatmentService treatmentService) {
+    public PrescriptionController(PrescriptionService prescriptionService, TreatmentService treatmentService,
+                                  Logger logger) {
         this.prescriptionService = prescriptionService;
         this.treatmentService = treatmentService;
+        this.logger = logger;
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
+        logger.info("Get prescription by id {}.", id);
         model.addAttribute(PRESCRIPTION, prescriptionService.getPrescriptionDtoOutById(id));
         model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
         return "prescriptions/prescription";
@@ -49,6 +54,7 @@ public class PrescriptionController {
     @GetMapping("/treatment/{treatmentId}")
     public String getByTreatmentId(@PathVariable int treatmentId,
                                    @PageableDefault(value = 15, sort = "date") Pageable pageable, Model model) {
+        logger.info("Get prescriptions by treatment id {}.", treatmentId);
         model.addAttribute(PAGE, prescriptionService.getByTreatmentId(treatmentId, pageable));
         return PRESCRIPTIONS_URL;
     }
@@ -61,6 +67,8 @@ public class PrescriptionController {
                          @RequestParam @Nullable boolean onlyActive,
                          @PageableDefault(value = 15, sort = "date") Pageable pageable,
                          Model model) {
+        logger.info("Filter prescriptions by date {}, insurance number {}, authenticated doctor {}, only active treatments {}.",
+                pDate, insuranceNumber, authDoctor, onlyActive);
         model.addAttribute(PAGE, prescriptionService.filter(pDate, insuranceNumber, authDoctor, onlyActive, pageable));
         return PRESCRIPTIONS_URL;
     }
@@ -86,8 +94,10 @@ public class PrescriptionController {
     @Secured("ROLE_DOCTOR")
     public String createPrescription(@Valid PrescriptionDto prescriptionDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            logger.warn("Binding result for prescription has errors: {}", bindingResult.getAllErrors());
             return addAttributes(prescriptionDto, bindingResult, model);
         }
+        logger.info("Create new prescription for patient with id {}.", prescriptionDto.getPatientId());
         var savedPrescription = prescriptionService.save(prescriptionDto);
         return REDIRECT_PRESCRIPTIONS_URL + savedPrescription.getId();
     }
@@ -104,8 +114,11 @@ public class PrescriptionController {
     @Secured("ROLE_DOCTOR")
     public String updatePrescription(@Valid PrescriptionDto prescriptionDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            logger.warn("Binding result for prescription has errors: {}", bindingResult.getAllErrors());
             return addAttributes(prescriptionDto, bindingResult, model);
         }
+        logger.info("Update prescription with id {} for patient with id {}.",
+                prescriptionDto.getId(), prescriptionDto.getPatientId());
         var savedPrescription = prescriptionService.update(prescriptionDto);
         return REDIRECT_PRESCRIPTIONS_URL + savedPrescription.getId();
     }
@@ -113,6 +126,7 @@ public class PrescriptionController {
     @GetMapping("/cancel/{id}")
     @Secured("ROLE_DOCTOR")
     public String cancel(@PathVariable int id, Model model) {
+        logger.info("Cancel prescription with id {}.", id);
         model.addAttribute(PRESCRIPTION, prescriptionService.cancel(id));
         return REDIRECT_PRESCRIPTIONS_URL + id;
     }
