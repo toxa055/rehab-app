@@ -3,6 +3,7 @@ package com.rehab.controller;
 import com.rehab.dto.PatientDto;
 import com.rehab.service.PatientService;
 import com.rehab.util.ControllerUtil;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -25,20 +26,24 @@ public class PatientController {
     private static final String PATIENT_URL = "patients/patient";
     private static final String PATIENT = "patient";
     private final PatientService patientService;
+    private final Logger logger;
 
     @Autowired
-    public PatientController(PatientService patientService) {
+    public PatientController(PatientService patientService, Logger logger) {
         this.patientService = patientService;
+        this.logger = logger;
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
+        logger.info("Get patient by id {}.", id);
         model.addAttribute(PATIENT, patientService.getById(id));
         return PATIENT_URL;
     }
 
     @GetMapping("/insNum/{insuranceNumber}")
     public String getByInsuranceNumber(@PathVariable int insuranceNumber, Model model) {
+        logger.info("Get patient by insurance number {}.", insuranceNumber);
         model.addAttribute(PATIENT, patientService.getByInsuranceNumber(insuranceNumber));
         return PATIENT_URL;
     }
@@ -46,6 +51,7 @@ public class PatientController {
     @GetMapping("/discharge/{id}")
     @Secured("ROLE_DOCTOR")
     public String discharge(@PathVariable int id) {
+        logger.info("Discharge patient with id {}.", id);
         patientService.discharge(id);
         return REDIRECT_PATIENTS_URL + id;
     }
@@ -61,6 +67,8 @@ public class PatientController {
                          @RequestParam @Nullable boolean onlyTreating,
                          @PageableDefault(value = 15, sort = "name") Pageable pageable,
                          Model model) {
+        logger.info("Filter patients by insurance number {}, name like... {}, only treating {}.",
+                insuranceNumber, nameLike, onlyTreating);
         model.addAttribute("page", patientService.filter(insuranceNumber, nameLike, onlyTreating, pageable));
         return "patients/list";
     }
@@ -82,13 +90,20 @@ public class PatientController {
     @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
     public String createOrUpdate(@Valid PatientDto patientDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            logger.warn("Binding result for patient has errors: {}", bindingResult.getAllErrors());
             model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
             model.addAttribute(PATIENT, patientDto);
             return CREATE_OR_UPDATE_PATIENT_URL;
         }
-        var patient = patientDto.getId() == null
-                ? patientService.save(patientDto)
-                : patientService.update(patientDto);
+        var isNull = patientDto.getId() == null;
+        PatientDto patient;
+        if (isNull) {
+            logger.info("Create new patient.");
+            patient = patientService.save(patientDto);
+        } else {
+            logger.info("Update patient with id {}.", patientDto.getId());
+            patient = patientService.update(patientDto);
+        }
         return REDIRECT_PATIENTS_URL + patient.getId();
     }
 }
