@@ -3,7 +3,7 @@
 <html>
 <body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #cfc7ff">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #75b8ff">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Rehab App</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"

@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
     <title>Home Page</title>
 </head>
-<body>
+<body style="background-image: url('/img/cover.png'); background-size: cover">
 <jsp:include page="nav.jsp"/>
 <br>
 <div class="container-fluid">
