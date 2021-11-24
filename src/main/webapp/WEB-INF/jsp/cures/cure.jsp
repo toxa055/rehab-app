@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>${cure.name}</title>
 </head>
 <body>
@@ -19,7 +20,7 @@
             <th scope="col">Type</th>
         </tr>
         </thead>
-        <tr class="table-light">
+        <tr class="general-grey">
             <td>${cure.id}</td>
             <td>${cure.name}</td>
             <td>${cure.cureType}</td>

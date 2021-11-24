@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>${employee.name}</title>
 </head>
 <body>
@@ -22,7 +23,7 @@
             <th scope="col">Actions</th>
         </tr>
         </thead>
-        <tr class="table-light">
+        <tr class="general-grey">
             <td>${employee.id}</td>
             <td>${employee.name}</td>
             <td>${employee.position}</td>

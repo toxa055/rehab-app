@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Patient ${patient.name}</title>
 </head>
@@ -27,7 +28,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="${patient.patientState == 'TREATING' ? 'table-warning' : 'table-success'}">
+        <tr class="${patient.patientState == 'TREATING' ? 'active-yellow' : 'active-green'}">
             <td style="display: none">${patient.id}</td>
             <td>${patient.insuranceNumber}</td>
             <td>${patient.name}</td>

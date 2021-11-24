@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Event</title>
 </head>
@@ -33,8 +34,8 @@
             <th scope="col">Comment</th>
         </tr>
         </thead>
-        <tr class="${event.eventState == 'PLANNED' ? 'table-warning' :
-        event.eventState == 'PERFORMED' ? 'table-success' : 'table-danger'}">
+        <tr class="${event.eventState == 'PLANNED' ? 'active-yellow' :
+        event.eventState == 'PERFORMED' ? 'active-green' : 'cancelled-red'}">
             <td style="display: none">${event.id}</td>
             <td style="display: none">${event.patientId}</td>
             <td>${event.patientInsuranceNumber}</td>

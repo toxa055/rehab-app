@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Treatment</title>
 </head>
@@ -31,7 +32,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="${treatment.closed ? 'table-success' : 'table-warning'}">
+        <tr class="${treatment.closed ? 'active-green' : 'active-yellow'}">
             <td style="display: none">${treatment.id}</td>
             <td style="display: none">${treatment.patientId}</td>
             <td>${treatment.patientInsuranceNumber}</td>
