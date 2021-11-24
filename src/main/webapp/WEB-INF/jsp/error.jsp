@@ -9,7 +9,7 @@
 <br>
 <div class="container-fluid">
     <div class="container">
-        <h2 class="mb-4">${exception != null ? exception : 'Page not found...'}</h2>
+        <h2 class="mb-4">${exception != null ? exception : 'Unknown error or page not found...'}</h2>
         <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
     </div>
 </div>
