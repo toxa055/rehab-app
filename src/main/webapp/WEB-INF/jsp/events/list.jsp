@@ -5,12 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Events</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Events</h2>
     <div>
         <form action="/events/filter" method="get">
@@ -87,8 +88,8 @@
         </tr>
         </thead>
         <c:forEach items="${page.content}" var="e">
-            <tr class="${e.eventState == 'PLANNED' ? 'table-warning' :
-             e.eventState == 'PERFORMED' ? 'table-success' : 'table-danger'}">
+            <tr class="${e.eventState == 'PLANNED' ? 'active-yellow' :
+             e.eventState == 'PERFORMED' ? 'active-green' : 'cancelled-red'}">
                 <td style="display: none">${e.id}</td>
                 <td style="display: none">${e.patientId}</td>
                 <td>${e.patientInsuranceNumber}</td>
@@ -124,6 +125,8 @@
         </nav>
     </div>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     if (window.location.href.toString().includes('prescription')) {
         $('#filterDiv').hide();

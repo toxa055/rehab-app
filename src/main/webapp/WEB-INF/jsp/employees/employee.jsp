@@ -5,12 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>${employee.name}</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>${employee.name}</h2>
     <table class="table table-hover">
         <thead>
@@ -22,7 +23,7 @@
             <th scope="col">Actions</th>
         </tr>
         </thead>
-        <tr class="table-light">
+        <tr class="general-grey">
             <td>${employee.id}</td>
             <td>${employee.name}</td>
             <td>${employee.position}</td>
@@ -38,10 +39,11 @@
                             Change Password</a>
                     </c:otherwise>
                 </c:choose>
-
             </td>
         </tr>
     </table>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>

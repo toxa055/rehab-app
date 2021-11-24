@@ -5,12 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Treatments</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Treatments</h2>
     <div>
         <form action="/treatments/filter" method="get">
@@ -82,7 +83,7 @@
         </tr>
         </thead>
         <c:forEach items="${page.content}" var="t">
-            <tr class="${t.closed ? 'table-success' : 'table-warning'}">
+            <tr class="${t.closed ? 'active-green' : 'active-yellow'}">
                 <td style="display: none">${t.id}</td>
                 <td style="display: none">${t.patientId}</td>
                 <td>${t.patientInsuranceNumber}</td>
@@ -116,6 +117,8 @@
         <a class="btn btn-outline-success" href="/treatments/new" role="button">New Treatment</a>
     </sec:authorize>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {

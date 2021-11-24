@@ -5,13 +5,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Patient ${patient.name}</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>${patient.name}</h2>
     <table class="table table-hover">
         <thead>
@@ -27,7 +28,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="${patient.patientState == 'TREATING' ? 'table-warning' : 'table-success'}">
+        <tr class="${patient.patientState == 'TREATING' ? 'active-yellow' : 'active-green'}">
             <td style="display: none">${patient.id}</td>
             <td>${patient.insuranceNumber}</td>
             <td>${patient.name}</td>
@@ -61,6 +62,8 @@
     <br>
     <a class="btn btn-outline-secondary" href="/patients" role="button">Back</a>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <div class="modal fade" id="dischargePatientModal" tabindex="-1" aria-labelledby="dischargePatientModal"
      aria-hidden="true">
     <div class="modal-dialog">

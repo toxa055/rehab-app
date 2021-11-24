@@ -5,12 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Prescriptions</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Prescriptions</h2>
     <div>
         <form action="/prescriptions/filter" method="get">
@@ -88,7 +89,7 @@
         </tr>
         </thead>
         <c:forEach items="${page.content}" var="p">
-            <tr class="${p.active ? 'table-warning' : 'table-success'}">
+            <tr class="${p.active ? 'active-yellow' : 'active-green'}">
                 <td style="display: none">${p.id}</td>
                 <td style="display: none">${p.patientId}</td>
                 <td>${p.patientInsuranceNumber}</td>
@@ -124,6 +125,8 @@
         </nav>
     </div>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     if (window.location.href.toString().includes('treatment')) {
         $('#filterDiv').hide();

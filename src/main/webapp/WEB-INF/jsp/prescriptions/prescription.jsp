@@ -5,13 +5,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Prescription</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Prescription for ${p.patientName}</h2>
     <table class="table table-hover">
         <thead>
@@ -37,7 +38,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="${p.active ? 'table-warning' : 'table-success'}">
+        <tr class="${p.active ? 'active-yellow' : 'active-green'}">
             <td style="display: none">${p.id}</td>
             <td style="display: none">${p.patientId}</td>
             <td>${p.patientInsuranceNumber}</td>
@@ -118,6 +119,8 @@
         </div>
     </div>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     if ($('#doctorId').text() != ${authDoctorId}) {
         $('#prescriptionCancelButton').attr('disabled', 'true');

@@ -5,12 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Employees</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Employees</h2>
     <table class="table table-hover">
         <thead>
@@ -25,7 +26,8 @@
         </tr>
         </thead>
         <c:forEach items="${page.content}" var="e">
-            <tr class="table-light">
+<%--            <tr class="table-light">--%>
+            <tr class="general-grey">
                 <td>${e.id}</td>
                 <td>${e.name}</td>
                 <td>${e.position}</td>
@@ -53,6 +55,8 @@
         <a class="btn btn-outline-success" href="/employees/new" role="button">New Employee</a>
     </sec:authorize>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {

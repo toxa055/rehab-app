@@ -5,13 +5,14 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     <title>Treatment</title>
 </head>
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>${treatment.patientName}'s treatment</h2>
     <table class="table table-hover">
         <thead>
@@ -31,7 +32,7 @@
             </sec:authorize>
         </tr>
         </thead>
-        <tr class="${treatment.closed ? 'table-success' : 'table-warning'}">
+        <tr class="${treatment.closed ? 'active-green' : 'active-yellow'}">
             <td style="display: none">${treatment.id}</td>
             <td style="display: none">${treatment.patientId}</td>
             <td>${treatment.patientInsuranceNumber}</td>
@@ -76,6 +77,8 @@
         </div>
     </div>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     if ($('#doctorId').text() != ${authDoctorId}) {
         $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success disabled');
