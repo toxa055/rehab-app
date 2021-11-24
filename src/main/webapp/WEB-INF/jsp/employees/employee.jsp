@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>${employee.name}</h2>
     <table class="table table-hover">
         <thead>
@@ -39,10 +39,11 @@
                             Change Password</a>
                     </c:otherwise>
                 </c:choose>
-
             </td>
         </tr>
     </table>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>

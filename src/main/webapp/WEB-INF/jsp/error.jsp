@@ -13,5 +13,8 @@
         <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
     </div>
 </div>
+<div class="fixed-bottom">
+    <jsp:include page="footer.jsp"/>
+</div>
 </body>
 </html>

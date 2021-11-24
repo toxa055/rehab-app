@@ -12,7 +12,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Event for ${event.patientName}</h2>
     <table class="table table-hover">
         <thead>
@@ -113,7 +113,8 @@
         </div>
     </div>
 </div>
-
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     $('#cancelEventButton').click(function () {
         let comm = $('#commentModal').val();

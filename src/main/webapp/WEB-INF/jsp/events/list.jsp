@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Events</h2>
     <div>
         <form action="/events/filter" method="get">
@@ -125,6 +125,8 @@
         </nav>
     </div>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     if (window.location.href.toString().includes('prescription')) {
         $('#filterDiv').hide();

@@ -10,7 +10,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Cures</h2>
     <table class="table table-hover">
         <thead>
@@ -41,6 +41,8 @@
     </div>
     <a class="btn btn-outline-success" href="/cures/new" role="button">New Cure</a>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {

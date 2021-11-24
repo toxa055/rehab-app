@@ -12,5 +12,8 @@
         <h2>Welcome to Rehab Application!</h2>
     </div>
 </div>
+<div class="fixed-bottom">
+    <jsp:include page="footer.jsp"/>
+</div>
 </body>
 </html>

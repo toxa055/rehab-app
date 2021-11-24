@@ -12,7 +12,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>${treatment.patientName}'s treatment</h2>
     <table class="table table-hover">
         <thead>
@@ -77,6 +77,8 @@
         </div>
     </div>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     if ($('#doctorId').text() != ${authDoctorId}) {
         $('#newPrescriptionButtonLink').attr('class', 'btn btn-outline-success disabled');

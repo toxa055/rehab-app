@@ -10,7 +10,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>${cure.name}</h2>
     <table class="table table-hover">
         <thead>
@@ -28,5 +28,7 @@
     </table>
     <a class="btn btn-outline-secondary" href="/cures" role="button">Back</a>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 </body>
 </html>

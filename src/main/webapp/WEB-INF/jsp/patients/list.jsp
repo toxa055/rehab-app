@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="../nav.jsp"/>
 <br>
-<div class="container-fluid">
+<div class="container-fluid" id="wrap">
     <h2>Patients</h2>
     <div>
         <form action="/patients/filter" method="get">
@@ -100,6 +100,8 @@
         <a class="btn btn-outline-success" href="/patients/new" role="button">New Patient</a>
     </sec:authorize>
 </div>
+<div id="main"></div>
+<jsp:include page="../footer.jsp"/>
 <script>
     let pageCount = ${page.totalPages};
     if (pageCount === 1) {
