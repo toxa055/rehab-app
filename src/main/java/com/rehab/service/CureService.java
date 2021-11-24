@@ -42,8 +42,9 @@ public class CureService {
         return toDto(cureCrudRepository.save(toEntity(cureDto)));
     }
 
-    public Page<CureDto> getAll(Pageable pageable) {
-        return cureCrudRepository.findAll(pageable).map(this::toDto);
+    public Page<CureDto> filter(String nameLike, Pageable pageable) {
+        return cureCrudRepository.filter(nameLike == null ? null : nameLike.strip().toLowerCase(), pageable)
+                .map(this::toDto);
     }
 
     private CureDto toDto(Cure cure) {

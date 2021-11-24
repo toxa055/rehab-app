@@ -74,7 +74,14 @@ class CureServiceTest {
     @Test
     public void getAll() {
         var expected = List.of(expected1, expected2);
-        var actual = cureService.getAll(PageRequest.of(0, 15)).getContent();
+        var actual = cureService.filter(null, PageRequest.of(0, 15)).getContent();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getWithFilter() {
+        var expected = List.of(expected1);
+        var actual = cureService.filter("ure1", PageRequest.of(0, 15)).getContent();
         assertEquals(expected, actual);
     }
 }

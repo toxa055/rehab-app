@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,9 +67,14 @@ public class CureController {
     }
 
     @GetMapping
-    public String cures(@PageableDefault(15) Pageable pageable, Model model) {
-        logger.info("Get all cures.");
-        model.addAttribute("page", cureService.getAll(pageable));
+    public String cures() {
+        return "redirect:/cures/filter?nameLike=";
+    }
+
+    @GetMapping("/filter")
+    public String filter(@RequestParam @Nullable String nameLike, @PageableDefault(15) Pageable pageable, Model model) {
+        logger.info("Filter cures by name like... {}.", nameLike);
+        model.addAttribute("page", cureService.filter(nameLike, pageable));
         return "/cures/list";
     }
 }
