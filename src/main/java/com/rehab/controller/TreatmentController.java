@@ -5,6 +5,7 @@ import com.rehab.service.PatientService;
 import com.rehab.service.TreatmentService;
 import com.rehab.util.ControllerUtil;
 import com.rehab.util.SecurityUtil;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -28,15 +29,18 @@ public class TreatmentController {
     private static final String REDIRECT = "redirect:../";
     private final TreatmentService treatmentService;
     private final PatientService patientService;
+    private final Logger logger;
 
     @Autowired
-    public TreatmentController(TreatmentService treatmentService, PatientService patientService) {
+    public TreatmentController(TreatmentService treatmentService, PatientService patientService, Logger logger) {
         this.treatmentService = treatmentService;
         this.patientService = patientService;
+        this.logger = logger;
     }
 
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
+        logger.info("Get treatment by id {}.", id);
         model.addAttribute("treatment", treatmentService.getById(id));
         model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
         return "treatments/treatment";
@@ -50,6 +54,8 @@ public class TreatmentController {
                          @RequestParam @Nullable boolean onlyOpen,
                          @PageableDefault(value = 15, sort = "date") Pageable pageable,
                          Model model) {
+        logger.info("Filter treatments by date {}, insurance number {}, authenticated doctor {}, only open treatments {}.",
+                tDate, insuranceNumber, authDoctor, onlyOpen);
         model.addAttribute("page", treatmentService.filter(tDate, insuranceNumber, authDoctor,
                 onlyOpen, pageable));
         return "/treatments/list";
@@ -68,6 +74,7 @@ public class TreatmentController {
     @GetMapping("/close/{id}")
     @Secured("ROLE_DOCTOR")
     public String close(@PathVariable int id) {
+        logger.info("Close treatment with id {}.", id);
         treatmentService.close(id);
         return REDIRECT + id;
     }
@@ -89,10 +96,12 @@ public class TreatmentController {
     @Secured("ROLE_DOCTOR")
     public String createTreatment(@Valid TreatmentDto treatmentDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
+            logger.warn("Binding result for treatment has errors: {}", bindingResult.getAllErrors());
             model.addAllAttributes(ControllerUtil.getErrorsMap(bindingResult));
             model.addAttribute("t", treatmentDto);
             return NEW_TREATMENT_URL;
         }
+        logger.info("Create new treatment for patient with id {}.", treatmentDto.getPatientId());
         var savedTreatment = treatmentService.save(treatmentDto);
         return REDIRECT + savedTreatment.getId();
     }
