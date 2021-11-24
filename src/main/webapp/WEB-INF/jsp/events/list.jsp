@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Events</title>
 </head>
 <body>
@@ -87,8 +88,8 @@
         </tr>
         </thead>
         <c:forEach items="${page.content}" var="e">
-            <tr class="${e.eventState == 'PLANNED' ? 'table-warning' :
-             e.eventState == 'PERFORMED' ? 'table-success' : 'table-danger'}">
+            <tr class="${e.eventState == 'PLANNED' ? 'active-yellow' :
+             e.eventState == 'PERFORMED' ? 'active-green' : 'cancelled-red'}">
                 <td style="display: none">${e.id}</td>
                 <td style="display: none">${e.patientId}</td>
                 <td>${e.patientInsuranceNumber}</td>

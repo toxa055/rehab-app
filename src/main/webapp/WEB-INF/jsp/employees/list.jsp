@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Employees</title>
 </head>
 <body>
@@ -25,7 +26,8 @@
         </tr>
         </thead>
         <c:forEach items="${page.content}" var="e">
-            <tr class="table-light">
+<%--            <tr class="table-light">--%>
+            <tr class="general-grey">
                 <td>${e.id}</td>
                 <td>${e.name}</td>
                 <td>${e.position}</td>

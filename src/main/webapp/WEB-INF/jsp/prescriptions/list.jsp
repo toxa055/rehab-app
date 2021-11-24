@@ -5,6 +5,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html: charset=UTF-8">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
     <title>Prescriptions</title>
 </head>
 <body>
@@ -88,7 +89,7 @@
         </tr>
         </thead>
         <c:forEach items="${page.content}" var="p">
-            <tr class="${p.active ? 'table-warning' : 'table-success'}">
+            <tr class="${p.active ? 'active-yellow' : 'active-green'}">
                 <td style="display: none">${p.id}</td>
                 <td style="display: none">${p.patientId}</td>
                 <td>${p.patientInsuranceNumber}</td>
