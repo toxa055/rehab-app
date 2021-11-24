@@ -2,6 +2,7 @@ package com.rehab.controller;
 
 import com.rehab.service.EventService;
 import com.rehab.util.SecurityUtil;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,14 +24,17 @@ public class EventController {
     private static final String REDIRECT = "redirect:../";
     private static final String EVENTS_URL = "/events/list";
     private final EventService eventService;
+    private final Logger logger;
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, Logger logger) {
         this.eventService = eventService;
+        this.logger = logger;
     }
 
     @GetMapping("/{eventId}")
     public String getById(@PathVariable int eventId, Model model) {
+        logger.info("Get event by id {}.", eventId);
         model.addAttribute("event", eventService.getById(eventId));
         model.addAttribute("authNurseId", SecurityUtil.getAuthEmployee().getId());
         return "/events/event";
@@ -40,6 +44,7 @@ public class EventController {
     public String getByPrescriptionId(@PathVariable int prescriptionId,
                                       @PageableDefault(value = 25, sort = {"plannedDate", "plannedTime"})
                                               Pageable pageable, Model model) {
+        logger.info("Get events by prescription id {}.", prescriptionId);
         model.addAttribute(PAGE, eventService.getByPrescriptionId(prescriptionId, pageable));
         return EVENTS_URL;
     }
@@ -52,6 +57,8 @@ public class EventController {
                          @RequestParam @Nullable boolean onlyPlanned,
                          @PageableDefault(value = 25, sort = {"plannedDate", "plannedTime"}) Pageable pageable,
                          Model model) {
+        logger.info("Filter events by planned date {}, insurance number {}, authenticated nurse {}, only planned events {}.",
+                plannedDate, insuranceNumber, authNurse, onlyPlanned);
         model.addAttribute(PAGE, eventService.filter(plannedDate, insuranceNumber, authNurse, onlyPlanned, pageable));
         return EVENTS_URL;
     }
@@ -59,6 +66,7 @@ public class EventController {
     @Secured("ROLE_NURSE")
     @GetMapping("/choose/{eventId}")
     public String choose(@PathVariable int eventId) {
+        logger.info("Choose event with id {}.", eventId);
         eventService.setNurse(eventId);
         return REDIRECT + eventId;
     }
@@ -66,6 +74,7 @@ public class EventController {
     @Secured("ROLE_NURSE")
     @GetMapping("/discard/{eventId}")
     public String discard(@PathVariable int eventId) {
+        logger.info("Discard event with id {}.", eventId);
         eventService.unSetNurse(eventId);
         return REDIRECT + eventId;
     }
@@ -74,6 +83,7 @@ public class EventController {
     @GetMapping("/change/{eventId}")
     public String changeState(@PathVariable int eventId, @RequestParam String state,
                               @RequestParam @Nullable String comment) {
+        logger.info("Change event state on {} for event with id {}.", state, eventId);
         eventService.changeState(eventId, state, comment);
         return REDIRECT + eventId;
     }
