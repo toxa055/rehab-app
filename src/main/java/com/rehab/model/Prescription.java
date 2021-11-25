@@ -67,7 +67,7 @@ public class Prescription extends AbstractIdEntity {
      * It connects to table 'cures' with 'cure_id'.
      * Value cannot be null.
      *
-     * @see Treatment
+     * @see Cure
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cure_id", nullable = false)
