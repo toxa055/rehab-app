@@ -11,7 +11,7 @@ public abstract class AbstractIdEntity {
 
     /**
      * Unique identifier which has any entity.
-     * It's mapped to column 'id' to table in database.
+     * It maps to column 'id' to table in database.
      */
     @Id
     @SequenceGenerator(name = "general_seq", sequenceName = "general_seq", allocationSize = 1)
