@@ -24,7 +24,7 @@ public interface PrescriptionCrudRepository extends JpaRepository<Prescription, 
      * @param pDate           particular prescription date.
      * @param insuranceNumber patient insurance number.
      * @param doctorId        doctor id.
-     * @param active          active prescription or not.
+     * @param active          only active prescriptions or any.
      * @param pageable        interface that provides pagination.
      * @return page of found prescriptions by given parameters.
      */

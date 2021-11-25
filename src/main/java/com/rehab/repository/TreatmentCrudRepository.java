@@ -24,7 +24,7 @@ public interface TreatmentCrudRepository extends JpaRepository<Treatment, Intege
      * @param tDate           particular treatment date.
      * @param insuranceNumber patient insurance number.
      * @param doctorId        doctor id.
-     * @param closed          closed treatment or not.
+     * @param closed          only closed treatments or any.
      * @param pageable        interface that provides pagination.
      * @return page of found treatments by given parameters.
      */
