@@ -7,23 +7,95 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
+/**
+ * Data Transfer Object for {@link com.rehab.model.Event}, i.e. it's a view representation of Event model.
+ * It's used for transferring data between services and controllers.
+ */
 public class EventDto {
+
+    /**
+     * Event id.
+     */
     private int id;
+
+    /**
+     * Patient id.
+     */
     private int patientId;
+
+    /**
+     * Patient insurance number.
+     */
     private int patientInsuranceNumber;
+
+    /**
+     * Patient name, second name.
+     */
     private String patientName;
+
+    /**
+     * Nurse id.
+     */
     private int nurseId;
+
+    /**
+     * Nurse name, second name.
+     */
     private String nurseName;
+
+    /**
+     * Prescription id.
+     */
     private int prescriptionId;
+
+    /**
+     * Event planned date.
+     */
     private LocalDate plannedDate;
+
+    /**
+     * Event planned time.
+     */
     private LocalTime plannedTime;
+
+    /**
+     * Event state.
+     */
     private EventState eventState;
+
+    /**
+     * Cure id.
+     */
     private int cureId;
+
+    /**
+     * Cure name.
+     */
     private String cureName;
+
+    /**
+     * Cure type.
+     */
     private CureType cureType;
+
+    /**
+     * Cure dose.
+     */
     private String dose;
+
+    /**
+     * Event end date.
+     */
     private LocalDate endDate;
+
+    /**
+     * Event end time.
+     */
     private LocalTime endTime;
+
+    /**
+     * Event comment.
+     */
     private String comment;
 
     public int getId() {
@@ -162,6 +234,12 @@ public class EventDto {
         this.comment = comment;
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param o the reference object with which to compare.
+     * @return true if this object is the same as the o argument; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -186,6 +264,11 @@ public class EventDto {
                 && Objects.equals(comment, eventDto.comment);
     }
 
+    /**
+     * Returns a hash code value for current object.
+     *
+     * @return a hash code value for the object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, patientId, patientInsuranceNumber, patientName, nurseId, nurseName, prescriptionId,
