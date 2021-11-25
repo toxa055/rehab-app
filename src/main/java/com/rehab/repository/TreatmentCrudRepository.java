@@ -10,9 +10,24 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Interface which allows working with treatments as entities in database.
+ *
+ * @see Treatment
+ */
 @Repository
 public interface TreatmentCrudRepository extends JpaRepository<Treatment, Integer> {
 
+    /**
+     * Method to get treatments filtering by given parameters.
+     *
+     * @param tDate           particular treatment date.
+     * @param insuranceNumber patient insurance number.
+     * @param doctorId        doctor id.
+     * @param closed          only closed treatments or any.
+     * @param pageable        interface that provides pagination.
+     * @return page of found treatments by given parameters.
+     */
     @Query("""
             SELECT t FROM Treatment t
             WHERE (cast(:tDate AS date) IS NULL OR t.date=:tDate)
@@ -23,5 +38,11 @@ public interface TreatmentCrudRepository extends JpaRepository<Treatment, Intege
     Page<Treatment> filter(LocalDate tDate, Integer insuranceNumber, Integer doctorId, Boolean closed,
                            Pageable pageable);
 
+    /**
+     * Method to get all treatments for particular patient by given patient id.
+     *
+     * @param patientId patient id, must not be null.
+     * @return list of found treatments.
+     */
     List<Treatment> findAllByPatientId(int patientId);
 }

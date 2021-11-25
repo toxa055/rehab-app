@@ -10,9 +10,24 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Interface which allows working with prescriptions as entities in database.
+ *
+ * @see Prescription
+ */
 @Repository
 public interface PrescriptionCrudRepository extends JpaRepository<Prescription, Integer> {
 
+    /**
+     * Method to get prescriptions filtering by given parameters.
+     *
+     * @param pDate           particular prescription date.
+     * @param insuranceNumber patient insurance number.
+     * @param doctorId        doctor id.
+     * @param active          only active prescriptions or any.
+     * @param pageable        interface that provides pagination.
+     * @return page of found prescriptions by given parameters.
+     */
     @Query("""
             SELECT p FROM Prescription p
             WHERE (cast(:pDate AS date) IS NULL OR p.date=:pDate)
@@ -23,7 +38,20 @@ public interface PrescriptionCrudRepository extends JpaRepository<Prescription, 
     Page<Prescription> filter(LocalDate pDate, Integer insuranceNumber, Integer doctorId, Boolean active,
                               Pageable pageable);
 
+    /**
+     * Method to get all prescriptions for particular treatment by given treatment id.
+     *
+     * @param treatmentId treatment id, must not be null.
+     * @param pageable    interface that provides pagination.
+     * @return page of found prescriptions.
+     */
     Page<Prescription> findAllByTreatmentId(int treatmentId, Pageable pageable);
 
+    /**
+     * Method to get all prescriptions for particular treatment by given treatment id.
+     *
+     * @param treatmentId treatment id, must not be null.
+     * @return list of found prescriptions.
+     */
     List<Prescription> findAllByTreatmentId(int treatmentId);
 }
