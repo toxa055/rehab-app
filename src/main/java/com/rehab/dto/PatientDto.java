@@ -8,21 +8,49 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Data Transfer Object for {@link com.rehab.model.Patient}, i.e. it's a view representation of Patient model.
+ * It's used for transferring data between services and controllers.
+ */
 public class PatientDto {
+
+    /**
+     * Patient id.
+     */
     private Integer id;
+
+    /**
+     * Patient insurance number.
+     */
     @NotNull(message = "Insurance number cannot be empty")
     @Range(min = 1_000, max = 99_999_999, message = "Insurance number must contain from 4 to 8 digits")
     private Integer insuranceNumber;
+
+    /**
+     * Patient name, second name.
+     */
     @NotBlank(message = "Name cannot be empty")
     @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String name;
+
+    /**
+     * Patient date of birth.
+     */
     @Past(message = "Birth date must be a past date")
     @NotNull(message = "Birth date cannot be empty")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
+
+    /**
+     * Patient home address.
+     */
     @NotBlank(message = "Address cannot be empty")
     @Size(min = 8, max = 50, message = "Length must be from 8 to 50 symbols")
     private String address;
+
+    /**
+     * Patient state.
+     */
     private PatientState patientState = PatientState.TREATING;
 
     public Integer getId() {
@@ -73,6 +101,12 @@ public class PatientDto {
         this.patientState = patientState;
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param o the reference object with which to compare.
+     * @return true if this object is the same as the o argument; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -86,6 +120,11 @@ public class PatientDto {
                 && patientState == that.patientState;
     }
 
+    /**
+     * Returns a hash code value for current object.
+     *
+     * @return a hash code value for the object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id, insuranceNumber, name, birthDate, address, patientState);
