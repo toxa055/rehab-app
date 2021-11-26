@@ -33,7 +33,7 @@ public class CureService {
     private final ModelMapper modelMapper;
 
     /**
-     * Constructs current instance and initializes following fields.
+     * Constructs new instance and initializes following fields.
      *
      * @param cureCrudRepository description of cureCrudRepository is in field declaration.
      * @param modelMapper        description of modelMapper is in field declaration.
@@ -70,7 +70,7 @@ public class CureService {
      * Method maps given cureDto to cure and saves it.
      *
      * @param cureDto that will be saved.
-     * @return saved cure mapped to CureDto.
+     * @return saved cure mapped to cureDto.
      */
     public CureDto save(CureDto cureDto) {
         var name = cureDto.getName();
@@ -81,11 +81,11 @@ public class CureService {
     }
 
     /**
-     * Method returns cures whose names contain value of nameLike and maps them to Page of CureDto.
+     * Method finds cures whose names contain value of nameLike and maps them to page of cureDto.
      *
      * @param nameLike not a particular cure name, but char sequence which cure names have to contain.
      * @param pageable interface that provides pagination.
-     * @return page of all cures mapped to CureDto if nameLike is null or only found ones.
+     * @return page of all cures mapped to cureDto if nameLike is null or only found ones.
      */
     public Page<CureDto> filter(String nameLike, Pageable pageable) {
         return cureCrudRepository.filter(nameLike == null ? null : nameLike.strip().toLowerCase(), pageable)
