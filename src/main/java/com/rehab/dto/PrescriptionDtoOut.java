@@ -3,9 +3,26 @@ package com.rehab.dto;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Data Transfer Object for {@link com.rehab.model.Prescription}. i.e. it's a view representation of Prescription model.
+ * It's used for transferring data between services and controllers.
+ * It's only used for getting prescription data.
+ */
 public class PrescriptionDtoOut extends AbstractPrescriptionDto {
+
+    /**
+     * Prescription date.
+     */
     private LocalDate date;
+
+    /**
+     * String representation of pattern time units.
+     */
     private String patternUnits;
+
+    /**
+     * Whether prescription active.
+     */
     private boolean active;
 
     public LocalDate getDate() {
@@ -32,6 +49,12 @@ public class PrescriptionDtoOut extends AbstractPrescriptionDto {
         this.active = active;
     }
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     *
+     * @param o the reference object with which to compare.
+     * @return true if this object is the same as the o argument; false otherwise.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -43,6 +66,11 @@ public class PrescriptionDtoOut extends AbstractPrescriptionDto {
                 && patternUnits.equals(that.patternUnits);
     }
 
+    /**
+     * Returns a hash code value for current object.
+     *
+     * @return a hash code value for the object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), date, patternUnits, active);
