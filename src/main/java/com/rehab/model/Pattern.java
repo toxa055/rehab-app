@@ -44,7 +44,8 @@ public class Pattern extends AbstractIdEntity {
     private TimeUnit unit;
 
     /**
-     * Particular value which defines what time a day or day of week
+     * String representation of particular time units
+     * which defines what time a day or day of week
      * patient has to take medicine (or to be treated with procedure).
      * It maps to column 'pattern_units' to table 'periods' in database.
      * Value cannot be null.
