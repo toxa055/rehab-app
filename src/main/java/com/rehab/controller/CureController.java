@@ -67,7 +67,7 @@ public class CureController {
      * Method executes GET request to receive cure by given id.
      *
      * @param id    cure id.
-     * @param model holds model attributes.
+     * @param model holder for model attributes.
      * @return name of jsp page.
      */
     @GetMapping("/{id}")
@@ -105,7 +105,7 @@ public class CureController {
      * Method executes POST request to create new cure. Given cureDto is validated before saving.
      *
      * @param cureDto       that will be saved.
-     * @param bindingResult holder for filed errors.
+     * @param bindingResult holder for field errors.
      * @param model         holder for model attributes.
      * @return redirect to list of cures.
      */
