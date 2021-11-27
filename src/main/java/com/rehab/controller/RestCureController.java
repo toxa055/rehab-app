@@ -28,6 +28,8 @@ public class RestCureController {
     private final Logger logger;
 
     /**
+     * Constructs new instance and initializes following fields.
+     *
      * @param cureService description of cureService is in field declaration.
      * @param logger      description of logger is in field declaration.
      */

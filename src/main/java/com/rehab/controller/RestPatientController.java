@@ -27,6 +27,8 @@ public class RestPatientController {
     private final Logger logger;
 
     /**
+     * Constructs new instance and initializes following fields.
+     *
      * @param patientService description of patientService is in field declaration.
      * @param logger         description of logger is in field declaration.
      */

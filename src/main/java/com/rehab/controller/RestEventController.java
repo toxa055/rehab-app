@@ -29,6 +29,8 @@ public class RestEventController {
     private final Logger logger;
 
     /**
+     * Constructs new instance and initializes following fields.
+     *
      * @param eventService description of eventService is in field declaration.
      * @param logger       description of logger is in field declaration.
      */
