@@ -177,7 +177,7 @@ public class TreatmentController {
      * @param treatmentDto  that will be saved.
      * @param bindingResult holder for field errors.
      * @param model         holder for model attributes.
-     * @return redirect to created treatment
+     * @return redirect to created treatment.
      */
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")

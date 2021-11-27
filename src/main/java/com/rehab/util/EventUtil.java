@@ -100,7 +100,7 @@ public class EventUtil {
 
     /**
      * Method changes event state from 'PLANNED' to 'CANCELLED',
-     * sets current day and  time, and adds comment to them.
+     * sets current day and time, and adds comment to them.
      *
      * @param events     that will be cancelled.
      * @param doctorName that will be added to comment.
