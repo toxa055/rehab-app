@@ -133,7 +133,7 @@ public class TreatmentService {
      *
      * @param date            particular date when treatments were created.
      * @param insuranceNumber patient insurance number.
-     * @param authDoctor      only treatments that were created authenticated doctor or any.
+     * @param authDoctor      only treatments that were created by authenticated doctor or any.
      * @param onlyOpen        only open treatments or any.
      * @param pageable        interface that provides pagination.
      * @return page of treatments (found by given parameters) mapped to treatmentDto.
