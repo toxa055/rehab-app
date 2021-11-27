@@ -255,7 +255,7 @@ public class EventService {
     /**
      * Method checks whether date of changed event is today date and sends message to message queue.
      *
-     * @param changedEvent that date will be checked.
+     * @param changedEvent event that date will be checked.
      */
     private void sendMessage(Event changedEvent) {
         if (changedEvent.getPlannedDate().equals(LocalDate.now())) {
