@@ -79,6 +79,7 @@ public class EmployeeService {
 
     /**
      * Method maps given userDto to employee and saves it.
+     * It's impossible to save new employee with email, if another employee has the same one.
      *
      * @param userDto that will be saved as employee.
      * @return saved employee mapped to employeeDto.
@@ -97,7 +98,7 @@ public class EmployeeService {
      * Method changes password for employee.
      *
      * @param userDto stores new password for employee.
-     * @return employeeDto that password was changed.
+     * @return employee, that password was changed, mapped to employeeDto.
      */
     @Transactional
     public EmployeeDto changePassword(UserDto userDto) {

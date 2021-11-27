@@ -68,6 +68,7 @@ public class CureService {
 
     /**
      * Method maps given cureDto to cure and saves it.
+     * It's impossible to save new cure with name, if another cure has the same one.
      *
      * @param cureDto that will be saved.
      * @return saved cure mapped to cureDto.

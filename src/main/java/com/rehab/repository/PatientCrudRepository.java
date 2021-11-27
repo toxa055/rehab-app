@@ -23,7 +23,7 @@ public interface PatientCrudRepository extends JpaRepository<Patient, Integer> {
      *
      * @param insuranceNumber particular insurance number.
      * @param nameLike        not a particular patient name, but char sequence which patient names have to contain.
-     * @param treating        patient state: only treating or not.
+     * @param state           only given patient state or any.
      * @param pageable        interface that provides pagination.
      * @return page of found patients by given parameters.
      */
@@ -31,9 +31,9 @@ public interface PatientCrudRepository extends JpaRepository<Patient, Integer> {
             SELECT p FROM Patient p
             WHERE (:insuranceNumber IS NULL OR p.insuranceNumber=:insuranceNumber)
             AND (:nameLike IS NULL OR LOWER(p.name) LIKE %:nameLike%)
-            AND (:treating IS NULL OR p.patientState=:treating)
+            AND (:state IS NULL OR p.patientState=:state)
             """)
-    Page<Patient> filter(Integer insuranceNumber, String nameLike, PatientState treating, Pageable pageable);
+    Page<Patient> filter(Integer insuranceNumber, String nameLike, PatientState state, Pageable pageable);
 
     /**
      * Method to get only patient by given insurance number.
