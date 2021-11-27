@@ -20,17 +20,48 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 
+/**
+ * Controller that executes http requests for Treatment.
+ * Any method returns name of jsp page to show it to user or redirects to another.
+ * Almost any method adds to model execution result of treatmentService (as attribute).
+ */
 @Controller
 @RequestMapping("/treatments")
 @Secured({"ROLE_ADMIN", "ROLE_DOCTOR"})
 public class TreatmentController {
 
+    /**
+     * Name of jsp page that contains form for creating treatment.
+     */
     private static final String NEW_TREATMENT_URL = "/treatments/new";
+
+    /**
+     * Redirection to previous resource.
+     */
     private static final String REDIRECT = "redirect:../";
+
+    /**
+     * TreatmentService bean.
+     */
     private final TreatmentService treatmentService;
+
+    /**
+     * PatientService bean.
+     */
     private final PatientService patientService;
+
+    /**
+     * Interface that logs specific messages.
+     */
     private final Logger logger;
 
+    /**
+     * Constructs new instance and initializes following fields.
+     *
+     * @param treatmentService description of treatmentService is in field declaration.
+     * @param patientService   description of patientService is in field declaration.
+     * @param logger           description of logger is in field declaration.
+     */
     @Autowired
     public TreatmentController(TreatmentService treatmentService, PatientService patientService, Logger logger) {
         this.treatmentService = treatmentService;
@@ -38,6 +69,13 @@ public class TreatmentController {
         this.logger = logger;
     }
 
+    /**
+     * Method executes GET request to receive treatment by given id.
+     *
+     * @param id    treatment id.
+     * @param model holder for model attributes.
+     * @return name of jsp page.
+     */
     @GetMapping("/{id}")
     public String getById(@PathVariable int id, Model model) {
         logger.info("Get treatment by id {}.", id);
@@ -46,6 +84,17 @@ public class TreatmentController {
         return "treatments/treatment";
     }
 
+    /**
+     * Method executes GET request to receive list of treatments filtered by given parameters.
+     *
+     * @param tDate           particular date when treatments were created.
+     * @param insuranceNumber patient insurance number.
+     * @param authDoctor      only treatments that were created by authenticated doctor or any.
+     * @param onlyOpen        only open treatments or any.
+     * @param pageable        interface that provides pagination.
+     * @param model           holder for model attributes.
+     * @return name of jsp page.
+     */
     @GetMapping("/filter")
     public String filter(@RequestParam @Nullable
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate tDate,
@@ -61,16 +110,33 @@ public class TreatmentController {
         return "/treatments/list";
     }
 
+    /**
+     * Method executes GET request to receive list of treatments with no filter.
+     *
+     * @return redirect to list of treatments.
+     */
     @GetMapping
     public String treatments() {
         return "redirect:/treatments/filter?tDate=&insuranceNumber=";
     }
 
+    /**
+     * Method executes GET request to receive list of treatments filtered by today date
+     * and created by only authenticated doctor.
+     *
+     * @return redirect to list of treatments.
+     */
     @GetMapping("/today")
     public String todayTreatments() {
         return "redirect:/treatments/filter?tDate=" + LocalDate.now() + "&insuranceNumber=&authDoctor=on";
     }
 
+    /**
+     * Method executes GET request to close treatment by given id.
+     *
+     * @param id treatment id.
+     * @return redirect to current treatment.
+     */
     @GetMapping("/close/{id}")
     @Secured("ROLE_DOCTOR")
     public String close(@PathVariable int id) {
@@ -79,12 +145,25 @@ public class TreatmentController {
         return REDIRECT + id;
     }
 
+    /**
+     * Method executes GET request to open jsp page where new treatment will be created.
+     *
+     * @return name of jsp page.
+     */
     @GetMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String create() {
         return NEW_TREATMENT_URL;
     }
 
+    /**
+     * Method executes GET request to open jsp page where new treatment
+     * (for patient by given patient id) will be created.
+     *
+     * @param patientId patient id.
+     * @param model     holder for model attributes.
+     * @return name of jsp page.
+     */
     @GetMapping("/new/{patientId}")
     @Secured("ROLE_DOCTOR")
     public String create(@PathVariable int patientId, Model model) {
@@ -92,6 +171,14 @@ public class TreatmentController {
         return NEW_TREATMENT_URL;
     }
 
+    /**
+     * Method executes POST request to create new treatment. Given treatmentDto is validated before saving.
+     *
+     * @param treatmentDto  that will be saved.
+     * @param bindingResult holder for field errors.
+     * @param model         holder for model attributes.
+     * @return redirect to created treatment.
+     */
     @PostMapping("/new")
     @Secured("ROLE_DOCTOR")
     public String createTreatment(@Valid TreatmentDto treatmentDto, BindingResult bindingResult, Model model) {
