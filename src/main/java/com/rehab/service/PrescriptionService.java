@@ -1,5 +1,7 @@
 package com.rehab.service;
 
+import com.rehab.config.BeansConfig;
+import com.rehab.config.MQConfig;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.dto.PrescriptionDtoOut;
 import com.rehab.exception.ApplicationException;
@@ -10,6 +12,7 @@ import com.rehab.repository.*;
 import com.rehab.util.EventUtil;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,18 +28,67 @@ import java.util.stream.Collectors;
 
 import static com.rehab.util.SecurityUtil.getAuthEmployee;
 
+/**
+ * Service class for Prescription. It operates with Prescription, PrescriptionDto,
+ * PrescriptionDtoOut and contains methods that are considered as business logic.
+ */
 @Service
 public class PrescriptionService {
 
+    /**
+     * PrescriptionCrudRepository bean.
+     */
     private final PrescriptionCrudRepository prescriptionCrudRepository;
+
+    /**
+     * PatternCrudRepository bean.
+     */
     private final PatternCrudRepository patternCrudRepository;
+
+    /**
+     * PeriodCrudRepository bean.
+     */
     private final PeriodCrudRepository periodCrudRepository;
+
+    /**
+     * EventCrudRepository bean.
+     */
     private final EventCrudRepository eventCrudRepository;
+
+    /**
+     * ModelMapper bean.
+     *
+     * @see BeansConfig#modelMapper()
+     */
     private final ModelMapper modelMapper;
+
+    /**
+     * Contains mapping configuration from PrescriptionDto to Prescription for modelMapper.
+     */
     private final TypeMap<PrescriptionDto, Prescription> typeMapToEntity;
+
+    /**
+     * Contains mapping configuration from Prescription to PrescriptionDTO for modelMapper.
+     */
     private final TypeMap<Prescription, PrescriptionDto> typeMapToDto;
+
+    /**
+     * RabbitTemplate bean. It's used for sending messages to queue.
+     *
+     * @see MQConfig#template(ConnectionFactory)
+     */
     private final RabbitTemplate template;
 
+    /**
+     * Constructs new instance and initializes following fields. Sets mapping configuration for modelMapper.
+     *
+     * @param prescriptionCrudRepository description of prescriptionCrudRepository is in field declaration.
+     * @param patternCrudRepository      description of patternCrudRepository is in field declaration.
+     * @param periodCrudRepository       description of periodCrudRepository is in field declaration.
+     * @param eventCrudRepository        description of eventCrudRepository is in field declaration.
+     * @param modelMapper                description of modelMapper is in field declaration.
+     * @param template                   description of template is in field declaration.
+     */
     @Autowired
     public PrescriptionService(PrescriptionCrudRepository prescriptionCrudRepository,
                                PatternCrudRepository patternCrudRepository, PeriodCrudRepository periodCrudRepository,
@@ -52,23 +104,54 @@ public class PrescriptionService {
         typeMapToDto = modelMapper.createTypeMap(Prescription.class, PrescriptionDto.class);
     }
 
+    /**
+     * Method returns only prescriptionDto by given prescription id.
+     *
+     * @param id prescription id.
+     * @return found prescription mapped to prescriptionDto.
+     */
     public PrescriptionDto getById(int id) {
         return toDto(getPrescriptionById(id));
     }
 
+    /**
+     * Method returns only prescriptionDtoOut by given prescription id.
+     *
+     * @param id prescription id.
+     * @return found prescription mapped to prescriptionDtoOut.
+     */
     public PrescriptionDtoOut getPrescriptionDtoOutById(int id) {
         return toDtoOut(getPrescriptionById(id));
     }
 
+    /**
+     * Method finds prescriptions for particular treatment and maps them to page of prescriptionDtoOut.
+     *
+     * @param treatmentId treatment id that prescriptions will be found for.
+     * @param pageable    interface that provides pagination.
+     * @return page of prescriptions for treatment mapped to prescriptionDtoOut.
+     */
     public Page<PrescriptionDtoOut> getByTreatmentId(int treatmentId, Pageable pageable) {
         return prescriptionCrudRepository.findAllByTreatmentId(treatmentId, pageable).map(this::toDtoOut);
     }
 
+    /**
+     * Method saves given prescriptionDto.
+     *
+     * @param prescriptionDto that will be saved.
+     * @return saved prescription mapped to prescriptionDtoOut.
+     */
     @Transactional
     public PrescriptionDtoOut save(PrescriptionDto prescriptionDto) {
         return toDtoOut(savePrescription(prescriptionDto));
     }
 
+    /**
+     * Method saves given prescriptionDto and cancels the previous one (that is considered to be updated).
+     *
+     * @param prescriptionDto that will be saved.
+     * @return saved prescription mapped to prescriptionDtoOut.
+     */
     @Transactional
     public PrescriptionDtoOut update(PrescriptionDto prescriptionDto) {
         var cancellingPrescriptionId = prescriptionDto.getId();
@@ -78,24 +161,57 @@ public class PrescriptionService {
         return toDtoOut(newPrescription);
     }
 
+    /**
+     * Method cancels prescription.
+     *
+     * @param id prescription id.
+     * @return cancelled prescription mapped to prescriptionDtoOut.
+     */
     @Transactional
     public PrescriptionDtoOut cancel(int id) {
         return toDtoOut(cancelPrescription(id));
     }
 
-    public Page<PrescriptionDtoOut> filter(LocalDate pDate, Integer insuranceNumber, boolean authDoctor,
+    /**
+     * Method finds prescriptions by given parameters and maps them to page of prescriptionDtoOut.
+     *
+     * @param date            particular date when prescriptions were created.
+     * @param insuranceNumber patient insurance number.
+     * @param authDoctor      only prescriptions that were created by authenticated doctor or any.
+     * @param onlyActive      only active prescriptions or any.
+     * @param pageable        interface that provides pagination.
+     * @return page of prescriptions (found by given parameters) mapped to prescriptionDtoOut.
+     */
+    public Page<PrescriptionDtoOut> filter(LocalDate date, Integer insuranceNumber, boolean authDoctor,
                                            boolean onlyActive, Pageable pageable) {
-        return prescriptionCrudRepository.filter(pDate, insuranceNumber,
+        return prescriptionCrudRepository.filter(date, insuranceNumber,
                 authDoctor ? getAuthEmployee().getId() : null,
                 onlyActive ? true : null,
                 pageable).map(this::toDtoOut);
     }
 
+    /**
+     * Method returns only prescription by given prescription id.
+     *
+     * @param id prescription id.
+     * @return found prescription.
+     */
     private Prescription getPrescriptionById(int id) {
         return prescriptionCrudRepository.findById(id).orElseThrow(() ->
                 new NoSuchElementException("Prescription with id " + id + " not found."));
     }
 
+    /**
+     * Method maps given dto to prescription and saves it.
+     * At first, method check whether period and pattern from given dto are existed in database,
+     * if they are not, method saves them to database. Then method saves prescription.
+     * After that, method calls utility method to crate new planned events based on given dto and saves them.
+     * Finally, method sends message to message queue if there are new events planned for today date were created.
+     *
+     * @param dto that will be saved.
+     * @return saved prescription.
+     * @see EventUtil#createEvents(Prescription)
+     */
     private Prescription savePrescription(PrescriptionDto dto) {
         var prescriptionFromDto = toEntity(dto);
         var periodFromDto = prescriptionFromDto.getPeriod();
@@ -113,6 +229,17 @@ public class PrescriptionService {
         return savedPrescription;
     }
 
+    /**
+     * Method sets prescription as inactive and cancels all events that were created for it.
+     * It,s impossible to cancel prescription if it is already cancelled or was created by different doctor.
+     * Method calls utility method to change state for events (associated to current prescription)
+     * from 'PLANNED' to 'CANCELLED'.
+     * Finally, method sends message to message queue if there are events planned for today date that were cancelled.
+     *
+     * @param id prescription id that will be cancelled.
+     * @return cancelled prescription.
+     * @see EventUtil#getEventsForCancelling(List, String)
+     */
     private Prescription cancelPrescription(int id) {
         var cancellingPrescription = getPrescriptionById(id);
         if (!cancellingPrescription.isActive()) {
@@ -131,6 +258,11 @@ public class PrescriptionService {
         return savedPrescription;
     }
 
+    /**
+     * Method checks whether date of any changed events is today date and sends message to message queue.
+     *
+     * @param changedEvents list of events that date will be checked.
+     */
     private void sendMessage(List<Event> changedEvents) {
         var today = LocalDate.now();
         var hasTodayEvents = changedEvents
@@ -141,6 +273,13 @@ public class PrescriptionService {
         }
     }
 
+    /**
+     * Method maps (converts) given object of Prescription class to object of PrescriptionDto class.
+     * It transforms string representation of pattern units to list of them.
+     *
+     * @param prescription object to map from Prescription to PrescriptionDto.
+     * @return mapped instance of PrescriptionDto class.
+     */
     private PrescriptionDto toDto(Prescription prescription) {
         var units = Arrays.stream(prescription.getPattern().getPatternUnits().split(", "))
                 .collect(Collectors.toList());
@@ -148,10 +287,23 @@ public class PrescriptionService {
         return modelMapper.map(prescription, PrescriptionDto.class);
     }
 
+    /**
+     * Method maps (converts) given object of Prescription class to object of PrescriptionDtoOut class.
+     *
+     * @param prescription object to map from Prescription to PrescriptionDtoOut.
+     * @return mapped instance of PrescriptionDtoOut class.
+     */
     private PrescriptionDtoOut toDtoOut(Prescription prescription) {
         return modelMapper.map(prescription, PrescriptionDtoOut.class);
     }
 
+    /**
+     * Method maps (converts) given object of PrescriptionDto class to object of Prescription class.
+     * It transforms list of pattern units to their string representation.
+     *
+     * @param dto object to map from PrescriptionDto to Prescription.
+     * @return mapped instance of Prescription class.
+     */
     private Prescription toEntity(PrescriptionDto dto) {
         typeMapToEntity.addMappings(m -> m.map(src -> getAuthEmployee(), Prescription::setDoctor));
         var mappedPrescription = modelMapper.map(dto, Prescription.class);
