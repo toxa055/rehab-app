@@ -8,6 +8,7 @@ import com.rehab.exception.ApplicationException;
 import com.rehab.model.Event;
 import com.rehab.model.Pattern;
 import com.rehab.model.Prescription;
+import com.rehab.model.type.EventState;
 import com.rehab.repository.*;
 import com.rehab.util.EventUtil;
 import org.modelmapper.ModelMapper;
@@ -173,6 +174,35 @@ public class PrescriptionService {
     }
 
     /**
+     * Method closes prescription, i.e., sets its state as inactive.
+     * It's impossible to close prescription if it is already closed, was created by different doctor
+     * or has at least one planned event (it means all events relating to the prescription
+     * must be either performed or cancelled).
+     *
+     * @param id prescription id.
+     * @return closed prescription mapped to prescriptionDtoOut.
+     */
+    @Transactional
+    public PrescriptionDtoOut close(int id) {
+        var closingPrescription = getPrescriptionById(id);
+        if (!closingPrescription.isActive()) {
+            throw new ApplicationException("Prescription is already closed.");
+        }
+        var authDoctor = getAuthEmployee();
+        if (!authDoctor.getId().equals(closingPrescription.getDoctor().getId())) {
+            throw new ApplicationException("Cannot close prescription which was created by a different doctor.");
+        }
+        var hasPlannedEvents = eventCrudRepository.findAllByPrescriptionId(id)
+                .stream()
+                .anyMatch(e -> e.getEventState() == EventState.PLANNED);
+        if (hasPlannedEvents) {
+            throw new ApplicationException("Cannot close prescription which has planned events.");
+        }
+        closingPrescription.setActive(false);
+        return toDtoOut(prescriptionCrudRepository.save(closingPrescription));
+    }
+
+    /**
      * Method finds prescriptions by given parameters and maps them to page of prescriptionDtoOut.
      *
      * @param date            particular date when prescriptions were created.
@@ -231,7 +261,7 @@ public class PrescriptionService {
 
     /**
      * Method sets prescription as inactive and cancels all events that were created for it.
-     * It,s impossible to cancel prescription if it is already cancelled or was created by different doctor.
+     * It's impossible to cancel prescription if it is already cancelled or was created by different doctor.
      * Method calls utility method to change state for events (associated to current prescription)
      * from 'PLANNED' to 'CANCELLED'.
      * Finally, method sends message to message queue if there are events planned for today date that were cancelled.

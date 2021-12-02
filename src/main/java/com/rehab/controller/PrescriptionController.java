@@ -257,6 +257,21 @@ public class PrescriptionController {
     }
 
     /**
+     * Method executes GET request to close prescription by given id.
+     *
+     * @param id    prescription id.
+     * @param model holder for model attributes.
+     * @return redirect to current prescription.
+     */
+    @GetMapping("/close/{id}")
+    @Secured("ROLE_DOCTOR")
+    public String close(@PathVariable int id, Model model) {
+        logger.info("Close prescription with id {}.", id);
+        model.addAttribute(PRESCRIPTION, prescriptionService.close(id));
+        return REDIRECT_PRESCRIPTIONS_URL + id;
+    }
+
+    /**
      * Method adds attributes (field errors map, prescriptionDto, treatmentDto) to model.
      *
      * @param dto    prescriptionDto that will be added to model.
