@@ -107,13 +107,15 @@ public class EventUtil {
      * @return list of cancelled events.
      */
     public static List<Event> getEventsForCancelling(List<Event> events, String doctorName) {
+        var today = LocalDate.now();
+        var now = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
         return events
                 .stream()
                 .filter(e -> e.getEventState() == EventState.PLANNED)
                 .peek(e -> {
                     e.setEventState(EventState.CANCELLED);
-                    e.setEndDate(LocalDate.now());
-                    e.setEndTime(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
+                    e.setEndDate(today);
+                    e.setEndTime(now);
                     e.setComment("Cancelled by " + doctorName);
                 })
                 .collect(Collectors.toList());
@@ -140,12 +142,11 @@ public class EventUtil {
     private static List<Event> todayEvents(Prescription prescription) {
         var events = new ArrayList<Event>();
         patternUnitsAsList(prescription.getPattern()).forEach(unit -> {
-            var event = new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(), LocalDate.now());
             switch (unit) {
-                case MORNING -> addEventIfUnitIsBeforeCurrentTime(MORNING_TIME, event, events);
-                case AFTERNOON -> addEventIfUnitIsBeforeCurrentTime(AFTERNOON_TIME, event, events);
-                case EVENING -> addEventIfUnitIsBeforeCurrentTime(EVENING_TIME, event, events);
-                case NIGHT -> addEventIfUnitIsBeforeCurrentTime(NIGHT_TIME, event, events);
+                case MORNING -> addEventIfUnitIsBeforeCurrentTime(MORNING_TIME, prescription, events);
+                case AFTERNOON -> addEventIfUnitIsBeforeCurrentTime(AFTERNOON_TIME, prescription, events);
+                case EVENING -> addEventIfUnitIsBeforeCurrentTime(EVENING_TIME, prescription, events);
+                case NIGHT -> addEventIfUnitIsBeforeCurrentTime(NIGHT_TIME, prescription, events);
                 default -> throw new IllegalArgumentException(ILLEGAL_PATTERN_UNIT_VALUE);
             }
         });
@@ -154,16 +155,16 @@ public class EventUtil {
 
     /**
      * Method checks if current time is before planned time for today event,
-     * then current event is added to list of today events.
+     * then current event is created and added to list of today events.
      *
-     * @param time   planned time of today event.
-     * @param event  that is checked for ability to be added to list of today events.
-     * @param events list of today events.
+     * @param time         planned time of today event.
+     * @param prescription that new event is being created for.
+     * @param events       list of today events.
      */
-    private static void addEventIfUnitIsBeforeCurrentTime(LocalTime time, Event event, List<Event> events) {
+    private static void addEventIfUnitIsBeforeCurrentTime(LocalTime time, Prescription prescription, List<Event> events) {
         if (LocalTime.now().isBefore(time)) {
-            event.setPlannedTime(time);
-            events.add(event);
+            events.add(new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
+                    LocalDate.now(), time));
         }
     }
 
@@ -178,18 +179,16 @@ public class EventUtil {
     private static void createAndAddEventsForPartsOfDay(Prescription prescription, LocalDate plannedDate,
                                                         List<Event> events) {
         patternUnitsAsList(prescription.getPattern()).forEach(unit -> {
-                    var event = new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
-                            plannedDate);
-                    event.setPlannedTime(
+                    var plannedTime =
                             switch (unit) {
                                 case MORNING -> MORNING_TIME;
                                 case AFTERNOON -> AFTERNOON_TIME;
                                 case EVENING -> EVENING_TIME;
                                 case NIGHT -> NIGHT_TIME;
                                 default -> throw new IllegalArgumentException(ILLEGAL_PATTERN_UNIT_VALUE);
-                            }
-                    );
-                    events.add(event);
+                            };
+                    events.add(new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
+                            plannedDate, plannedTime));
                 }
         );
     }
@@ -207,11 +206,7 @@ public class EventUtil {
      */
     private static void createAndAddEventForDaysOfWeek(Prescription prescription, LocalDate possiblePlannedDate,
                                                        List<Event> events) {
-        var patternUnits = Arrays.stream(prescription.getPattern().getPatternUnits().split(", "))
-                .map(PatternUnit::valueOf).collect(Collectors.toList());
-        patternUnits.forEach(unit -> {
-                    var event = new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
-                            MORNING_TIME);
+        patternUnitsAsList(prescription.getPattern()).forEach(unit -> {
                     var isGivenDateSuitable = switch (unit) {
                         case MONDAY,
                                 TUESDAY,
@@ -223,8 +218,8 @@ public class EventUtil {
                         default -> throw new IllegalArgumentException(ILLEGAL_PATTERN_UNIT_VALUE);
                     };
                     if (isGivenDateSuitable) {
-                        event.setPlannedDate(possiblePlannedDate);
-                        events.add(event);
+                        events.add(new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
+                                possiblePlannedDate, MORNING_TIME));
                     }
                 }
         );
