@@ -134,38 +134,30 @@ public class EventUtil {
     }
 
     /**
-     * Method creates new events only for today date (if it's possible) and returns list of them.
+     * Method creates new events only for today date (if current time is before planned time for today event)
+     * and returns list of them.
      *
      * @param prescription that today events is being created for.
      * @return list of created events planned only for today.
      */
     private static List<Event> todayEvents(Prescription prescription) {
         var events = new ArrayList<Event>();
+        var today = LocalDate.now();
+        var now = LocalTime.now();
         patternUnitsAsList(prescription.getPattern()).forEach(unit -> {
-            switch (unit) {
-                case MORNING -> addEventIfUnitIsBeforeCurrentTime(MORNING_TIME, prescription, events);
-                case AFTERNOON -> addEventIfUnitIsBeforeCurrentTime(AFTERNOON_TIME, prescription, events);
-                case EVENING -> addEventIfUnitIsBeforeCurrentTime(EVENING_TIME, prescription, events);
-                case NIGHT -> addEventIfUnitIsBeforeCurrentTime(NIGHT_TIME, prescription, events);
+            var plannedTime = switch (unit) {
+                case MORNING -> MORNING_TIME;
+                case AFTERNOON -> AFTERNOON_TIME;
+                case EVENING -> EVENING_TIME;
+                case NIGHT -> NIGHT_TIME;
                 default -> throw new IllegalArgumentException(ILLEGAL_PATTERN_UNIT_VALUE);
+            };
+            if (now.isBefore(plannedTime)) {
+                events.add(new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
+                        today, plannedTime));
             }
         });
         return events;
-    }
-
-    /**
-     * Method checks if current time is before planned time for today event,
-     * then current event is created and added to list of today events.
-     *
-     * @param time         planned time of today event.
-     * @param prescription that new event is being created for.
-     * @param events       list of today events.
-     */
-    private static void addEventIfUnitIsBeforeCurrentTime(LocalTime time, Prescription prescription, List<Event> events) {
-        if (LocalTime.now().isBefore(time)) {
-            events.add(new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
-                    LocalDate.now(), time));
-        }
     }
 
     /**
@@ -218,8 +210,8 @@ public class EventUtil {
                         default -> throw new IllegalArgumentException(ILLEGAL_PATTERN_UNIT_VALUE);
                     };
                     if (isGivenDateSuitable) {
-                        events.add(new Event(prescription.getPatient(), prescription.getCure(), prescription.getDose(),
-                                possiblePlannedDate, MORNING_TIME));
+                        events.add(new Event(prescription.getPatient(), prescription.getCure(),
+                                prescription.getDose(), possiblePlannedDate, MORNING_TIME));
                     }
                 }
         );
