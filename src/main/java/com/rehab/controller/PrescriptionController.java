@@ -1,6 +1,7 @@
 package com.rehab.controller;
 
 import com.rehab.dto.PrescriptionDto;
+import com.rehab.service.EventService;
 import com.rehab.service.PrescriptionService;
 import com.rehab.service.TreatmentService;
 import com.rehab.util.ControllerUtil;
@@ -71,6 +72,11 @@ public class PrescriptionController {
     private final TreatmentService treatmentService;
 
     /**
+     * EventService bean.
+     */
+    private final EventService eventService;
+
+    /**
      * Interface that logs specific messages.
      */
     private final Logger logger;
@@ -80,13 +86,15 @@ public class PrescriptionController {
      *
      * @param prescriptionService description of prescriptionService is in field declaration.
      * @param treatmentService    description of treatmentService is in field declaration.
+     * @param eventService        description of eventService is in field declaration.
      * @param logger              description of logger is in field declaration.
      */
     @Autowired
     public PrescriptionController(PrescriptionService prescriptionService, TreatmentService treatmentService,
-                                  Logger logger) {
+                                  EventService eventService, Logger logger) {
         this.prescriptionService = prescriptionService;
         this.treatmentService = treatmentService;
+        this.eventService = eventService;
         this.logger = logger;
     }
 
@@ -102,6 +110,7 @@ public class PrescriptionController {
         logger.info("Get prescription by id {}.", id);
         model.addAttribute(PRESCRIPTION, prescriptionService.getPrescriptionDtoOutById(id));
         model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
+        model.addAllAttributes(eventService.getEventsStateCountByPrescriptionId(id));
         return "prescriptions/prescription";
     }
 
@@ -140,8 +149,8 @@ public class PrescriptionController {
                          @RequestParam @Nullable boolean onlyActive,
                          @PageableDefault(value = 15, sort = "date") Pageable pageable,
                          Model model) {
-        logger.info("Filter prescriptions by date {}, insurance number {}, authenticated doctor {}, only active treatments {}.",
-                pDate, insuranceNumber, authDoctor, onlyActive);
+        logger.info("Filter prescriptions by date {}, insurance number {}, authenticated doctor {}, " +
+                        "only active treatments {}.", pDate, insuranceNumber, authDoctor, onlyActive);
         model.addAttribute(PAGE, prescriptionService.filter(pDate, insuranceNumber, authDoctor, onlyActive, pageable));
         return PRESCRIPTIONS_URL;
     }

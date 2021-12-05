@@ -67,8 +67,27 @@
         </sec:authorize>
         <a class="btn btn-outline-dark" role="button" target="_blank" href="/events/prescription/${p.id}">
             Current Events</a>
+        <div class="col-lg-2 float-end">
+            <b>Number of events:</b>
+            <div class="row">
+                <div class="col-lg-7">Planned:</div>
+                <div class="col-lg-2">${PLANNED}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">Performed:</div>
+                <div class="col-lg-2">${PERFORMED}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">Cancelled:</div>
+                <div class="col-lg-2">${CANCELLED}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7"><b>Total:</b></div>
+                <div class="col-lg-2">${PLANNED + PERFORMED + CANCELLED}</div>
+            </div>
+        </div>
     </div>
-    <br>
+    <br><br>
     <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
 
