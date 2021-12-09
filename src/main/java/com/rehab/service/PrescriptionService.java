@@ -5,9 +5,7 @@ import com.rehab.config.MQConfig;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.dto.PrescriptionDtoOut;
 import com.rehab.exception.ApplicationException;
-import com.rehab.model.Event;
-import com.rehab.model.Pattern;
-import com.rehab.model.Prescription;
+import com.rehab.model.*;
 import com.rehab.model.type.EventState;
 import com.rehab.repository.*;
 import com.rehab.util.EventUtil;
@@ -22,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.rehab.util.SecurityUtil.getAuthEmployee;
@@ -200,6 +196,21 @@ public class PrescriptionService {
         }
         closingPrescription.setActive(false);
         return toDtoOut(prescriptionCrudRepository.save(closingPrescription));
+    }
+
+    /**
+     * Method finds number of prescriptions (active and inactive separately)
+     * for particular treatment and collects them to map.
+     *
+     * @param tId treatment id.
+     * @return map where key is prescription state (active and inactive)
+     * and value is number of prescriptions (for this state).
+     */
+    public Map<String, Long> getPrescriptionsCountByTreatmentId(int tId) {
+        Map<String, Long> map = new HashMap<>();
+        map.put("active", prescriptionCrudRepository.getPrescriptionsCountByStateAndTreatmentId(true, tId));
+        map.put("inactive", prescriptionCrudRepository.getPrescriptionsCountByStateAndTreatmentId(false, tId));
+        return map;
     }
 
     /**

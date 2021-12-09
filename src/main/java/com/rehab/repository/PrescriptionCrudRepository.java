@@ -54,4 +54,18 @@ public interface PrescriptionCrudRepository extends JpaRepository<Prescription, 
      * @return list of found prescriptions.
      */
     List<Prescription> findAllByTreatmentId(int treatmentId);
+
+    /**
+     * Method to get number of prescriptions (active or not) for particular treatment.
+     *
+     * @param active      prescriptions are active or not.
+     * @param treatmentId treatment id, must not be null.
+     * @return number of found prescriptions.
+     */
+    @Query("""
+            SELECT COUNT(p) FROM Prescription p
+            WHERE p.isActive=:active
+            AND p.treatment.id=:treatmentId
+            """)
+    Long getPrescriptionsCountByStateAndTreatmentId(boolean active, int treatmentId);
 }

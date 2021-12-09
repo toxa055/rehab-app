@@ -2,6 +2,7 @@ package com.rehab.controller;
 
 import com.rehab.dto.TreatmentDto;
 import com.rehab.service.PatientService;
+import com.rehab.service.PrescriptionService;
 import com.rehab.service.TreatmentService;
 import com.rehab.util.ControllerUtil;
 import com.rehab.util.SecurityUtil;
@@ -51,6 +52,11 @@ public class TreatmentController {
     private final PatientService patientService;
 
     /**
+     * PrescriptionService bean.
+     */
+    private final PrescriptionService prescriptionService;
+
+    /**
      * Interface that logs specific messages.
      */
     private final Logger logger;
@@ -58,14 +64,17 @@ public class TreatmentController {
     /**
      * Constructs new instance and initializes following fields.
      *
-     * @param treatmentService description of treatmentService is in field declaration.
-     * @param patientService   description of patientService is in field declaration.
-     * @param logger           description of logger is in field declaration.
+     * @param treatmentService    description of treatmentService is in field declaration.
+     * @param patientService      description of patientService is in field declaration.
+     * @param prescriptionService description of prescriptionService is in field declaration.
+     * @param logger              description of logger is in field declaration.
      */
     @Autowired
-    public TreatmentController(TreatmentService treatmentService, PatientService patientService, Logger logger) {
+    public TreatmentController(TreatmentService treatmentService, PatientService patientService,
+                               PrescriptionService prescriptionService, Logger logger) {
         this.treatmentService = treatmentService;
         this.patientService = patientService;
+        this.prescriptionService = prescriptionService;
         this.logger = logger;
     }
 
@@ -81,6 +90,7 @@ public class TreatmentController {
         logger.info("Get treatment by id {}.", id);
         model.addAttribute("treatment", treatmentService.getById(id));
         model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
+        model.addAllAttributes(prescriptionService.getPrescriptionsCountByTreatmentId(id));
         return "treatments/treatment";
     }
 
