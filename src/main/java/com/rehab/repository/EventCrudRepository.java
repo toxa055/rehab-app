@@ -68,4 +68,18 @@ public interface EventCrudRepository extends JpaRepository<Event, Integer> {
             ORDER BY plannedTime
             """)
     List<Event> findPlannedByPlannedDate(LocalDate plannedDate);
+
+    /**
+     * Method to get number of events for particular prescription by event state.
+     *
+     * @param state          event state.
+     * @param prescriptionId prescription id, must not be null.
+     * @return number of found events.
+     */
+    @Query("""
+            SELECT COUNT(e) FROM Event e
+            WHERE e.prescription.id=:prescriptionId
+            AND e.eventState=:state
+            """)
+    Long getEventsCountByStateAndPrescriptionId(EventState state, int prescriptionId);
 }

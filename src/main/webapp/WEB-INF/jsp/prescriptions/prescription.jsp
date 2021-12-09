@@ -33,9 +33,6 @@
             <th scope="col">Period</th>
             <th scope="col">Dose</th>
             <th scope="col">Active</th>
-            <sec:authorize access="hasRole('DOCTOR')">
-                <th scope="col">Actions</th>
-            </sec:authorize>
         </tr>
         </thead>
         <tr class="${p.active ? 'active-yellow' : 'active-green'}">
@@ -54,25 +51,69 @@
             <td>${p.periodCount} ${p.periodUnit}</td>
             <td>${p.dose}</td>
             <td id="isActive">${p.active}</td>
-            <sec:authorize access="hasRole('DOCTOR')">
-                <td>
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                            data-bs-target="#prescriptionCancelModal" id="prescriptionCancelButton">Cancel
-                    </button>
-                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                            data-bs-target="#prescriptionUpdateModal" id="prescriptionUpdateButton">Update
-                    </button>
-                </td>
-            </sec:authorize>
         </tr>
     </table>
     <div>
+        <sec:authorize access="hasRole('DOCTOR')">
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#prescriptionCloseModal" id="prescriptionCloseButton">Close
+            </button>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                    data-bs-target="#prescriptionUpdateModal" id="prescriptionUpdateButton">Update
+            </button>
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                    data-bs-target="#prescriptionCancelModal" id="prescriptionCancelButton">Cancel
+            </button>
+        </sec:authorize>
         <a class="btn btn-outline-dark" role="button" target="_blank" href="/events/prescription/${p.id}">
             Current Events</a>
+        <div class="col-lg-2 float-end">
+            <b>Number of events:</b>
+            <div class="row">
+                <div class="col-lg-7">Planned:</div>
+                <div class="col-lg-2">${PLANNED}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">Performed:</div>
+                <div class="col-lg-2">${PERFORMED}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">Cancelled:</div>
+                <div class="col-lg-2">${CANCELLED}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7"><b>Total:</b></div>
+                <div class="col-lg-2">${PLANNED + PERFORMED + CANCELLED}</div>
+            </div>
+        </div>
     </div>
-    <br>
+    <br><br>
     <button type="reset" class="btn btn-outline-secondary" onclick="window.history.back()">Back</button>
 </div>
+
+<div class="modal fade" id="prescriptionCloseModal" tabindex="-1" aria-labelledby="prescriptionCloseModal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="prescriptionCloseModalLabel">Do you really want to close the
+                    prescription?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>
+                    The prescription will be closed.<br>
+                    Before closing, there should be no one planned events relating to the prescription.
+                </h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a class="btn btn-outline-primary" href="/prescriptions/close/${p.id}" role="button">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="prescriptionCancelModal" tabindex="-1" aria-labelledby="prescriptionCancelModal"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -95,6 +136,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="prescriptionUpdateModal" tabindex="-1" aria-labelledby="prescriptionUpdateModal"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -119,17 +161,21 @@
         </div>
     </div>
 </div>
+
 <div id="main"></div>
 <jsp:include page="../footer.jsp"/>
 <script>
     if ($('#doctorId').text() != ${authDoctorId}) {
+        $('#prescriptionCloseButton').attr('disabled', 'true');
         $('#prescriptionCancelButton').attr('disabled', 'true');
         $('#prescriptionUpdateButton').attr('disabled', 'true');
     } else {
+        $('#prescriptionCloseButton').attr('disabled', false);
         $('#prescriptionCancelButton').attr('disabled', false);
         $('#prescriptionUpdateButton').attr('disabled', false);
     }
     if ($('#isActive').text() === 'false') {
+        $('#prescriptionCloseButton').attr('disabled', 'true');
         $('#prescriptionCancelButton').attr('disabled', 'true');
         $('#prescriptionUpdateButton').attr('disabled', 'true');
     }

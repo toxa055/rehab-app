@@ -27,9 +27,6 @@
             <th scope="col">Diagnosis</th>
             <th scope="col">Close date</th>
             <th scope="col">Closed</th>
-            <sec:authorize access="hasRole('DOCTOR')">
-                <th scope="col">Actions</th>
-            </sec:authorize>
         </tr>
         </thead>
         <tr class="${treatment.closed ? 'active-green' : 'active-yellow'}">
@@ -43,22 +40,35 @@
             <td>${treatment.diagnosis}</td>
             <td>${treatment.closeDate}</td>
             <td>${treatment.closed}</td>
-            <sec:authorize access="hasRole('DOCTOR')">
-                <td>
-                    <a class="btn btn-outline-success" href="/prescriptions/new/${treatment.id}"
-                       id="newPrescriptionButtonLink" role="button">New Prescription</a>
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                            data-bs-target="#closeTreatmentModal" id="closeTreatmentButton">Close
-                    </button>
-                </td>
-            </sec:authorize>
         </tr>
     </table>
     <div>
+        <sec:authorize access="hasRole('DOCTOR')">
+            <a class="btn btn-outline-success" href="/prescriptions/new/${treatment.id}"
+               id="newPrescriptionButtonLink" role="button">New Prescription</a>
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                    data-bs-target="#closeTreatmentModal" id="closeTreatmentButton">Close
+            </button>
+        </sec:authorize>
         <a class="btn btn-outline-dark" role="button" target="_blank" href="/prescriptions/treatment/${treatment.id}">
             Current Prescriptions</a>
+        <div class="col-lg-2 float-end">
+            <b>Number of prescriptions:</b>
+            <div class="row">
+                <div class="col-lg-7">Active:</div>
+                <div class="col-lg-2">${active}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7">Inactive:</div>
+                <div class="col-lg-2">${inactive}</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-7"><b>Total:</b></div>
+                <div class="col-lg-2">${active + inactive}</div>
+            </div>
+        </div>
     </div>
-    <br>
+    <br><br>
     <a class="btn btn-outline-secondary" href="/treatments/today" role="button">Back</a>
 </div>
 <div class="modal fade" id="closeTreatmentModal" tabindex="-1" aria-labelledby="closeTreatmentModal"

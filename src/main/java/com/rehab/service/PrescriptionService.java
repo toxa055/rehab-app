@@ -5,9 +5,8 @@ import com.rehab.config.MQConfig;
 import com.rehab.dto.PrescriptionDto;
 import com.rehab.dto.PrescriptionDtoOut;
 import com.rehab.exception.ApplicationException;
-import com.rehab.model.Event;
-import com.rehab.model.Pattern;
-import com.rehab.model.Prescription;
+import com.rehab.model.*;
+import com.rehab.model.type.EventState;
 import com.rehab.repository.*;
 import com.rehab.util.EventUtil;
 import org.modelmapper.ModelMapper;
@@ -21,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.rehab.util.SecurityUtil.getAuthEmployee;
@@ -173,6 +170,50 @@ public class PrescriptionService {
     }
 
     /**
+     * Method closes prescription, i.e., sets its state as inactive.
+     * It's impossible to close prescription if it is already closed, was created by different doctor
+     * or has at least one planned event (it means all events relating to the prescription
+     * must be either performed or cancelled).
+     *
+     * @param id prescription id.
+     * @return closed prescription mapped to prescriptionDtoOut.
+     */
+    @Transactional
+    public PrescriptionDtoOut close(int id) {
+        var closingPrescription = getPrescriptionById(id);
+        if (!closingPrescription.isActive()) {
+            throw new ApplicationException("Prescription is already closed.");
+        }
+        var authDoctor = getAuthEmployee();
+        if (!authDoctor.getId().equals(closingPrescription.getDoctor().getId())) {
+            throw new ApplicationException("Cannot close prescription which was created by a different doctor.");
+        }
+        var hasPlannedEvents = eventCrudRepository.findAllByPrescriptionId(id)
+                .stream()
+                .anyMatch(e -> e.getEventState() == EventState.PLANNED);
+        if (hasPlannedEvents) {
+            throw new ApplicationException("Cannot close prescription which has planned events.");
+        }
+        closingPrescription.setActive(false);
+        return toDtoOut(prescriptionCrudRepository.save(closingPrescription));
+    }
+
+    /**
+     * Method finds number of prescriptions (active and inactive separately)
+     * for particular treatment and collects them to map.
+     *
+     * @param tId treatment id.
+     * @return map where key is prescription state (active and inactive)
+     * and value is number of prescriptions (for this state).
+     */
+    public Map<String, Long> getPrescriptionsCountByTreatmentId(int tId) {
+        Map<String, Long> map = new HashMap<>();
+        map.put("active", prescriptionCrudRepository.getPrescriptionsCountByStateAndTreatmentId(true, tId));
+        map.put("inactive", prescriptionCrudRepository.getPrescriptionsCountByStateAndTreatmentId(false, tId));
+        return map;
+    }
+
+    /**
      * Method finds prescriptions by given parameters and maps them to page of prescriptionDtoOut.
      *
      * @param date            particular date when prescriptions were created.
@@ -231,7 +272,7 @@ public class PrescriptionService {
 
     /**
      * Method sets prescription as inactive and cancels all events that were created for it.
-     * It,s impossible to cancel prescription if it is already cancelled or was created by different doctor.
+     * It's impossible to cancel prescription if it is already cancelled or was created by different doctor.
      * Method calls utility method to change state for events (associated to current prescription)
      * from 'PLANNED' to 'CANCELLED'.
      * Finally, method sends message to message queue if there are events planned for today date that were cancelled.

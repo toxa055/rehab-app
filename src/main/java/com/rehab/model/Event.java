@@ -167,39 +167,17 @@ public class Event extends AbstractIdEntity {
     /**
      * Constructor to initialize following fields.
      *
-     * @param patient description of patient is in field declaration.
-     * @param cure    description of cure is in field declaration.
-     * @param dose    description of dose is in field declaration.
-     */
-    public Event(Patient patient, Cure cure, String dose) {
-        this.patient = patient;
-        this.cure = cure;
-        this.dose = dose;
-    }
-
-    /**
-     * Constructor to initialize following fields.
-     *
      * @param patient     description of patient is in field declaration.
      * @param cure        description of cure is in field declaration.
      * @param dose        description of dose is in field declaration.
      * @param plannedDate description of plannedDate is in field declaration.
-     */
-    public Event(Patient patient, Cure cure, String dose, LocalDate plannedDate) {
-        this(patient, cure, dose);
-        this.plannedDate = plannedDate;
-    }
-
-    /**
-     * Constructor to initialize following fields.
-     *
-     * @param patient     description of patient is in field declaration.
-     * @param cure        description of cure is in field declaration.
-     * @param dose        description of dose is in field declaration.
      * @param plannedTime description of plannedTime is in field declaration.
      */
-    public Event(Patient patient, Cure cure, String dose, LocalTime plannedTime) {
-        this(patient, cure, dose);
+    public Event(Patient patient, Cure cure, String dose, LocalDate plannedDate, LocalTime plannedTime) {
+        this.patient = patient;
+        this.cure = cure;
+        this.dose = dose;
+        this.plannedDate = plannedDate;
         this.plannedTime = plannedTime;
     }
 

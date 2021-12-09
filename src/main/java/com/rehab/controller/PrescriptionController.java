@@ -1,6 +1,7 @@
 package com.rehab.controller;
 
 import com.rehab.dto.PrescriptionDto;
+import com.rehab.service.EventService;
 import com.rehab.service.PrescriptionService;
 import com.rehab.service.TreatmentService;
 import com.rehab.util.ControllerUtil;
@@ -71,6 +72,11 @@ public class PrescriptionController {
     private final TreatmentService treatmentService;
 
     /**
+     * EventService bean.
+     */
+    private final EventService eventService;
+
+    /**
      * Interface that logs specific messages.
      */
     private final Logger logger;
@@ -80,13 +86,15 @@ public class PrescriptionController {
      *
      * @param prescriptionService description of prescriptionService is in field declaration.
      * @param treatmentService    description of treatmentService is in field declaration.
+     * @param eventService        description of eventService is in field declaration.
      * @param logger              description of logger is in field declaration.
      */
     @Autowired
     public PrescriptionController(PrescriptionService prescriptionService, TreatmentService treatmentService,
-                                  Logger logger) {
+                                  EventService eventService, Logger logger) {
         this.prescriptionService = prescriptionService;
         this.treatmentService = treatmentService;
+        this.eventService = eventService;
         this.logger = logger;
     }
 
@@ -102,6 +110,7 @@ public class PrescriptionController {
         logger.info("Get prescription by id {}.", id);
         model.addAttribute(PRESCRIPTION, prescriptionService.getPrescriptionDtoOutById(id));
         model.addAttribute("authDoctorId", SecurityUtil.getAuthEmployee().getId());
+        model.addAllAttributes(eventService.getEventsStateCountByPrescriptionId(id));
         return "prescriptions/prescription";
     }
 
@@ -140,8 +149,8 @@ public class PrescriptionController {
                          @RequestParam @Nullable boolean onlyActive,
                          @PageableDefault(value = 15, sort = "date") Pageable pageable,
                          Model model) {
-        logger.info("Filter prescriptions by date {}, insurance number {}, authenticated doctor {}, only active treatments {}.",
-                pDate, insuranceNumber, authDoctor, onlyActive);
+        logger.info("Filter prescriptions by date {}, insurance number {}, authenticated doctor {}, " +
+                        "only active treatments {}.", pDate, insuranceNumber, authDoctor, onlyActive);
         model.addAttribute(PAGE, prescriptionService.filter(pDate, insuranceNumber, authDoctor, onlyActive, pageable));
         return PRESCRIPTIONS_URL;
     }
@@ -253,6 +262,21 @@ public class PrescriptionController {
     public String cancel(@PathVariable int id, Model model) {
         logger.info("Cancel prescription with id {}.", id);
         model.addAttribute(PRESCRIPTION, prescriptionService.cancel(id));
+        return REDIRECT_PRESCRIPTIONS_URL + id;
+    }
+
+    /**
+     * Method executes GET request to close prescription by given id.
+     *
+     * @param id    prescription id.
+     * @param model holder for model attributes.
+     * @return redirect to current prescription.
+     */
+    @GetMapping("/close/{id}")
+    @Secured("ROLE_DOCTOR")
+    public String close(@PathVariable int id, Model model) {
+        logger.info("Close prescription with id {}.", id);
+        model.addAttribute(PRESCRIPTION, prescriptionService.close(id));
         return REDIRECT_PRESCRIPTIONS_URL + id;
     }
 

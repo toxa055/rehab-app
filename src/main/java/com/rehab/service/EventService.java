@@ -23,8 +23,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -174,6 +173,19 @@ public class EventService {
         var savedEvent = eventCrudRepository.save(eventForChangingState);
         sendMessage(savedEvent);
         return toDto(savedEvent);
+    }
+
+    /**
+     * Method finds number of events each event state for particular prescription and collects them to map.
+     *
+     * @param pId prescription id.
+     * @return map where key is event state and value is number of events (for this state).
+     */
+    public Map<String, Long> getEventsStateCountByPrescriptionId(int pId) {
+        Map<String, Long> map = new HashMap<>();
+        Arrays.stream(EventState.values()).forEach(es ->
+                map.put(es.name(), eventCrudRepository.getEventsCountByStateAndPrescriptionId(es, pId)));
+        return map;
     }
 
     /**
